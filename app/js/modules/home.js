@@ -97,7 +97,7 @@ export async function main(ctx) {
           <div class="banner-title">${isIOS ? 'Adicione à tela inicial' : 'Instale o app'}</div>
           <p class="banner-text">${isIOS ? 'Toque em Compartilhar → Adicionar à Tela de Início' : 'Use o app offline e acesse mais rápido'}</p>
         </div>
-        ${!isIOS ? raw(`<button type="button" class="btn btn--small btn--primary" data-install>Instalar</button>`) : ''}
+        ${!isIOS ? `<button type="button" class="btn btn--small btn--primary" data-install>Instalar</button>` : ''}
         <button type="button" class="banner-close" aria-label="Dispensar" data-dismiss-install>
           <svg width="20" height="20" viewBox="0 0 20 20"><path d="M5 5 L15 15 M15 5 L5 15" stroke="currentColor" stroke-width="2"/></svg>
         </button>

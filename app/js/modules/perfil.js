@@ -118,27 +118,28 @@ export async function main(ctx) {
       <input type="file" accept=".json" style="display:none" data-file-input>
     </div>
     
-    ${getInstallPrompt() ? raw(`
-      <div class="card mb-1">
-        <h2 style="font-size:1.125rem;margin-bottom:1rem">Instalar app</h2>
-        <p class="text-small text-muted mb-1">Use o app offline e acesse mais rápido</p>
-        <button type="button" class="btn btn--primary" style="width:100%" data-install>Instalar agora</button>
+    <div class="card mb-1" data-install-card style="display:none">
+      <h2 style="font-size:1.125rem;margin-bottom:1rem">Instalar app</h2>
+      <p class="text-small text-muted mb-1" data-install-text>Use o app offline e acesse mais rápido</p>
+      <button type="button" class="btn btn--primary" style="width:100%" data-install>Instalar app</button>
+      <div class="text-small text-muted" data-install-ios-help style="display:none;margin-top:0.75rem">
+        Para instalar: toque em Compartilhar e depois Adicionar à Tela de Início.
       </div>
-    `) : ''}
+    </div>
     
     ${CONFIG.support.whatsapp || CONFIG.support.email ? raw(`
       <div class="card mb-1">
         <h2 style="font-size:1.125rem;margin-bottom:1rem">Suporte</h2>
-        ${CONFIG.support.whatsapp ? raw(`
+        ${CONFIG.support.whatsapp ? `
           <a href="https://wa.me/${CONFIG.support.whatsapp}?text=${encodeURIComponent(CONFIG.support.message)}" target="_blank" rel="noopener noreferrer" class="btn btn--ghost" style="width:100%;margin-bottom:0.75rem">
             WhatsApp
           </a>
-        `) : ''}
-        ${CONFIG.support.email ? raw(`
+        ` : ''}
+        ${CONFIG.support.email ? `
           <a href="mailto:${CONFIG.support.email}" target="_blank" rel="noopener noreferrer" class="btn btn--ghost" style="width:100%">
             E-mail
           </a>
-        `) : ''}
+        ` : ''}
       </div>
     `) : ''}
     
@@ -330,16 +331,63 @@ export async function main(ctx) {
     }
   });
   
-  // Install
-  ctx.el.querySelector('[data-install]')?.addEventListener('click', async () => {
+  // Install (PWA) — botão robusto: aparece quando instalável (Chrome/Android/desktop)
+  // ou mostra instruções no iOS; fica oculto se já instalado.
+  const installCard = ctx.el.querySelector('[data-install-card]');
+  const installBtn = ctx.el.querySelector('[data-install]');
+  const installIosHelp = ctx.el.querySelector('[data-install-ios-help]');
+  const installText = ctx.el.querySelector('[data-install-text]');
+
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+
+  function refreshInstallCard() {
+    if (!installCard) return;
+    if (isStandalone) {
+      installCard.style.display = 'none';
+      return;
+    }
+    if (getInstallPrompt()) {
+      // Chrome/Android/desktop: prompt disponível
+      installCard.style.display = '';
+      if (installBtn) installBtn.style.display = '';
+      if (installIosHelp) installIosHelp.style.display = 'none';
+    } else if (isIOS) {
+      // iOS Safari: não dispara beforeinstallprompt — mostra instruções
+      installCard.style.display = '';
+      if (installBtn) installBtn.style.display = 'none';
+      if (installIosHelp) installIosHelp.style.display = '';
+      if (installText) installText.textContent = 'Adicione o app à tela de início do seu iPhone/iPad';
+    } else {
+      // Ainda não instalável — mantém oculto (pode aparecer quando o evento disparar)
+      installCard.style.display = 'none';
+    }
+  }
+
+  refreshInstallCard();
+
+  // Se o beforeinstallprompt disparar depois que a tela já abriu, atualiza o botão.
+  const onInstallable = () => refreshInstallCard();
+  window.addEventListener('edf-installable', onInstallable);
+
+  installBtn?.addEventListener('click', async () => {
     const prompt = getInstallPrompt();
-    if (!prompt) return;
-    
-    prompt.prompt();
-    const { outcome } = await prompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      toast('App instalado com sucesso!', { type: 'success' });
+    if (!prompt) {
+      // Sem prompt (iOS ou ainda não disponível): não faz nada que quebre.
+      if (isIOS && installIosHelp) installIosHelp.style.display = '';
+      return;
+    }
+    try {
+      prompt.prompt();
+      const { outcome } = await prompt.userChoice;
+      if (outcome === 'accepted') {
+        toast('App instalado com sucesso!', { type: 'success' });
+        window.__edfInstallPrompt = null;
+        if (installCard) installCard.style.display = 'none';
+      }
+    } catch (_) {
+      // Prompt já consumido ou indisponível — ignora silenciosamente.
     }
   });
   
@@ -427,5 +475,9 @@ export async function main(ctx) {
     openSheet(content, { title: 'Avisos importantes' });
   });
   
-  return {};
+  return {
+    destroy() {
+      window.removeEventListener('edf-installable', onInstallable);
+    },
+  };
 }

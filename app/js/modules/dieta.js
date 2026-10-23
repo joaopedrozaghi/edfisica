@@ -503,7 +503,7 @@ export async function metas(ctx) {
           <div class="stat"><div class="stat-value" style="font-size:1.5rem">${targets.carb}g</div><div class="stat-label">Carboidrato</div></div>
           <div class="stat"><div class="stat-value" style="font-size:1.5rem">${targets.gord}g</div><div class="stat-label">Gordura</div></div>
         </div>
-        ${targets.bmr ? raw(`<p class="text-small text-muted" style="margin-top:0.75rem">TMB: ${fmtInt(targets.bmr)} kcal · GET: ${fmtInt(targets.tdee)} kcal</p>`) : ''}
+        ${targets.bmr ? `<p class="text-small text-muted" style="margin-top:0.75rem">TMB: ${fmtInt(targets.bmr)} kcal · GET: ${fmtInt(targets.tdee)} kcal</p>` : ''}
       </div>
     `) : ''}
 

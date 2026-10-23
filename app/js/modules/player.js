@@ -189,10 +189,11 @@ export async function main(ctx) {
     const ex = phase.exerciseId ? EXERCISES_BY_ID[phase.exerciseId] : null;
     const phasePct = progressPct();
 
+    // Cores on-theme (preto + amarelo): trabalho em amarelo (destaque), descanso verde suave, preparar neutro.
     const phaseColors = {
-      prepare: 'var(--accent, #6366f1)',
-      work: 'var(--success, #22c55e)',
-      rest: 'var(--warning, #f59e0b)',
+      prepare: 'var(--muted)',
+      work: 'var(--accent)',
+      rest: '#4ADE80',
     };
 
     ctx.el.innerHTML = html`

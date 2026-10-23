@@ -106,11 +106,23 @@ let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
+  // Também expõe no window para telas que são renderizadas depois do evento
+  // (evita problemas de ordem de carregamento / import circular).
+  window.__edfInstallPrompt = e;
   console.info('[install] prompt capturado');
+  // Notifica telas abertas (ex.: Perfil/Início) para mostrarem o botão.
+  window.dispatchEvent(new CustomEvent('edf-installable'));
+});
+
+// Depois de instalado, limpa o prompt para o botão sumir.
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  window.__edfInstallPrompt = null;
+  console.info('[install] app instalado');
 });
 
 export function getInstallPrompt() {
-  return deferredPrompt;
+  return deferredPrompt || window.__edfInstallPrompt || null;
 }
 
 // ---------------------------------------------------------------------

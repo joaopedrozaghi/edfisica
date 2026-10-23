@@ -18,11 +18,21 @@ const DIFFICULTY_LABEL = {
   avancado: 'Avançado',
 };
 
-const DIFFICULTY_COLOR = {
-  iniciante: 'var(--success, #22c55e)',
-  intermediario: 'var(--warning, #f59e0b)',
-  avancado: 'var(--danger, #ef4444)',
+// Cores de destaque por nível, alinhadas ao tema escuro + amarelo.
+// Chips de superfície escura com texto/borda colorida (sem fundo chapado berrante).
+const DIFFICULTY_ACCENT = {
+  iniciante: '#4ADE80',          // verde suave (texto/borda)
+  intermediario: 'var(--accent)', // amarelo/dourado (cor de destaque do app)
+  avancado: 'var(--danger)',      // vermelho do tema (#FF6B6B)
 };
+
+/** Estilo inline de um chip de dificuldade on-theme (superfície escura + borda esquerda colorida). */
+function difficultyBadgeStyle(difficulty) {
+  const accent = DIFFICULTY_ACCENT[difficulty] || 'var(--accent)';
+  return `display:inline-flex;align-items:center;background:var(--surface);color:var(--text);` +
+    `border:1px solid var(--border);border-left:3px solid ${accent};` +
+    `font-size:.7rem;font-weight:600;padding:.2em .6em;border-radius:.4em`;
+}
 
 function svgFigure(pose) {
   // Bonequinhos (stick-figures) removidos a pedido: não renderiza mais a figura.
@@ -35,7 +45,7 @@ function exerciseCard(ex, faved) {
       <div class="exercise-card__info">
         <div class="exercise-card__name">${ex.name}</div>
         <div class="exercise-card__meta">
-          <span class="badge" style="background:${DIFFICULTY_COLOR[ex.difficulty]};color:#fff;font-size:.7rem;padding:.15em .5em;border-radius:.25em">${DIFFICULTY_LABEL[ex.difficulty] || ex.difficulty}</span>
+          <span class="badge" style="${difficultyBadgeStyle(ex.difficulty)}">${DIFFICULTY_LABEL[ex.difficulty] || ex.difficulty}</span>
           <span class="text-muted text-small">${ex.muscles.slice(0, 2).join(', ')}</span>
         </div>
       </div>
@@ -157,7 +167,7 @@ async function exercicioDetalhe(ctx, id) {
       </div>
 
       <div class="card" style="text-align:center;padding:1rem;margin-bottom:1rem">
-        <span class="badge" style="display:inline-block;background:${DIFFICULTY_COLOR[ex.difficulty]};color:#fff;padding:.2em .7em;border-radius:.3em">
+        <span class="badge" style="${difficultyBadgeStyle(ex.difficulty)}">
           ${DIFFICULTY_LABEL[ex.difficulty] || ex.difficulty}
         </span>
       </div>
