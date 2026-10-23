@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 40" width="224" height="40" role="img" aria-label="EdFísica PRO">
+  <defs>
+    <linearGradient id="lg-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1A1E24"/>
+      <stop offset="1" stop-color="#0B0C0F"/>
+    </linearGradient>
+    <linearGradient id="lg-pro" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D9FF7A"/>
+      <stop offset="1" stop-color="#C6FF3D"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="38" height="38" rx="11" fill="url(#lg-bg)" stroke="#C6FF3D" stroke-opacity=".35"/>
+  <path d="M23 6 10 22h9l-2.5 12L30.5 17H21z" fill="#C6FF3D"/>
+  <circle cx="32.5" cy="8" r="3" fill="#E9C46A"/>
+  <text x="48" y="28.5" font-family="Sora, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="24" font-weight="800" fill="#F3F5F7" textLength="112" lengthAdjust="spacingAndGlyphs">EdFísica</text>
+  <rect x="168" y="8" width="54" height="24" rx="12" fill="url(#lg-pro)"/>
+  <text x="195" y="25" text-anchor="middle" font-family="Sora, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="800" fill="#0A0B0D" textLength="32" lengthAdjust="spacingAndGlyphs">PRO</text>
+</svg>

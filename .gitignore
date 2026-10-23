@@ -1,0 +1,6 @@
+# Pasta interna de trabalho do agente (não faz parte do site)
+.agents/
+
+# Sistema
+Thumbs.db
+.DS_Store

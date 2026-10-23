@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#07080A">
+  
+  <title>EdFísica PRO</title>
+  
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+  <script src="./js/theme-init.js"></script>
+  <link rel="stylesheet" href="./css/app.css">
+</head>
+<body>
+  <div id="app">
+    <div class="splash">
+      <svg viewBox="0 0 80 80" width="80" height="80" aria-label="EdFísica PRO">
+        <circle cx="40" cy="40" r="30" fill="none" stroke="var(--accent-fill)" stroke-width="3" opacity="0.2"/>
+        <circle cx="40" cy="40" r="30" fill="none" stroke="var(--accent-fill)" stroke-width="3" stroke-dasharray="188.5" stroke-dashoffset="47" class="splash-ring">
+          <animate attributeName="stroke-dashoffset" from="188.5" to="0" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <path d="M40 20 L50 35 L40 32 L30 35 Z M40 32 L40 60 M30 50 L50 50" stroke="var(--accent-fill)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p>Carregando...</p>
+    </div>
+  </div>
+  
+  <noscript>
+    <div style="padding:2rem;text-align:center;font-family:system-ui,sans-serif">
+      <p><strong>O EdFísica PRO precisa de JavaScript habilitado para funcionar.</strong></p>
+      <p>Por favor, ative o JavaScript no seu navegador e recarregue a página.</p>
+    </div>
+  </noscript>
+  
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
