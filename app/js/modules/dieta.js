@@ -222,10 +222,12 @@ export async function main(ctx) {
 function openAddSheet(mealKey, date, foods, foodsById, onAdded) {
   const mealLabel = MEALS.find(m => m.key === mealKey)?.label || mealKey;
 
-  openSheet({
-    title: `Adicionar em ${mealLabel}`,
-    content: buildSearchSheetHTML(),
-    onOpen(el) {
+  openSheet(buildSearchSheetHTML(), { title: `Adicionar em ${mealLabel}` });
+
+  // openSheet insere o conteúdo em .sheet-body; pegamos esse elemento para ligar os eventos.
+  const el = document.querySelector('.sheet .sheet-body');
+  if (el) {
+    (function setup() {
       const input = el.querySelector('[data-food-search]');
       const results = el.querySelector('[data-search-results]');
       const addForm = el.querySelector('[data-add-form]');
@@ -393,8 +395,8 @@ function openAddSheet(mealKey, date, foods, foodsById, onAdded) {
         clearTimeout(searchTimer);
         searchTimer = setTimeout(() => search(input.value), 250);
       });
-    },
-  });
+    })();
+  }
 }
 
 function buildSearchSheetHTML() {
