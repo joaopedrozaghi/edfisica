@@ -10,16 +10,17 @@
   --border: rgba(255,255,255,0.08);
   --text: #F3F5F7;
   --muted: #A7AEB8;
-  --accent: #C6FF3D;
-  --accent-fill: #C6FF3D;
+  --accent: #FFD60A;
+  --accent-fill: #FFD60A;
   --accent-ink: #0A0B0D;
-  --gold: #E9C46A;
+  --gold: #FFD60A;
   --danger: #FF6B6B;
   --radius: 20px;
   --radius-pill: 999px;
-  --glow: 0 0 40px rgba(198,255,61,.25);
-  --btn-secondary-bg: #23272E;
-  --btn-secondary-border: rgba(255,255,255,0.14);
+  --glow: 0 0 40px rgba(255,214,10,.25);
+  --btn-secondary-bg: #1A1C1F;
+  --btn-secondary-border: rgba(255,214,10,0.45);
+  --input-bg: #15171A;
 }
 
 [data-theme="light"] {
@@ -29,14 +30,15 @@
   --border: rgba(10,11,13,.08);
   --text: #0D0F12;
   --muted: #5A626E;
-  --accent: #3D6400;
-  --accent-fill: #3D6400;
-  --accent-ink: #FFFFFF;
-  --gold: #8A5F00;
+  --accent: #8A6D00;
+  --accent-fill: #FFD60A;
+  --accent-ink: #0A0B0D;
+  --gold: #8A6D00;
   --danger: #C62828;
   --glow: 0 2px 12px rgba(0,0,0,.08);
   --btn-secondary-bg: #ECEEF1;
   --btn-secondary-border: rgba(10,11,13,.14);
+  --input-bg: #FFFFFF;
 }
 
 /* ===================================================================
@@ -514,7 +516,8 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 .field input,
 .field select,
 .field textarea {
-  background: var(--surface);
+  background: var(--input-bg);
+  color: var(--text);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 0.75rem 1rem;
@@ -527,6 +530,25 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 .field select:focus,
 .field textarea:focus {
   border-color: var(--accent);
+}
+
+/* Todos os inputs/selects/textarea do app: fundo escuro sólido e texto claro,
+   para o menu de seleção não ficar branco/azul. */
+input, select, textarea {
+  color: var(--text);
+  background: var(--input-bg);
+}
+
+/* Opções do menu suspenso (dropdown) com fundo escuro e texto claro. */
+select option {
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+select option:checked,
+select option:hover {
+  background: var(--accent-fill);
+  color: var(--accent-ink);
 }
 
 .field input[aria-invalid="true"],
