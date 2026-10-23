@@ -16,7 +16,8 @@ import { dateKey } from '../utils.js';
 // ---------------------------------------------------------------------
 
 function svgFigure(pose) {
-  return POSES[pose] || POSES.standing;
+  // Bonequinhos removidos a pedido.
+  return '';
 }
 
 function formatTime(sec) {
@@ -230,10 +231,6 @@ export async function main(ctx) {
               Série ${phase.setNum} de ${phase.totalSets}
             </div>
           `) : '<div style="margin-bottom:1rem"></div>'}
-
-          ${ex ? raw(`
-            <div style="color:var(--text);max-width:80px;opacity:.7" aria-hidden="true">${svgFigure(ex.pose)}</div>
-          `) : ''}
 
           ${nextName ? raw(`
             <div style="margin-top:1.5rem;padding:.75rem;background:var(--surface);border-radius:.5rem;width:100%;max-width:320px">

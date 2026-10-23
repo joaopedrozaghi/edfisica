@@ -27,7 +27,9 @@
   --border: rgba(10,11,13,.08);
   --text: #0D0F12;
   --muted: #5A626E;
-  --accent: #4C7A00;
+  --accent: #3D6400;
+  --accent-fill: #3D6400;
+  --accent-ink: #FFFFFF;
   --gold: #8A5F00;
   --danger: #C62828;
   --glow: 0 2px 12px rgba(0,0,0,.08);

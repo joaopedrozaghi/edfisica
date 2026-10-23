@@ -25,13 +25,13 @@ const DIFFICULTY_COLOR = {
 };
 
 function svgFigure(pose) {
-  return POSES[pose] || POSES.standing;
+  // Bonequinhos (stick-figures) removidos a pedido: não renderiza mais a figura.
+  return '';
 }
 
 function exerciseCard(ex, faved) {
   return `
     <a href="#/treino/exercicio/${ex.id}" class="exercise-card card" aria-label="${ex.name}">
-      <div class="exercise-card__figure" aria-hidden="true">${svgFigure(ex.pose)}</div>
       <div class="exercise-card__info">
         <div class="exercise-card__name">${ex.name}</div>
         <div class="exercise-card__meta">
@@ -156,11 +156,8 @@ async function exercicioDetalhe(ctx, id) {
         </button>
       </div>
 
-      <div class="card" style="text-align:center;padding:1.5rem;margin-bottom:1rem">
-        <div style="color:var(--text);max-width:120px;margin:0 auto" aria-hidden="true">
-          ${raw(svgFigure(ex.pose))}
-        </div>
-        <span class="badge" style="margin-top:.75rem;display:inline-block;background:${DIFFICULTY_COLOR[ex.difficulty]};color:#fff;padding:.2em .7em;border-radius:.3em">
+      <div class="card" style="text-align:center;padding:1rem;margin-bottom:1rem">
+        <span class="badge" style="display:inline-block;background:${DIFFICULTY_COLOR[ex.difficulty]};color:#fff;padding:.2em .7em;border-radius:.3em">
           ${DIFFICULTY_LABEL[ex.difficulty] || ex.difficulty}
         </span>
       </div>
@@ -321,7 +318,6 @@ async function programaDetalhe(ctx, id) {
         if (!ex) return `<div class="card text-muted text-small">${i + 1}. ${item.exerciseId} (não encontrado)</div>`;
         return `
           <a href="#/treino/exercicio/${ex.id}" class="card" style="display:flex;gap:.75rem;align-items:center;text-decoration:none;padding:.75rem">
-            <div style="color:var(--text);width:44px;flex-shrink:0" aria-hidden="true">${svgFigure(ex.pose)}</div>
             <div style="flex:1">
               <div style="font-weight:600">${ex.name}</div>
               <div class="text-muted text-small">${item.sets} × ${item.workSec}s · descanso ${item.restSec}s</div>
@@ -382,7 +378,6 @@ export async function construtor(ctx) {
             const ex = EXERCISES_BY_ID[item.exerciseId];
             return `
               <div class="card" style="display:flex;gap:.75rem;align-items:center;padding:.6rem">
-                <div style="color:var(--text);width:36px;flex-shrink:0" aria-hidden="true">${ex ? svgFigure(ex.pose) : ''}</div>
                 <div style="flex:1">
                   <div style="font-weight:600">${ex ? ex.name : item.exerciseId}</div>
                   <div class="text-muted text-small">${item.sets} × ${item.workSec}s · descanso ${item.restSec}s</div>
