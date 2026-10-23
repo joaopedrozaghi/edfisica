@@ -230,7 +230,7 @@ export async function main(ctx) {
             <div class="text-muted text-small" style="margin-bottom:1rem">
               Série ${phase.setNum} de ${phase.totalSets}
             </div>
-          `) : '<div style="margin-bottom:1rem"></div>'}
+          `) : raw('<div style="margin-bottom:1rem"></div>')}
 
           ${nextName ? raw(`
             <div style="margin-top:1.5rem;padding:.75rem;background:var(--surface);border-radius:.5rem;width:100%;max-width:320px">

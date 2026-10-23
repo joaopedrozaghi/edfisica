@@ -18,6 +18,8 @@
   --radius: 20px;
   --radius-pill: 999px;
   --glow: 0 0 40px rgba(198,255,61,.25);
+  --btn-secondary-bg: #23272E;
+  --btn-secondary-border: rgba(255,255,255,0.14);
 }
 
 [data-theme="light"] {
@@ -33,6 +35,8 @@
   --gold: #8A5F00;
   --danger: #C62828;
   --glow: 0 2px 12px rgba(0,0,0,.08);
+  --btn-secondary-bg: #ECEEF1;
+  --btn-secondary-border: rgba(10,11,13,.14);
 }
 
 /* ===================================================================
@@ -421,6 +425,16 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   background: transparent;
   color: var(--accent);
   border: 2px solid var(--accent);
+}
+
+.btn--secondary {
+  background: var(--btn-secondary-bg);
+  color: var(--text);
+  border: 1px solid var(--btn-secondary-border);
+}
+
+.btn--secondary:hover {
+  filter: brightness(1.15);
 }
 
 .btn--danger {
