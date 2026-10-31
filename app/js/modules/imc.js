@@ -85,7 +85,7 @@ export async function main(ctx) {
       `) : ''}
 
       <div class="card mb-2" style="background:var(--card-alt,var(--card))">
-        <h2 style="font-size:1rem;margin-bottom:0.5rem">⚠️ Limitações do IMC</h2>
+        <h2 style="font-size:1rem;margin-bottom:0.5rem">Limitações do IMC</h2>
         <p class="text-small text-muted">
           O IMC não distingue gordura de massa muscular e pode classificar incorretamente atletas,
           idosos e pessoas com diferentes biotipos. Crianças, gestantes e idosos devem usar referências específicas.

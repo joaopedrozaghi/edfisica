@@ -265,6 +265,7 @@ async function handleRoute() {
   }
   
   // Post-render: title, focus, scroll, aria-current, transition
+  document.documentElement.dataset.chrome = route.chrome === false ? 'off' : 'on';
   document.title = `${route.title} · ${CONFIG.product.name}`;
   
   const h1 = viewEl.querySelector('h1');
