@@ -415,7 +415,8 @@ const MOCK_ICONS = {
   flame: '<path d="M12 22c4 0 7-2.7 7-6.8 0-3.4-2.3-6-4.2-8.2-.4 1.8-1.3 3-2.8 3.5.4-3.2-1-6.2-3.5-8.5C8.3 5.7 5 9 5 15.2 5 19.3 8 22 12 22Z"/>',
   droplet: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
   play: '<path d="M7 4.5v15a1 1 0 0 0 1.5.9l12-7.5a1 1 0 0 0 0-1.8l-12-7.5A1 1 0 0 0 7 4.5Z" fill="currentColor"/>',
-  bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="none"/>',
+  timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2h5"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
 };
 
 function initPhones() {
@@ -434,6 +435,20 @@ function initPhones() {
   });
 }
 
+// ---------- Para quem é: abas ----------
+function initWho() {
+  const root = document.querySelector('[data-who]');
+  if (!root) return;
+  const tabs = Array.from(root.querySelectorAll('[data-who-tab]'));
+  const panels = Array.from(root.querySelectorAll('[data-who-panel]'));
+  const go = (i) => {
+    tabs.forEach((t, n) => { t.setAttribute('aria-selected', String(n === i)); t.tabIndex = n === i ? 0 : -1; });
+    panels.forEach((p, n) => { p.hidden = n !== i; });
+  };
+  tabs.forEach((t, n) => t.addEventListener('click', () => go(n)));
+  go(0);
+}
+
 // ---------- Inicialização ----------
 function init() {
   document.documentElement.classList.add('js');
@@ -445,6 +460,7 @@ function init() {
   initCountdown();
   initPhones();
   initShowcase();
+  initWho();
   initReveal();
   initTopBar();
   initStickyCTA();

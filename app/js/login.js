@@ -57,7 +57,7 @@ export function renderLogin(app) {
           ${needCode ? raw(`
           <div class="auth-field" data-only="signup">
             <input id="au-code" name="code" type="text" autocomplete="off" autocapitalize="characters" placeholder=" ">
-            <label for="au-code">Código da compra</label>
+            <label for="au-code">Código de acesso (está no e-mail da compra)</label>
           </div>`) : ''}
           <p class="auth-error" data-error role="alert" hidden></p>
           <button type="submit" class="btn btn--primary auth-submit" data-submit><span data-submit-label></span></button>
@@ -161,7 +161,6 @@ export function renderLogin(app) {
 
 function mark() {
   return `<div class="auth-mark" aria-hidden="true">
-    <svg viewBox="0 0 48 48" width="44" height="44"><rect width="48" height="48" rx="14" fill="var(--accent-fill)"/>
-    <path d="M27 9 15 27h8l-2 12 12-18h-8z" fill="var(--accent-ink)"/></svg>
+    <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><path d="M8.5 26h7l3.5-9 6 17 4-12 2.5 4h8" fill="none" stroke="#0B0C0E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span>${esc(CONFIG.product.shortName)}<b>PRO</b></span></div>`;
 }

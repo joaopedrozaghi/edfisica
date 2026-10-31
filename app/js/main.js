@@ -193,7 +193,7 @@ function renderShell() {
   const sidebarHtml = html`
     <aside class="sidebar">
       <a href="#/" class="sidebar-logo">
-        EdFísica <span class="sidebar-logo-badge">PRO</span>
+        <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><path d="M8.5 26h7l3.5-9 6 17 4-12 2.5 4h8" fill="none" stroke="#0B0C0E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg> EdFísica <span class="sidebar-logo-badge">PRO</span>
       </a>
       ${raw(sidebarGroups.map(group => `
         <div class="sidebar-section">

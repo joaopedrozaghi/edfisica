@@ -54,11 +54,11 @@ export const CONFIG = Object.freeze({
   // Acesso ao app.
   access: {
     lifetime: true,            // true = mostra "Acesso vitalício"
-    requireCode: false,        // true = pede o código da compra ao criar a conta (barreira leve, NÃO é segurança)
+    requireCode: true,         // true = pede o código da compra ao criar a conta (barreira leve, NÃO é segurança)
                                // codeHashes = códigos do plano COMPLETO; basicCodeHashes = códigos do plano BÁSICO.
                                // Quem cria a conta com código do Básico não acessa os bônus (aparece "Fazer upgrade").
-    basicCodeHashes: [],
-    codeHashes: [],            // SHA-256 (hex, minúsculas) dos códigos válidos, gerado com o comando do README
+    basicCodeHashes: ['dcc36671fdff5ad4a3f6df2587f7e337af98a5e4c8a2bafa3354caf81137b958'],
+    codeHashes: ['961d886accaff848f9a5147b1d02ac4c330318abae1564c27a9a875185885afc'], // SHA-256 (hex, minúsculas) dos códigos válidos, gerado com o comando do README
                                // (que já converte o código para MAIÚSCULAS). Maiúsculas/minúsculas não importam.
   },
 
