@@ -91,9 +91,15 @@ Substitua os itens `example: true` por depoimentos reais com autorização por e
 
 ---
 
-## Código de acesso (opcional, não é segurança real)
+## Login do app (e-mail e senha)
 
-Para exibir uma tela de código antes de abrir o app:
+Ao abrir o app, cada pessoa cria a própria conta (nome, e-mail e senha) e depois entra com ela. Cada conta tem seus próprios dados (treinos, dieta, estudos). A senha nunca é guardada em texto: só um hash PBKDF2.
+
+> As contas ficam **no aparelho** onde foram criadas (não há servidor). Trocar de celular = criar a conta de novo e importar o backup do Perfil. Não existe "esqueci a senha".
+
+## Código de acesso na criação da conta (opcional, não é segurança real)
+
+Para pedir o código da compra ao criar a conta:
 
 ```js
 access: {

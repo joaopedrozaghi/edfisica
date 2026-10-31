@@ -40,9 +40,9 @@ const ROUTES = [
   { pattern: '/perfil', load: () => import('./modules/perfil.js'), view: 'main', title: 'Perfil', nav: 'mais' },
 
   // Dieta + Calculadora de Alimentos
-  { pattern: '/dieta', load: () => import('./modules/dieta.js'), view: 'main', title: 'Dieta', nav: 'mais' },
-  { pattern: '/dieta/metas', load: () => import('./modules/dieta.js'), view: 'metas', title: 'Metas de Dieta', nav: 'mais' },
-  { pattern: '/dieta/planos', load: () => import('./modules/dieta.js'), view: 'planos', title: 'Planos Alimentares', nav: 'mais' },
+  { pattern: '/dieta', load: () => import('./modules/dieta.js'), view: 'main', title: 'Dieta', nav: 'dieta' },
+  { pattern: '/dieta/metas', load: () => import('./modules/dieta.js'), view: 'metas', title: 'Metas de Dieta', nav: 'dieta' },
+  { pattern: '/dieta/planos', load: () => import('./modules/dieta.js'), view: 'planos', title: 'Planos Alimentares', nav: 'dieta' },
 
   // Teste de IMC
   { pattern: '/imc', load: () => import('./modules/imc.js'), view: 'main', title: 'Teste de IMC', nav: 'mais' },

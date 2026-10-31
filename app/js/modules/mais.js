@@ -1,39 +1,52 @@
-// mais.js: grid de tiles para Mais (<1024px, B6.0)
+// mais.js: conta + atalhos para as outras ferramentas.
 // Sem efeitos colaterais na importação
 
-import { html, raw } from '../ui.js';
+import { html, raw, confirmDialog } from '../ui.js';
+import { icon } from '../icons.js';
+import { currentUser, signOut } from '../auth.js';
 
 export async function main(ctx) {
+  const user = currentUser();
   const tiles = [
-    { href: '#/estudos', icon: '📚', title: 'Estudos para Prova', desc: 'Resumos, flashcards e quiz por matéria' },
-    { href: '#/simulado', icon: '⏱️', title: 'Simulado', desc: 'Prova cronometrada com gabarito e histórico' },
-    { href: '#/imc', icon: '⚖️', title: 'Teste de IMC', desc: 'Calcule seu Índice de Massa Corporal' },
-    { href: '#/avaliacao', icon: '📏', title: 'Avaliação Física', desc: '% gordura, RCQ, FC e 1RM' },
-    { href: '#/progresso', icon: '📈', title: 'Progresso', desc: 'Veja sua evolução e estatísticas' },
-    { href: '#/perfil', icon: '👤', title: 'Perfil', desc: 'Dados pessoais, backup e configurações' },
+    { href: '#/estudos', icon: 'book', title: 'Estudos', desc: 'Resumos, flashcards e quiz' },
+    { href: '#/simulado', icon: 'timer', title: 'Simulado', desc: 'Prova com tempo e gabarito' },
+    { href: '#/imc', icon: 'scale', title: 'IMC', desc: 'Seu índice em segundos' },
+    { href: '#/avaliacao', icon: 'ruler', title: 'Avaliação', desc: '% gordura, RCQ, FC e 1RM' },
+    { href: '#/progresso', icon: 'chart', title: 'Progresso', desc: 'Sua evolução' },
+    { href: '#/perfil', icon: 'user', title: 'Perfil', desc: 'Dados, tema e backup' },
   ];
-  
+
   ctx.el.innerHTML = html`
     <h1 tabindex="-1">Mais</h1>
-    <p class="text-muted mb-2">Ferramentas, avaliações e configurações</p>
-    
-    <div style="display:grid;gap:1rem;margin-top:2rem">
-      ${raw(tiles.map(tile => `
-        <a href="${tile.href}" class="list-item">
-          <div class="list-item-icon">${tile.icon}</div>
-          <div class="list-item-content">
-            <div class="list-item-title">${tile.title}</div>
-            <div class="list-item-subtitle">${tile.desc}</div>
-          </div>
-          <div class="list-item-action">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M7 4l6 6-6 6"/>
-            </svg>
-          </div>
-        </a>
-      `).join(''))}
+
+    ${user ? raw(`
+      <div class="account-row">
+        <span class="avatar">${(user.name || '?').trim().charAt(0).toUpperCase()}</span>
+        <div class="grow"><strong></strong><span></span></div>
+        <button type="button" class="logout-btn" data-logout>${icon('logout', 16)} Sair</button>
+      </div>`) : ''}
+
+    <div class="tiles">
+      ${raw(tiles.map((t) => `
+        <a href="${t.href}" class="tile">
+          <span class="list-item-icon">${icon(t.icon, 20)}</span>
+          <div><strong>${t.title}</strong><span>${t.desc}</span></div>
+        </a>`).join(''))}
     </div>
   `;
-  
+
+  if (user) {
+    // Nome e e-mail entram como texto (nunca como HTML)
+    ctx.el.querySelector('.account-row strong').textContent = user.name;
+    ctx.el.querySelector('.account-row .grow span').textContent = user.email;
+    ctx.el.querySelector('[data-logout]').addEventListener('click', async () => {
+      const ok = await confirmDialog('Sair da sua conta neste aparelho? Seu progresso continua salvo.', { confirmLabel: 'Sair' });
+      if (!ok) return;
+      signOut();
+      location.replace(location.pathname + '#/');
+      location.reload();
+    });
+  }
+
   return {};
 }

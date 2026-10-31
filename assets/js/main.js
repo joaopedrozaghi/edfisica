@@ -124,48 +124,32 @@ function replaceWith(container, markup) {
   if (container) container.innerHTML = markup;
 }
 
-function renderBonuses() {
+function renderIncluded() {
+  const ul = document.querySelector('[data-render="included"]');
+  if (!ul) return;
   const hasAnchor = derived.anchorBRL !== null;
-  const html = CONFIG.bonuses.map((b, i) => `
-    <article class="card glass bonus reveal">
-      <div class="bonus-top"><span class="bonus-tag">★ Bônus ${i + 1}</span><span class="card-emoji" aria-hidden="true">${esc(b.emoji)}</span></div>
-      <h3>${esc(b.title)}</h3>
-      <p>${esc(b.desc)}</p>
-      <p class="bonus-price">${hasAnchor ? `<s class="was">De ${esc(fmtBRL(b.value))}</s>` : '<span class="incl">Incluso</span>'}<span class="free">GRÁTIS</span></p>
-    </article>`).join('');
-  replaceWith(document.querySelector('[data-render="bonuses"]'), html);
-}
-
-function renderValueStack() {
-  const hasAnchor = derived.anchorBRL !== null;
-  const items = [CONFIG.mainProduct].concat(CONFIG.bonuses);
-  document.querySelectorAll('[data-render="value-stack"]').forEach((ul) => {
-    const strike = ul.hasAttribute('data-strike');
-    const html = items.map((it) => {
-      const val = hasAnchor
-        ? (strike ? `<s>${esc(fmtBRL(it.value))}</s>` : esc(fmtBRL(it.value)))
-        : 'Incluso';
-      return `<li><span>${esc(it.title)}</span><span class="v">${val}</span></li>`;
-    }).join('');
-    replaceWith(ul, html);
-  });
+  const items = [{ title: CONFIG.mainProduct.title, desc: 'Estudos, treinos, dieta, IMC, avaliação física e progresso.', value: CONFIG.mainProduct.value }]
+    .concat(CONFIG.bonuses.map((b) => ({ title: b.title, value: b.value, bonus: true })));
+  replaceWith(ul, items.map((it, i) => `
+    <li>
+      <span class="incl-n">${i === 0 ? '★' : i}</span>
+      <span class="incl-t"><strong>${esc(it.title)}</strong>${it.desc ? `<span>${esc(it.desc)}</span>` : ""}</span>
+      <span class="incl-v">${hasAnchor ? `<s>${esc(fmtBRL(it.value))}</s>` : (it.bonus ? 'Bônus' : 'Incluso')}</span>
+    </li>`).join(''));
 }
 
 function renderTestimonials() {
+  // Só depoimentos reais (example:false). Os de exemplo nunca aparecem no site.
   const t = CONFIG.testimonials;
   const section = document.getElementById('depoimentos');
   if (!section) return;
-  if (!t.enabled || !t.items.length) { section.hidden = true; return; }
-  const notice = section.querySelector('[data-testi-notice]');
-  if (notice) notice.hidden = !t.items.some((it) => it.example);
-  const html = t.items.map((it) => {
-    const tag = it.example ? '<span class="testi-tag">Exemplo: substitua por um depoimento real</span>' : '';
-    const who = it.example
-      ? esc(it.role || '')
-      : [it.name ? `<strong>${esc(it.name)}</strong>` : '', esc(it.role || ''), esc(it.city || '')].filter(Boolean).join(' · ');
-    return `<figure class="card glass testi reveal">${tag}<blockquote>“${esc(it.text)}”</blockquote><figcaption>${who}</figcaption></figure>`;
-  }).join('');
-  replaceWith(section.querySelector('[data-render="testimonials"]'), html);
+  const real = (t.items || []).filter((it) => !it.example);
+  if (!t.enabled || !real.length) { section.hidden = true; return; }
+  section.hidden = false;
+  replaceWith(section.querySelector('[data-render="testimonials"]'), real.map((it) => {
+    const who = [it.name ? `<strong>${esc(it.name)}</strong>` : '', esc(it.role || ''), esc(it.city || '')].filter(Boolean).join(' · ');
+    return `<figure class="quote"><blockquote>“${esc(it.text)}”</blockquote><figcaption>${who}</figcaption></figure>`;
+  }).join(''));
 }
 
 function renderSupport() {
@@ -238,22 +222,28 @@ function initCountdown() {
   if (!document.hidden) start(); else tick();
 }
 
-// ---------- Revelar ao rolar ----------
+// ---------- Entrada suave ao rolar ----------
 function initReveal() {
-  const els = document.querySelectorAll('.reveal');
-  if (reduceMotion || !('IntersectionObserver' in window)) {
-    els.forEach((el) => el.classList.add('is-visible'));
-    return;
-  }
+  const els = document.querySelectorAll('.nums, .block, .foot');
+  if (reduceMotion || !('IntersectionObserver' in window)) return;
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
     });
-  }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
-  els.forEach((el) => io.observe(el));
+  }, { threshold: 0.12 });
+  els.forEach((el) => { el.classList.add('rise'); io.observe(el); });
 }
 
-// ---------- Barra fixa de compra (< 1024 px) ----------
+// ---------- Topo com linha ao rolar ----------
+function initTopBar() {
+  const top = document.querySelector('.top');
+  if (!top) return;
+  const on = () => top.classList.toggle('is-scrolled', window.scrollY > 8);
+  window.addEventListener('scroll', on, { passive: true });
+  on();
+}
+
+// ---------- Barra fixa de compra ----------
 function initStickyCTA() {
   const bar = document.getElementById('sticky-cta');
   const hero = document.getElementById('hero-cta');
@@ -269,42 +259,21 @@ function initStickyCTA() {
     if (btn) btn.tabIndex = show ? 0 : -1;
   };
   new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      // Só aparece depois que o botão do topo saiu da tela por cima.
-      heroPassed = !e.isIntersecting && e.boundingClientRect.top < 0;
-    });
+    entries.forEach((e) => { heroPassed = !e.isIntersecting && e.boundingClientRect.top < 0; });
     update();
   }).observe(hero);
   new IntersectionObserver((entries) => {
     entries.forEach((e) => { offerVisible = e.isIntersecting; });
     update();
-  }).observe(offer);
+  }, { threshold: 0.2 }).observe(offer);
 }
 
-// ---------- FAQ (acordeão; vários itens podem ficar abertos) ----------
+// ---------- Dúvidas: abre uma por vez ----------
 function initFAQ() {
-  document.querySelectorAll('.faq-item').forEach((item) => {
-    const btn = item.querySelector('.faq-q');
-    const panel = item.querySelector('.faq-a');
-    if (!btn || !panel) return;
-    let timer = 0;
-    btn.setAttribute('aria-expanded', 'false');
-    panel.hidden = true;
-    btn.addEventListener('click', () => {
-      const open = btn.getAttribute('aria-expanded') !== 'true';
-      btn.setAttribute('aria-expanded', String(open));
-      clearTimeout(timer);
-      if (open) {
-        panel.hidden = false;
-        if (reduceMotion) { item.classList.add('is-open'); return; }
-        requestAnimationFrame(() => requestAnimationFrame(() => item.classList.add('is-open')));
-      } else {
-        item.classList.remove('is-open');
-        if (reduceMotion) { panel.hidden = true; return; }
-        timer = setTimeout(() => { panel.hidden = true; }, 320);
-      }
-    });
-  });
+  const items = document.querySelectorAll('.faq details');
+  items.forEach((d) => d.addEventListener('toggle', () => {
+    if (d.open) items.forEach((o) => { if (o !== d) o.open = false; });
+  }));
 }
 
 // ---------- Contagem animada dos números ----------
@@ -319,7 +288,7 @@ function initCountUp() {
       const final = parseInt(el.textContent.replace(/\D/g, ''), 10);
       if (!isFinite(final) || final <= 0) return;
       const t0 = performance.now();
-      const dur = 1200;
+      const dur = 1000;
       const step = (t) => {
         const p = Math.min(1, (t - t0) / dur);
         el.textContent = fmtInt(final * (1 - Math.pow(1 - p, 3)));
@@ -327,48 +296,116 @@ function initCountUp() {
       };
       requestAnimationFrame(step);
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.5 });
   els.forEach((el) => io.observe(el));
 }
 
-// ---------- Indicadores do carrossel de telas (celular) ----------
-function initDemoDots() {
-  const track = document.querySelector('[data-demo-track]');
-  const dots = document.querySelectorAll('[data-demo-dots] i');
-  if (!track || !dots.length) return;
-  let raf = 0;
-  track.addEventListener('scroll', () => {
-    if (raf) return;
-    raf = requestAnimationFrame(() => {
-      raf = 0;
-      const items = track.children;
-      const mid = track.scrollLeft + track.clientWidth / 2;
-      let best = 0;
-      let dist = Infinity;
-      for (let i = 0; i < items.length; i++) {
-        const c = items[i].offsetLeft + items[i].offsetWidth / 2;
-        if (Math.abs(c - mid) < dist) { dist = Math.abs(c - mid); best = i; }
-      }
-      dots.forEach((d, i) => d.classList.toggle('on', i === best));
+// ---------- Vitrine: abas, arrastar no celular, flashcard e timer ----------
+const CAPTIONS = [
+  () => `${fmtInt(CONFIG.contentStats.subjects)} matérias com resumos, flashcards e questões comentadas. Toque no cartão.`,
+  () => 'O app conta o tempo, avisa a troca e mostra o próximo exercício.',
+  () => `Monte o dia com ${fmtInt(CONFIG.contentStats.foods)}+ alimentos brasileiros e veja calorias e macros.`,
+  () => 'IMC, % de gordura, frequência cardíaca e seu histórico de peso.',
+];
+
+function initShowcase() {
+  const root = document.querySelector('[data-show]');
+  if (!root) return;
+  const tabs = Array.from(root.querySelectorAll('[data-tab]'));
+  const track = root.querySelector('[data-screens]');
+  const ind = root.querySelector('.show-ind');
+  const cap = root.querySelector('[data-cap]');
+  const phone = root.querySelector('[data-phone]');
+  const panels = Array.from(track.children);
+  let idx = 0;
+  let auto = 0;
+  let touched = false;
+
+  const stopAuto = () => { touched = true; clearInterval(auto); auto = 0; };
+  const go = (i, fromUser) => {
+    idx = (i + tabs.length) % tabs.length;
+    track.style.transform = `translateX(${-idx * 100}%)`;
+    ind.style.transform = `translateX(${idx * 100}%)`;
+    tabs.forEach((t, n) => {
+      t.setAttribute('aria-selected', String(n === idx));
+      t.tabIndex = n === idx ? 0 : -1;
     });
+    panels.forEach((p, n) => p.setAttribute('aria-hidden', String(n !== idx)));
+    if (cap) {
+      cap.classList.add('is-out');
+      setTimeout(() => { cap.textContent = CAPTIONS[idx](); cap.classList.remove('is-out'); }, 160);
+    }
+    if (fromUser) stopAuto();
+  };
+  const startAuto = () => {
+    if (reduceMotion || touched || auto) return;
+    auto = setInterval(() => go(idx + 1), 5000);
+  };
+
+  tabs.forEach((t, n) => t.addEventListener('click', () => go(n, true)));
+  root.querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    go(idx + (e.key === 'ArrowRight' ? 1 : -1), true);
+    tabs[idx].focus();
+  });
+
+  // Arrastar para o lado no celular
+  let x0 = null;
+  let y0 = 0;
+  phone.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; stopAuto(); }, { passive: true });
+phone.addEventListener('pointerdown', stopAuto);
+  phone.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    const dy = e.changedTouches[0].clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(idx + (dx < 0 ? 1 : -1), true);
   }, { passive: true });
+
+  // Flashcard vira ao tocar
+  root.querySelector('[data-flip]')?.addEventListener('click', (e) => {
+    e.currentTarget.classList.toggle('is-flipped');
+    stopAuto();
+  });
+
+  // Timer do player conta de verdade (30 s em loop)
+  const clock = root.querySelector('[data-clock]');
+  const ring = root.querySelector('[data-ring]');
+  if (clock && ring && !reduceMotion) {
+    const C = 326.7;
+    let left = 30;
+    setInterval(() => {
+      if (document.hidden) return;
+      left = left <= 0 ? 30 : left - 1;
+      clock.textContent = `0:${String(left).padStart(2, '0')}`;
+      ring.style.strokeDashoffset = String(C * (1 - left / 30));
+    }, 1000);
+  }
+
+  // Só anda sozinho enquanto a vitrine está na tela
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) startAuto(); else { clearInterval(auto); auto = 0; } });
+    }, { threshold: 0.5 }).observe(phone);
+  }
+  go(0);
 }
 
 // ---------- Inicialização ----------
 function init() {
   document.documentElement.classList.add('js');
-  renderBonuses();
-  renderValueStack();
+  renderIncluded();
   renderTestimonials();
   bindConfig(document);
   renderSupport();
   bindCTAs();
   initCountdown();
+  initShowcase();
   initReveal();
+  initTopBar();
   initStickyCTA();
   initFAQ();
   initCountUp();
-  initDemoDots();
 }
 
 init();

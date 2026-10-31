@@ -7,6 +7,7 @@ import { PROGRAMS, PROGRAMS_BY_ID } from '../../data/programs.js';
 import { repo } from '../repo.js';
 import { html, raw, toast } from '../ui.js';
 import { uid } from '../utils.js';
+import { icon } from '../icons.js';
 
 // ---------------------------------------------------------------------
 // Helpers
@@ -88,48 +89,56 @@ async function biblioteca(ctx) {
     return list;
   }
 
-  function render() {
+  function listHtml() {
     const list = filtered();
     const favIds = repo.favs.list('exercises');
+    return list.length === 0
+      ? `<div class="empty"><p class="text-muted">Nenhum exercício encontrado.</p></div>`
+      : `<div class="exercise-grid">${list.map((e) => exerciseCard(e, favIds.includes(e.id))).join('')}</div>`;
+  }
 
+  function render() {
     ctx.el.innerHTML = html`
       <h1 tabindex="-1">Treino em Casa</h1>
 
-      <div class="module-actions" style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1.25rem">
-        <a href="#/treino/programas" class="btn btn--primary">🏋️ Programas</a>
-        <a href="#/treino/construtor" class="btn btn--secondary">🔧 Montar Treino</a>
+      <div class="module-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem">
+        <a href="#/treino/programas" class="btn btn--primary">${raw(icon('play', 18))} Programas</a>
+        <a href="#/treino/construtor" class="btn btn--ghost">${raw(icon('wrench', 18))} Montar treino</a>
       </div>
 
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem" role="group" aria-label="Filtrar por nível">
+      <div class="search-wrap">
+        ${raw(icon('search', 18))}
+        <input type="search" placeholder="Buscar exercício ou músculo" value="${search}" data-search aria-label="Buscar exercício">
+      </div>
+
+      <div class="chip-row" role="group" aria-label="Filtrar por nível">
         ${raw(['todos','iniciante','intermediario','avancado'].map((d) =>
-          `<button type="button" class="btn btn--small${filter === d ? ' btn--primary' : ' btn--secondary'}" data-filter="${d}">
-            ${d === 'todos' ? 'Todos' : DIFFICULTY_LABEL[d]}
-          </button>`
+          `<button type="button" class="chip${filter === d ? ' chip--active' : ''}" data-filter="${d}" aria-pressed="${filter === d}">${d === 'todos' ? 'Todos' : DIFFICULTY_LABEL[d]}</button>`
         ).join(''))}
       </div>
 
-      <div style="margin-bottom:1rem">
-        <input type="search" class="input" placeholder="Buscar exercício ou músculo…" value="${search}" data-search aria-label="Buscar exercício" style="width:100%">
-      </div>
-
-      ${list.length === 0
-        ? raw(`<div class="empty"><p>Nenhum exercício encontrado.</p></div>`)
-        : raw(`<div class="exercise-grid">${list.map((e) => exerciseCard(e, favIds.includes(e.id))).join('')}</div>`)
-      }
+      <div data-list>${raw(listHtml())}</div>
     `;
 
-    // Filter buttons
+    const listEl = ctx.el.querySelector('[data-list]');
+
+    // Filtros: só troca a lista (sem redesenhar a tela)
     ctx.el.querySelectorAll('[data-filter]').forEach((btn) => {
       btn.addEventListener('click', () => {
         filter = btn.dataset.filter;
-        render();
+        ctx.el.querySelectorAll('[data-filter]').forEach((b) => {
+          const on = b === btn;
+          b.classList.toggle('chip--active', on);
+          b.setAttribute('aria-pressed', String(on));
+        });
+        listEl.innerHTML = listHtml();
       });
     });
 
-    // Search
+    // Busca: atualiza a lista mantendo o foco no campo
     ctx.el.querySelector('[data-search]')?.addEventListener('input', (e) => {
       search = e.target.value;
-      render();
+      listEl.innerHTML = listHtml();
     });
   }
 
