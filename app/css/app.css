@@ -1897,3 +1897,6 @@ body::before {
 .wm-fit, .auth-mark b { color: #93C5FD !important; }
 .opt.is-right .opt-l { background: #4ADE80; color: #06210f; }
 .opt.is-wrong .opt-l { background: #FF6B6B; color: #2a0606; }
+
+/* Títulos recebem foco ao trocar de aba (leitor de tela), mas sem a borda azul */
+[tabindex="-1"]:focus, [tabindex="-1"]:focus-visible { outline: none; }
