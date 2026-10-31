@@ -133,7 +133,7 @@ main { outline: none; }
 .iphone::after { right: -3px; top: 29%; height: 11%; }
 .iphone-screen {
   position: relative; height: 100%; overflow: hidden; border-radius: calc(var(--w) * .14);
-  background: #060D1E; isolation: isolate; touch-action: pan-y;
+  background: #060D1E; isolation: isolate;
 }
 .ip-island {
   position: absolute; z-index: 5; top: calc(var(--w) * .035); left: 50%; transform: translateX(-50%);
@@ -508,7 +508,7 @@ main { outline: none; }
 .sticky-p span { order: -1; }
 @media (min-width: 720px) {
   .offer { max-width: 760px; }
-  .plans { grid-template-columns: 1.1fr 1fr; align-items: center; }
+  .plans { grid-template-columns: 1fr 1.1fr; align-items: center; }
 }
 
 /* Wordmark: "PRO" com contorno amarelo */
@@ -721,3 +721,11 @@ body {
 .hero-sub b { color: var(--text); font-weight: 600; }
 .hero-sub strong { display: block; margin-top: 6px; color: #93C5FD; }
 @media (prefers-reduced-motion: reduce) { .rot--word .rot-w:first-child { display: block; } }
+
+
+/* Carrossel "Por dentro do app": arrastar em cima do iPhone */
+.iphone--hero .iphone-screen { touch-action: pan-y; }        /* o iPhone do topo tem arrastar próprio */
+.gal .tilt { pointer-events: none; }                          /* o toque vai direto para o carrossel */
+.gal-track { touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; }
+.gal-track > .gal-item { scroll-snap-stop: always; }          /* para em um iPhone por vez */
+.plans { gap: 24px; }
