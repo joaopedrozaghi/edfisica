@@ -227,13 +227,12 @@ export function gauge(value, { size = 200, min = 15, max = 40, bands = [], needl
   }
   
   // Labels min/max
+  const padding = 10;
   const labelsEl = `
     <text x="${padding}" y="${center + 5}" text-anchor="start" font-size="12" fill="var(--muted)">${min}</text>
     <text x="${size - padding}" y="${center + 5}" text-anchor="end" font-size="12" fill="var(--muted)">${max}</text>
   `;
-  
-  const padding = 10;
-  
+
   return `
     <svg width="${size}" height="${size * 0.6}" viewBox="0 0 ${size} ${size * 0.6}" class="chart-gauge">
       ${bandsEl}

@@ -5,7 +5,7 @@
 import { EXERCISES, EXERCISES_BY_ID, POSES } from '../../data/exercises.js';
 import { PROGRAMS, PROGRAMS_BY_ID } from '../../data/programs.js';
 import { repo } from '../repo.js';
-import { html, raw, toast } from '../ui.js';
+import { html, raw, esc, toast } from '../ui.js';
 import { uid } from '../utils.js';
 import { icon } from '../icons.js';
 
@@ -46,11 +46,11 @@ function exerciseCard(ex, faved) {
       <div class="exercise-card__info">
         <div class="exercise-card__name">${ex.name}</div>
         <div class="exercise-card__meta">
-          <span class="badge" style="${difficultyBadgeStyle(ex.difficulty)}">${DIFFICULTY_LABEL[ex.difficulty] || ex.difficulty}</span>
+          <span class="lvl lvl--${ex.difficulty}">${DIFFICULTY_LABEL[ex.difficulty] || ex.difficulty}</span>
           <span class="text-muted text-small">${ex.muscles.slice(0, 2).join(', ')}</span>
         </div>
       </div>
-      <span class="fav-icon" aria-label="${faved ? 'Favorito' : ''}">${faved ? '★' : ''}</span>
+      <span class="fav-icon" aria-label="${faved ? 'Favorito' : ''}">${faved ? icon('heart', 16) : icon('chevron', 16)}</span>
     </a>`;
 }
 
@@ -155,70 +155,48 @@ async function exercicioDetalhe(ctx, id) {
 
   if (!ex) {
     ctx.el.innerHTML = html`
-      <div class="empty">
-        <h1 tabindex="-1">Conteúdo não encontrado</h1>
-        <p>Exercício "${id}" não existe.</p>
-        <a href="#/treino" class="btn btn--primary">Voltar</a>
-      </div>`;
+      <a href="#/treino" class="back-link">${raw(icon('back', 18))} Treino</a>
+      <div class="done"><h1 tabindex="-1">Exercício não encontrado</h1><a href="#/treino" class="btn btn--primary">Voltar</a></div>`;
     return {};
   }
 
-  const isFav = repo.favs.has('exercises', id);
-
   function render(fav) {
     ctx.el.innerHTML = html`
-      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem">
-        <a href="#/treino" class="btn btn--small btn--secondary" aria-label="Voltar">← Voltar</a>
-        <h1 tabindex="-1" style="margin:0;flex:1;font-size:1.25rem">${ex.name}</h1>
-        <button type="button" class="btn btn--small${fav ? ' btn--primary' : ' btn--secondary'}" data-fav aria-label="${fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}">
-          ${fav ? '★' : '☆'}
-        </button>
-      </div>
-
-      <div class="card" style="text-align:center;padding:1rem;margin-bottom:1rem">
-        <span class="badge" style="${difficultyBadgeStyle(ex.difficulty)}">
-          ${DIFFICULTY_LABEL[ex.difficulty] || ex.difficulty}
-        </span>
-      </div>
-
-      <div class="card" style="margin-bottom:1rem">
-        <h2 style="font-size:1rem;margin-bottom:.5rem">💪 Músculos trabalhados</h2>
-        <p>${ex.muscles.join(', ')}</p>
-      </div>
-
-      <div class="card" style="margin-bottom:1rem">
-        <h2 style="font-size:1rem;margin-bottom:.75rem">📋 Passo a passo</h2>
-        <ol style="padding-left:1.25rem;margin:0">
-          ${raw(ex.steps.map((s) => `<li style="margin-bottom:.4rem">${s}</li>`).join(''))}
-        </ol>
-      </div>
-
-      <div class="card" style="margin-bottom:1rem">
-        <h2 style="font-size:1rem;margin-bottom:.75rem">⚠️ Erros comuns</h2>
-        <ul style="padding-left:1.25rem;margin:0">
-          ${raw(ex.errors.map((e) => `<li style="margin-bottom:.4rem">${e}</li>`).join(''))}
-        </ul>
-      </div>
-
-      <div class="card" style="margin-bottom:1rem">
-        <h2 style="font-size:1rem;margin-bottom:.75rem">🔄 Variações</h2>
-        <div style="margin-bottom:.5rem">
-          <strong>Mais fácil:</strong> ${ex.variations.easier}
-        </div>
+      <a href="#/treino" class="back-link">${raw(icon('back', 18))} Exercícios</a>
+      <div class="ex-head">
         <div>
-          <strong>Mais difícil:</strong> ${ex.variations.harder}
+          <span class="lvl lvl--${ex.difficulty}">${DIFFICULTY_LABEL[ex.difficulty] || ex.difficulty}</span>
+          <h1 tabindex="-1">${ex.name}</h1>
         </div>
+        <button type="button" class="fav-btn${fav ? ' is-on' : ''}" data-fav aria-pressed="${fav}" aria-label="${fav ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}">${raw(icon('heart', 20))}</button>
+      </div>
+      <div class="tags">${raw(ex.muscles.map((m) => `<span>${esc(m)}</span>`).join(''))}</div>
+
+      <h2 class="section-title">Passo a passo</h2>
+      <ol class="steps-list">
+        ${raw(ex.steps.map((s, i) => `<li><span>${i + 1}</span><p>${esc(s)}</p></li>`).join(''))}
+      </ol>
+
+      <h2 class="section-title">Erros comuns</h2>
+      <ul class="errors-list">
+        ${raw(ex.errors.map((e) => `<li>${esc(e)}</li>`).join(''))}
+      </ul>
+
+      <h2 class="section-title">Variações</h2>
+      <div class="var-grid">
+        <div class="var-card"><small>Mais fácil</small><p>${ex.variations.easier}</p></div>
+        <div class="var-card var-card--hard"><small>Mais difícil</small><p>${ex.variations.harder}</p></div>
       </div>
     `;
 
     ctx.el.querySelector('[data-fav]')?.addEventListener('click', () => {
       const newFav = repo.favs.toggle('exercises', id);
       render(newFav);
-      toast(newFav ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+      toast(newFav ? 'Salvo nos favoritos' : 'Removido dos favoritos');
     });
   }
 
-  render(isFav);
+  render(repo.favs.has('exercises', id));
   return {};
 }
 
@@ -226,13 +204,32 @@ async function exercicioDetalhe(ctx, id) {
 // View: programas
 // ---------------------------------------------------------------------
 
+// Capa de cada programa: cor e ícone
+const PROGRAM_THEME = {
+  'full-body-iniciante': { c: '#FFD60A', i: 'dumbbell' },
+  'hiit-15min': { c: '#FF7A45', i: 'flame' },
+  mobilidade: { c: '#4ADE80', i: 'heart' },
+  core: { c: '#6BB4FF', i: 'timer' },
+  'terceira-idade': { c: '#C084FC', i: 'user' },
+};
+const BONUS_PROGRAMS = ['mobilidade', 'terceira-idade'];
+
+function programCard(p) {
+  const t = PROGRAM_THEME[p.id] || { c: '#FFD60A', i: 'dumbbell' };
+  return `
+    <a href="#/treino/programas/${p.id}" class="prog" style="--c:${t.c}">
+      <span class="prog-cover">${icon(t.i, 26)}${BONUS_PROGRAMS.includes(p.id) ? '<em>Bônus</em>' : ''}</span>
+      <span class="prog-body">
+        <b>${esc(p.name)}</b>
+        <span class="prog-meta"><span>${p.durationMin} min</span><span>${DIFFICULTY_LABEL[p.level] || p.level}</span><span>${p.items.length} exercícios</span></span>
+        <span class="prog-desc">${esc(p.description)}</span>
+      </span>
+    </a>`;
+}
+
 export async function programas(ctx) {
   const { params } = ctx;
-
-  if (params && params.id) {
-    return programaDetalhe(ctx, params.id);
-  }
-
+  if (params && params.id) return programaDetalhe(ctx, params.id);
   return listaProgramas(ctx);
 }
 
@@ -240,41 +237,25 @@ async function listaProgramas(ctx) {
   const customList = repo.workouts.listCustom();
 
   ctx.el.innerHTML = html`
-    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
-      <a href="#/treino" class="btn btn--small btn--secondary">← Voltar</a>
-      <h1 tabindex="-1" style="margin:0;flex:1;font-size:1.25rem">Programas</h1>
-    </div>
+    <a href="#/treino" class="back-link">${raw(icon('back', 18))} Treino</a>
+    <h1 tabindex="-1">Programas</h1>
+    <p class="page-sub">Escolha um e aperte play: o app guia cada série e descanso.</p>
 
-    <h2 style="font-size:1rem;margin-bottom:.75rem">Prontos</h2>
-    <div class="exercise-grid">
-      ${raw(PROGRAMS.map((p) => `
-        <a href="#/treino/programas/${p.id}" class="card program-card" style="text-decoration:none;display:block">
-          <div style="font-size:2rem;margin-bottom:.5rem">${p.emoji}</div>
-          <div style="font-weight:700;margin-bottom:.25rem">${p.name}</div>
-          <div class="text-muted text-small">${p.durationMin} min · ${DIFFICULTY_LABEL[p.level] || p.level}</div>
-          <p class="text-small" style="margin-top:.5rem;margin-bottom:0">${p.description}</p>
-        </a>
-      `).join(''))}
-    </div>
+    <div class="prog-list">${raw(PROGRAMS.map(programCard).join(''))}</div>
 
     ${customList.length > 0 ? raw(`
-      <h2 style="font-size:1rem;margin:1.5rem 0 .75rem">Meus treinos</h2>
-      <div class="exercise-grid">
+      <h2 class="section-title">Meus treinos</h2>
+      <div class="subject-list">
         ${customList.map((w) => `
-          <a href="#/treino/programas/custom-${w.id}" class="card program-card" style="text-decoration:none;display:block">
-            <div style="font-size:2rem;margin-bottom:.5rem">🔧</div>
-            <div style="font-weight:700;margin-bottom:.25rem">${w.name || 'Treino personalizado'}</div>
-            <div class="text-muted text-small">${w.items ? w.items.length : 0} exercícios</div>
-          </a>
-        `).join('')}
-      </div>
-    `) : ''}
+          <a href="#/treino/programas/custom-${w.id}" class="list-item">
+            <span class="list-item-icon">${icon('wrench', 20)}</span>
+            <span class="list-item-content"><span class="list-item-title">${esc(w.name || 'Treino personalizado')}</span><span class="list-item-subtitle">${w.items ? w.items.length : 0} exercícios</span></span>
+            <span class="list-item-action">${icon('chevron', 18)}</span>
+          </a>`).join('')}
+      </div>`) : ''}
 
-    <div style="margin-top:1.5rem">
-      <a href="#/treino/construtor" class="btn btn--secondary" style="width:100%;display:block;text-align:center">🔧 Montar novo treino</a>
-    </div>
+    <a href="#/treino/construtor" class="btn btn--ghost btn--block" style="margin-top:1.25rem">${raw(icon('wrench', 18))} Montar meu treino</a>
   `;
-
   return {};
 }
 
@@ -283,20 +264,10 @@ async function programaDetalhe(ctx, id) {
   let isCustom = false;
 
   if (id.startsWith('custom-')) {
-    const customId = id.slice(7);
-    const c = repo.workouts.getCustom(customId);
+    const c = repo.workouts.getCustom(id.slice(7));
     if (c) {
       isCustom = true;
-      program = {
-        id: 'custom-' + c.id,
-        name: c.name || 'Treino personalizado',
-        description: '',
-        level: 'personalizado',
-        durationMin: 0,
-        emoji: '🔧',
-        prepareSec: c.prepareSec || 10,
-        items: c.items || [],
-      };
+      program = { id: 'custom-' + c.id, name: c.name || 'Treino personalizado', description: '', level: 'personalizado', durationMin: 0, prepareSec: c.prepareSec || 10, items: c.items || [] };
     }
   } else {
     program = PROGRAMS_BY_ID[id] || null;
@@ -304,67 +275,52 @@ async function programaDetalhe(ctx, id) {
 
   if (!program) {
     ctx.el.innerHTML = html`
-      <div class="empty">
-        <h1 tabindex="-1">Conteúdo não encontrado</h1>
-        <p>Programa "${id}" não existe.</p>
-        <a href="#/treino/programas" class="btn btn--primary">Voltar</a>
-      </div>`;
+      <a href="#/treino/programas" class="back-link">${raw(icon('back', 18))} Programas</a>
+      <div class="done"><h1 tabindex="-1">Programa não encontrado</h1><a href="#/treino/programas" class="btn btn--primary">Voltar</a></div>`;
     return {};
   }
 
-  const exItems = program.items.map((item) => ({
-    item,
-    ex: EXERCISES_BY_ID[item.exerciseId],
-  }));
+  const t = PROGRAM_THEME[program.id] || { c: '#FFD60A', i: isCustom ? 'wrench' : 'dumbbell' };
+  const exItems = program.items.map((item) => ({ item, ex: EXERCISES_BY_ID[item.exerciseId] }));
+  const totalSec = program.items.reduce((s, it) => s + it.sets * (it.workSec + it.restSec), 0);
+  const minutes = program.durationMin || Math.max(1, Math.round(totalSec / 60));
 
   ctx.el.innerHTML = html`
-    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
-      <a href="#/treino/programas" class="btn btn--small btn--secondary">← Voltar</a>
-      <h1 tabindex="-1" style="margin:0;flex:1;font-size:1.25rem">${program.name}</h1>
-    </div>
-
-    <div class="card" style="margin-bottom:1rem;text-align:center">
-      <div style="font-size:3rem">${program.emoji}</div>
-      ${program.description ? raw(`<p style="margin:.5rem 0 0">${program.description}</p>`) : ''}
-      <div class="text-muted text-small" style="margin-top:.5rem">
-        ${program.durationMin > 0 ? `${program.durationMin} min · ` : ''}${DIFFICULTY_LABEL[program.level] || program.level}
+    <a href="#/treino/programas" class="back-link">${raw(icon('back', 18))} Programas</a>
+    <div class="prog-hero" style="--c:${t.c}">
+      <span class="prog-hero-ico">${raw(icon(t.i, 28))}</span>
+      <h1 tabindex="-1">${program.name}</h1>
+      ${program.description ? raw(`<p>${esc(program.description)}</p>`) : ''}
+      <div class="prog-stats">
+        <div><b>${minutes}</b><span>min</span></div>
+        <div><b>${program.items.length}</b><span>exercícios</span></div>
+        <div><b>${isCustom ? '—' : (DIFFICULTY_LABEL[program.level] || program.level)}</b><span>nível</span></div>
       </div>
     </div>
 
-    <h2 style="font-size:1rem;margin-bottom:.75rem">Exercícios</h2>
-    <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem">
-      ${raw(exItems.map(({ item, ex }, i) => {
-        if (!ex) return `<div class="card text-muted text-small">${i + 1}. ${item.exerciseId} (não encontrado)</div>`;
-        return `
-          <a href="#/treino/exercicio/${ex.id}" class="card" style="display:flex;gap:.75rem;align-items:center;text-decoration:none;padding:.75rem">
-            <div style="flex:1">
-              <div style="font-weight:600">${ex.name}</div>
-              <div class="text-muted text-small">${item.sets} × ${item.workSec}s · descanso ${item.restSec}s</div>
-            </div>
-          </a>`;
-      }).join(''))}
+    <h2 class="section-title">Exercícios</h2>
+    <ol class="prog-ex">
+      ${raw(exItems.map(({ item, ex }, i) => ex ? `
+        <li><a href="#/treino/exercicio/${ex.id}">
+          <span class="prog-ex-n">${i + 1}</span>
+          <span class="prog-ex-t"><b>${esc(ex.name)}</b><span>${item.sets} séries · ${item.workSec}s de treino · ${item.restSec}s de descanso</span></span>
+          ${icon('chevron', 16)}
+        </a></li>` : '').join(''))}
+    </ol>
+
+    <div class="sticky-action">
+      <a href="#/treino/player/${program.id}" class="btn btn--primary btn--block btn--big">${raw(icon('play', 18))} Começar treino</a>
+      ${isCustom ? raw(`<button type="button" class="link-danger" data-delete-custom>Excluir este treino</button>`) : ''}
     </div>
-
-    <a href="#/treino/player/${program.id}" class="btn btn--primary" style="width:100%;display:block;text-align:center;padding:.85rem;font-size:1.1rem">
-      ▶ Iniciar treino
-    </a>
-
-    ${isCustom ? raw(`
-      <button type="button" class="btn btn--secondary" style="width:100%;display:block;text-align:center;margin-top:.75rem" data-delete-custom>
-        🗑 Excluir treino
-      </button>
-    `) : ''}
   `;
 
   if (isCustom) {
     ctx.el.querySelector('[data-delete-custom]')?.addEventListener('click', () => {
-      const customId = id.slice(7);
-      repo.workouts.removeCustom(customId);
+      repo.workouts.removeCustom(id.slice(7));
       toast('Treino excluído');
       ctx.navigate('#/treino/programas');
     });
   }
-
   return {};
 }
 

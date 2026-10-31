@@ -28,7 +28,7 @@ function renderSetup(ctx) {
   const history = repo.study.listSimulados();
 
   ctx.el.innerHTML = html`
-    <h1 tabindex="-1">⏱️ Simulado</h1>
+    <h1 tabindex="-1">Simulado</h1>
     <p class="text-muted mb-2">Escolha as matérias e o número de questões.</p>
 
     <div class="card mb-1">
@@ -38,7 +38,7 @@ function renderSetup(ctx) {
           <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;padding:0.5rem 0">
             <input type="checkbox" name="subject" value="${s.id}" checked
               style="width:1.1rem;height:1.1rem;cursor:pointer">
-            <span>${s.icon} ${s.title}</span>
+            <span>${s.title}</span>
           </label>
         `).join(''))}
       </div>
@@ -77,7 +77,7 @@ function renderSetup(ctx) {
                   <div style="font-weight:600">${s.score}/${s.total} corretas (${pct}%)</div>
                   <div style="font-size:0.85rem;color:var(--text-muted)">${date} · ${s.items.length} questões</div>
                 </div>
-                <div style="font-size:1.75rem">${pct >= 70 ? '🏆' : pct >= 50 ? '👍' : '📖'}</div>
+                <div class="sim-pct ${pct >= 70 ? 'is-good' : pct >= 50 ? 'is-mid' : 'is-low'}">${pct}%</div>
               </div>
             </div>`;
         }).join('')}
@@ -180,7 +180,7 @@ function renderRun(ctx, active) {
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
         <span style="font-size:0.9rem;color:var(--text-muted)">Questão ${currentIdx + 1}/${total}</span>
         <span data-timer style="font-variant-numeric:tabular-nums;font-weight:600;
-          color:var(--accent);font-size:1rem">⏱ ${formatTime(getElapsed())}</span>
+          color:var(--accent);font-size:1rem">${formatTime(getElapsed())}</span>
       </div>
 
       <div style="height:6px;background:var(--border);border-radius:3px;margin-bottom:1.5rem;overflow:hidden">
@@ -220,7 +220,7 @@ function renderRun(ctx, active) {
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
       const timerEl = ctx.el.querySelector('[data-timer]');
-      if (timerEl) timerEl.textContent = `⏱ ${formatTime(getElapsed())}`;
+      if (timerEl) timerEl.textContent = formatTime(getElapsed());
     }, 1000);
 
     // Answer
@@ -301,13 +301,12 @@ function renderRun(ctx, active) {
     repo.study.saveSimulado(result);
 
     const pct = Math.round((score / result.total) * 100);
-    const emoji = pct >= 70 ? '🏆' : pct >= 50 ? '👍' : '📖';
 
     ctx.el.innerHTML = html`
-      <h1 tabindex="-1">⏱️ Resultado do Simulado</h1>
+      <h1 tabindex="-1">Resultado do simulado</h1>
 
       <div class="card" style="text-align:center;padding:2rem;margin-bottom:1.5rem">
-        <div style="font-size:3rem;margin-bottom:0.75rem">${emoji}</div>
+        <div style="margin:0 auto .75rem;width:120px">${raw(scoreRingHtml(pct))}</div>
         <div style="font-size:2.5rem;font-weight:800;color:${pct >= 70 ? 'var(--success,#22c55e)' : pct >= 50 ? 'var(--accent)' : 'var(--danger,#ef4444)'}">${pct}%</div>
         <div style="font-size:1.1rem;margin-top:0.5rem">${score} de ${result.total} corretas</div>
         <div style="font-size:0.9rem;color:var(--text-muted);margin-top:0.25rem">Tempo: ${formatTime(elapsed)}</div>
@@ -333,4 +332,9 @@ function shuffle(arr) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
+}
+
+function scoreRingHtml(pct) {
+  const C = 2 * Math.PI * 46;
+  return `<div class="score-ring"><svg viewBox="0 0 108 108" aria-hidden="true"><circle cx="54" cy="54" r="46" class="trk"/><circle cx="54" cy="54" r="46" class="val" style="stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${(C * (1 - pct / 100)).toFixed(1)}"/></svg><div><b>${pct}%</b><span>de acerto</span></div></div>`;
 }

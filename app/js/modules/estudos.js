@@ -2,7 +2,7 @@
 // Sem efeitos colaterais na importação
 
 import { repo } from '../repo.js';
-import { html, raw, toast } from '../ui.js';
+import { html, raw, esc } from '../ui.js';
 import { SUBJECTS, LOADERS } from '../../data/subjects/index.js';
 import { icon } from '../icons.js';
 
@@ -82,43 +82,40 @@ function renderList(ctx) {
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// View de matéria (tabs: resumo | flashcards | quiz)
+// View de matéria (abas: resumo | flashcards | quiz)
 // ─────────────────────────────────────────────────────────────────────
 
+const TAB_LABELS = { resumo: 'Resumo', flashcards: 'Flashcards', quiz: 'Quiz' };
+
 function renderSubject(ctx, subject, activeTab) {
+  const studyData = repo.study.get();
+  const quiz = studyData.quiz[subject.id] || { answered: 0, correct: 0 };
+  const pct = quiz.answered ? Math.round((quiz.correct / quiz.answered) * 100) : null;
+  const tabs = ['resumo', 'flashcards', 'quiz'];
+  const tabIdx = tabs.indexOf(activeTab);
+
   ctx.el.innerHTML = html`
-    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem">
-      <a href="#/estudos" style="color:var(--text-muted);text-decoration:none;font-size:0.9rem">← Matérias</a>
+    <a href="#/estudos" class="back-link">${raw(icon('back', 18))} Matérias</a>
+    <div class="subj-head">
+      <span class="subj-ico">${raw(icon(SUBJECT_ICON[subject.id] || 'book', 24))}</span>
+      <div>
+        <h1 tabindex="-1">${subject.title}</h1>
+        <p class="subj-meta">${subject.flashcards.length} flashcards · ${subject.questoes.length} questões${pct !== null ? ` · ${pct}% de acerto` : ''}</p>
+      </div>
     </div>
 
-    <h1 tabindex="-1">${subject.icon} ${subject.title}</h1>
-
-    <div class="tab-bar" role="tablist" style="display:flex;gap:0.5rem;margin:1.5rem 0;border-bottom:2px solid var(--border);padding-bottom:0">
-      ${raw(['resumo', 'flashcards', 'quiz'].map(tab => {
-        const labels = { resumo: '📖 Resumo', flashcards: '🃏 Flashcards', quiz: '✅ Quiz' };
-        const isActive = tab === activeTab;
-        return `<button type="button" role="tab" aria-selected="${isActive}" data-tab="${tab}"
-          style="padding:0.5rem 1rem;border:none;background:transparent;cursor:pointer;font-size:0.95rem;
-          border-bottom:3px solid ${isActive ? 'var(--accent)' : 'transparent'};
-          color:${isActive ? 'var(--accent)' : 'var(--text-muted)'};font-weight:${isActive ? '600' : '400'};
-          margin-bottom:-2px">
-          ${labels[tab]}
-        </button>`;
-      }).join(''))}
+    <div class="seg" role="tablist" style="--n:3;--i:${tabIdx}">
+      ${raw(tabs.map((t) => `<button type="button" role="tab" aria-selected="${t === activeTab}" data-tab="${t}">${TAB_LABELS[t]}</button>`).join(''))}
+      <span class="seg-ind" aria-hidden="true"></span>
     </div>
 
     <div data-tab-content></div>
   `;
 
-  // Tab click
-  ctx.el.querySelectorAll('[data-tab]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tab = btn.dataset.tab;
-      ctx.navigate(`#/estudos/${subject.id}?tab=${tab}`);
-    });
+  ctx.el.querySelectorAll('[data-tab]').forEach((btn) => {
+    btn.addEventListener('click', () => ctx.navigate(`#/estudos/${subject.id}?tab=${btn.dataset.tab}`));
   });
 
-  // Render content
   const contentEl = ctx.el.querySelector('[data-tab-content]');
   if (activeTab === 'resumo') renderResumo(contentEl, subject);
   else if (activeTab === 'flashcards') renderFlashcards(contentEl, subject);
@@ -128,232 +125,212 @@ function renderSubject(ctx, subject, activeTab) {
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// Resumo + pontos-chave
+// Resumo: introdução em destaque, parágrafos curtos e pontos-chave
 // ─────────────────────────────────────────────────────────────────────
 
+function splitSentences(text) {
+  return String(text).replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9(])/);
+}
+
 function renderResumo(el, subject) {
+  const sentences = splitSentences(subject.resumo);
+  const lead = sentences.shift() || '';
+  const paras = [];
+  for (let i = 0; i < sentences.length; i += 2) paras.push(sentences.slice(i, i + 2).join(' '));
+  const minutes = Math.max(1, Math.round(String(subject.resumo).split(/\s+/).length / 180));
+
   el.innerHTML = html`
-    <div class="card mb-1" style="white-space:pre-line;line-height:1.7">${subject.resumo}</div>
-    <div class="card">
-      <h2 style="font-size:1.1rem;margin-bottom:1rem">🔑 Pontos-chave</h2>
-      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem">
-        ${raw(subject.pontosChave.map(pt =>
-          `<li style="display:flex;gap:0.75rem;align-items:flex-start">
-            <span style="color:var(--accent);flex-shrink:0;margin-top:0.1rem">✓</span>
-            <span>${pt}</span>
-          </li>`
-        ).join(''))}
-      </ul>
+    <p class="read-time">${raw(icon('timer', 14))} Leitura de ${minutes} min</p>
+    <p class="resumo-lead">${lead}</p>
+    <div class="resumo-body">
+      ${raw(paras.map((p) => `<p>${esc(p)}</p>`).join(''))}
+    </div>
+
+    <h2 class="section-title">Pontos-chave</h2>
+    <ol class="keypoints">
+      ${raw(subject.pontosChave.map((pt, i) => `<li><span>${i + 1}</span><p>${esc(pt)}</p></li>`).join(''))}
+    </ol>
+
+    <div class="practice">
+      <p>Agora fixe o conteúdo:</p>
+      <div class="practice-row">
+        <a href="#/estudos/${subject.id}?tab=flashcards" class="btn btn--ghost">${raw(icon('cards', 18))} Flashcards</a>
+        <a href="#/estudos/${subject.id}?tab=quiz" class="btn btn--primary">${raw(icon('clipboard', 18))} Fazer quiz</a>
+      </div>
     </div>
   `;
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// Flashcards (flip, Errei/Acertei, Leitner)
+// Flashcards: cartão que vira em 3D, Errei/Acertei (Leitner)
 // ─────────────────────────────────────────────────────────────────────
 
 function renderFlashcards(el, subject) {
   const cards = subject.flashcards;
   let idx = 0;
-  let flipped = false;
+  let right = 0;
 
   function render() {
     const card = cards[idx];
     el.innerHTML = html`
-      <p class="text-muted text-small mb-1" style="text-align:center">${idx + 1} / ${cards.length}</p>
+      <div class="run-top"><span>Cartão ${idx + 1} de ${cards.length}</span><span>${right} acertos</span></div>
+      <div class="run-bar"><i style="width:${(idx / cards.length) * 100}%"></i></div>
 
-      <div data-flashcard style="
-        background:var(--surface);border:1px solid var(--border);border-radius:1rem;
-        padding:2rem;min-height:160px;display:flex;flex-direction:column;
-        align-items:center;justify-content:center;text-align:center;
-        cursor:pointer;transition:transform 120ms;user-select:none;gap:1rem">
-        ${flipped
-          ? raw(`<div style="font-size:0.8rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">Resposta</div>
-                 <div style="font-size:1.1rem;line-height:1.6">${card.verso}</div>`)
-          : raw(`<div style="font-size:0.8rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">Pergunta</div>
-                 <div style="font-size:1.1rem;font-weight:500;line-height:1.5">${card.frente}</div>
-                 <div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.5rem">Toque para revelar</div>`)
-        }
+      <button type="button" class="fc" data-flashcard aria-label="Virar o cartão">
+        <span class="fc-in">
+          <span class="fc-face">
+            <span class="fc-lbl">Pergunta</span>
+            <span class="fc-txt">${card.frente}</span>
+            <span class="fc-hint">${raw(icon('cards', 14))} Toque para ver a resposta</span>
+          </span>
+          <span class="fc-face fc-back">
+            <span class="fc-lbl fc-lbl--y">Resposta</span>
+            <span class="fc-txt fc-txt--a">${card.verso}</span>
+          </span>
+        </span>
+      </button>
+
+      <div class="grade" data-grade-row hidden>
+        <button type="button" data-grade="wrong" class="grade-btn grade-btn--no">Errei</button>
+        <button type="button" data-grade="right" class="grade-btn grade-btn--yes">Acertei</button>
       </div>
+      <p class="grade-help" data-grade-help>Pense na resposta e toque no cartão.</p>
 
-      ${flipped ? raw(`
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.25rem">
-          <button type="button" data-grade="wrong" class="btn btn--danger">❌ Errei</button>
-          <button type="button" data-grade="right" class="btn btn--primary">✅ Acertei</button>
-        </div>
-      `) : raw(`
-        <div style="text-align:center;margin-top:1.25rem">
-          <button type="button" data-flip class="btn btn--ghost">Virar 🔄</button>
-        </div>
-      `)}
-
-      <div style="display:flex;justify-content:center;gap:1.5rem;margin-top:1.5rem">
-        <button type="button" data-prev class="btn btn--ghost btn--small" ${idx === 0 ? 'disabled' : ''}>← Anterior</button>
-        <button type="button" data-next class="btn btn--ghost btn--small" ${idx === cards.length - 1 ? 'disabled' : ''}>Próximo →</button>
+      <div class="run-nav">
+        <button type="button" data-prev class="btn btn--ghost btn--small" ${idx === 0 ? 'disabled' : ''}>${raw(icon('back', 16))} Anterior</button>
+        <button type="button" data-next class="btn btn--ghost btn--small" ${idx === cards.length - 1 ? 'disabled' : ''}>Pular ${raw(icon('chevron', 16))}</button>
       </div>
     `;
 
-    el.querySelector('[data-flashcard]')?.addEventListener('click', () => {
-      flipped = !flipped;
-      render();
+    const fc = el.querySelector('[data-flashcard]');
+    fc.addEventListener('click', () => {
+      const on = fc.classList.toggle('is-flipped');
+      el.querySelector('[data-grade-row]').hidden = !on;
+      el.querySelector('[data-grade-help]').hidden = on;
     });
 
-    el.querySelector('[data-flip]')?.addEventListener('click', () => {
-      flipped = true;
-      render();
-    });
+    const advance = () => {
+      if (idx < cards.length - 1) { idx++; render(); return; }
+      repo.study.finishSession({ kind: 'flashcards', subjectId: subject.id, count: cards.length });
+      el.innerHTML = html`
+        <div class="done">
+          ${raw(scoreRing(right, cards.length))}
+          <h2>Rodada concluída</h2>
+          <p class="text-muted">Você acertou ${right} de ${cards.length} cartões. Os que errou voltam com mais frequência.</p>
+          <div class="practice-row">
+            <button type="button" data-restart class="btn btn--ghost">Recomeçar</button>
+            <a href="#/estudos/${subject.id}?tab=quiz" class="btn btn--primary">Fazer quiz</a>
+          </div>
+        </div>`;
+      el.querySelector('[data-restart]')?.addEventListener('click', () => { idx = 0; right = 0; render(); });
+    };
 
     el.querySelector('[data-grade="wrong"]')?.addEventListener('click', () => {
       repo.study.gradeCard(card.id, false);
-      toast('Adicionado ao caderno de erros', { type: 'info', duration: 1500 });
-      if (idx < cards.length - 1) { idx++; flipped = false; render(); }
+      advance();
     });
-
     el.querySelector('[data-grade="right"]')?.addEventListener('click', () => {
       repo.study.gradeCard(card.id, true);
-      if (idx < cards.length - 1) { idx++; flipped = false; render(); }
-      else {
-        repo.study.finishSession({ kind: 'flashcards', subjectId: subject.id, count: cards.length });
-        el.innerHTML = html`
-          <div class="empty" style="padding:2rem 0">
-            <div class="empty-emoji">🎉</div>
-            <h2 class="empty-title">Flashcards concluídos!</h2>
-            <p class="empty-text">Ótimo trabalho. Revise os erros ou faça o quiz.</p>
-            <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
-              <button type="button" data-restart class="btn btn--ghost">Recomeçar</button>
-              <a href="#/estudos/${subject.id}?tab=quiz" class="btn btn--primary">Fazer Quiz</a>
-            </div>
-          </div>`;
-        el.querySelector('[data-restart]')?.addEventListener('click', () => {
-          idx = 0; flipped = false; render();
-        });
-      }
+      right++;
+      advance();
     });
-
-    el.querySelector('[data-prev]')?.addEventListener('click', () => {
-      if (idx > 0) { idx--; flipped = false; render(); }
-    });
-    el.querySelector('[data-next]')?.addEventListener('click', () => {
-      if (idx < cards.length - 1) { idx++; flipped = false; render(); }
-    });
+    el.querySelector('[data-prev]')?.addEventListener('click', () => { if (idx > 0) { idx--; render(); } });
+    el.querySelector('[data-next]')?.addEventListener('click', () => { if (idx < cards.length - 1) { idx++; render(); } });
   }
 
   render();
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// Quiz (resposta trava + revelação de explicação + caderno de erros)
+// Quiz e caderno de erros (mesmo componente)
 // ─────────────────────────────────────────────────────────────────────
 
-function renderQuiz(el, subject) {
-  const questoes = subject.questoes;
+function scoreRing(score, total) {
+  const pct = total ? Math.round((score / total) * 100) : 0;
+  const C = 2 * Math.PI * 46;
+  return `
+    <div class="score-ring">
+      <svg viewBox="0 0 108 108" aria-hidden="true"><circle cx="54" cy="54" r="46" class="trk"/><circle cx="54" cy="54" r="46" class="val" style="stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${(C * (1 - pct / 100)).toFixed(1)}"/></svg>
+      <div><b>${pct}%</b><span>${score}/${total}</span></div>
+    </div>`;
+}
+
+/**
+ * Roda uma lista de questões. opts: { subjectIdOf(q), labelOf(q), onFinish(score), finishHtml(score) }
+ */
+function runQuestions(el, questoes, opts) {
   let idx = 0;
-  let answered = false;
   let score = 0;
 
   function renderQuestion() {
     const q = questoes[idx];
     el.innerHTML = html`
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-        <span class="text-small text-muted">Questão ${idx + 1} de ${questoes.length}</span>
-        <span class="text-small">Acertos: <strong>${score}</strong></span>
+      <div class="run-top"><span>Questão ${idx + 1} de ${questoes.length}</span><span>${opts.labelOf ? opts.labelOf(q) : `${score} acertos`}</span></div>
+      <div class="run-bar"><i style="width:${(idx / questoes.length) * 100}%"></i></div>
+      <p class="q-text">${q.texto}</p>
+      <div class="opts">
+        ${raw(q.opcoes.map((op, i) => `<button type="button" class="opt" data-opt="${i}"><span class="opt-l">${String.fromCharCode(65 + i)}</span><span class="opt-t">${esc(op)}</span></button>`).join(''))}
       </div>
-
-      <div class="card mb-1">
-        <p style="font-weight:500;line-height:1.6;margin:0">${q.texto}</p>
-      </div>
-
-      <div data-options style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem">
-        ${raw(q.opcoes.map((op, i) =>
-          `<button type="button" data-opt="${i}"
-            style="text-align:left;padding:1rem;border-radius:0.75rem;border:2px solid var(--border);
-            background:var(--surface);cursor:pointer;line-height:1.5;transition:all 120ms">
-            <span style="font-weight:600;margin-right:0.5rem">${String.fromCharCode(65 + i)})</span>${op}
-          </button>`
-        ).join(''))}
-      </div>
-
-      <div data-explanation style="display:none"></div>
+      <div data-explanation></div>
     `;
 
-    el.querySelectorAll('[data-opt]').forEach(btn => {
+    el.querySelectorAll('[data-opt]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        if (answered) return;
-        answered = true;
-
+        if (el.querySelector('.opts.is-locked')) return;
+        el.querySelector('.opts').classList.add('is-locked');
         const chosen = parseInt(btn.dataset.opt, 10);
         const correct = chosen === q.correta;
-
         if (correct) score++;
+        repo.study.recordAnswer(opts.subjectIdOf(q), q.id, correct);
 
-        // Persiste no repo
-        repo.study.recordAnswer(subject.id, q.id, correct);
-
-        // Colorir opções
-        el.querySelectorAll('[data-opt]').forEach(b => {
+        el.querySelectorAll('[data-opt]').forEach((b) => {
           const i = parseInt(b.dataset.opt, 10);
-          if (i === q.correta) {
-            b.style.borderColor = 'var(--success, #22c55e)';
-            b.style.background = 'rgba(34,197,94,0.12)';
-          } else if (i === chosen && !correct) {
-            b.style.borderColor = 'var(--danger, #ef4444)';
-            b.style.background = 'rgba(239,68,68,0.12)';
-          }
-          b.style.cursor = 'default';
+          if (i === q.correta) b.classList.add('is-right');
+          else if (i === chosen) b.classList.add('is-wrong');
+          else b.classList.add('is-dim');
         });
+        if (navigator.vibrate) navigator.vibrate(correct ? 15 : [20, 40, 20]);
 
-        // Explicação
-        const expEl = el.querySelector('[data-explanation]');
-        expEl.style.display = 'block';
-        expEl.innerHTML = `
-          <div class="card" style="border-left:4px solid ${correct ? 'var(--success,#22c55e)' : 'var(--danger,#ef4444)'};padding:1rem">
-            <p style="font-weight:600;margin:0 0 0.5rem">${correct ? '✅ Correto!' : '❌ Incorreto'}</p>
-            <p style="margin:0;line-height:1.6;font-size:0.95rem">${q.explicacao}</p>
-          </div>`;
-
-        // Botão próxima
-        const nextBtn = document.createElement('button');
-        nextBtn.type = 'button';
-        nextBtn.className = 'btn btn--primary';
-        nextBtn.style.cssText = 'width:100%;margin-top:1rem';
-        nextBtn.textContent = idx < questoes.length - 1 ? 'Próxima →' : 'Ver resultado';
-        nextBtn.addEventListener('click', () => {
+        const exp = el.querySelector('[data-explanation]');
+        exp.innerHTML = `
+          <div class="explain ${correct ? 'explain--ok' : 'explain--no'}">
+            <b>${correct ? 'Certo!' : 'Não foi dessa vez'}</b>
+            <p>${esc(q.explicacao)}</p>
+          </div>
+          <button type="button" class="btn btn--primary btn--block" data-next-q>${idx < questoes.length - 1 ? 'Próxima questão' : 'Ver resultado'}</button>`;
+        exp.querySelector('[data-next-q]').addEventListener('click', () => {
           idx++;
-          answered = false;
-          if (idx < questoes.length) {
-            renderQuestion();
-          } else {
-            renderResult();
-          }
+          if (idx < questoes.length) renderQuestion();
+          else finish();
         });
-        expEl.appendChild(nextBtn);
+        exp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
     });
   }
 
-  function renderResult() {
-    repo.study.finishSession({ kind: 'quiz', subjectId: subject.id, count: questoes.length });
-    const pct = Math.round((score / questoes.length) * 100);
-    const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '👍' : '📖';
-
-    el.innerHTML = html`
-      <div class="empty" style="padding:2rem 0">
-        <div class="empty-emoji">${emoji}</div>
-        <h2 class="empty-title">Quiz concluído!</h2>
-        <p class="empty-text">${score} de ${questoes.length} corretas — ${pct}%</p>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:1rem">
-          <button type="button" data-restart class="btn btn--ghost">Refazer quiz</button>
-          <a href="#/estudos" class="btn btn--primary">Outras matérias</a>
-        </div>
-      </div>
-    `;
-
-    el.querySelector('[data-restart]')?.addEventListener('click', () => {
-      idx = 0; answered = false; score = 0; renderQuestion();
-    });
+  function finish() {
+    if (opts.onFinish) opts.onFinish(score);
+    el.innerHTML = `<div class="done">${scoreRing(score, questoes.length)}${opts.finishHtml(score)}</div>`;
+    el.querySelector('[data-restart]')?.addEventListener('click', () => { idx = 0; score = 0; renderQuestion(); });
   }
 
   renderQuestion();
+}
+
+function renderQuiz(el, subject) {
+  runQuestions(el, subject.questoes, {
+    subjectIdOf: () => subject.id,
+    onFinish: () => repo.study.finishSession({ kind: 'quiz', subjectId: subject.id, count: subject.questoes.length }),
+    finishHtml: (score) => {
+      const pct = Math.round((score / subject.questoes.length) * 100);
+      const msg = pct >= 80 ? 'Mandou muito bem. Você está pronto para essa matéria.' : pct >= 60 ? 'Bom resultado. Revise os erros e tente de novo.' : 'Leia o resumo de novo e refaça: a segunda vez rende muito mais.';
+      return `<h2>Quiz concluído</h2><p class="text-muted">${msg}</p>
+        <div class="practice-row">
+          <button type="button" data-restart class="btn btn--ghost">Refazer</button>
+          <a href="#/estudos/caderno" class="btn btn--primary">Revisar erros</a>
+        </div>`;
+    },
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────
@@ -365,122 +342,35 @@ export async function caderno(ctx) {
 
   if (wrongList.length === 0) {
     ctx.el.innerHTML = html`
-      <div class="empty">
-        <div class="empty-emoji">🎉</div>
-        <h1 class="empty-title" tabindex="-1">Caderno de Erros</h1>
-        <p class="empty-text">Nenhum erro registrado — continue assim!</p>
+      <a href="#/estudos" class="back-link">${raw(icon('back', 18))} Estudos</a>
+      <div class="done">
+        <span class="done-ico">${raw(icon('notebook', 28))}</span>
+        <h1 tabindex="-1">Caderno de erros vazio</h1>
+        <p class="text-muted">Quando você errar uma questão, ela aparece aqui para revisar até acertar.</p>
         <a href="#/estudos" class="btn btn--primary">Ir para Estudos</a>
       </div>`;
     return {};
   }
 
-  // Encontrar as questões erradas em todas as matérias
-  const allSubjects = [
-    (await LOADERS['anatomia']()).subject,
-    (await LOADERS['fisiologia']()).subject,
-    (await LOADERS['treinamento']()).subject,
-    (await LOADERS['primeiros-socorros']()).subject,
-    (await LOADERS['avaliacao']()).subject,
-    (await LOADERS['regras-esportes']()).subject,
-  ];
-
+  const allSubjects = await Promise.all(Object.keys(LOADERS).map(async (k) => (await LOADERS[k]()).subject));
   const qMap = {};
   for (const s of allSubjects) {
-    for (const q of s.questoes) {
-      qMap[q.id] = { ...q, subjectTitle: s.title, subjectId: s.id };
-    }
+    for (const q of s.questoes) qMap[q.id] = { ...q, subjectTitle: s.title, subjectId: s.id };
   }
-
-  const wrongQuestoes = wrongList.map(w => qMap[w.qid]).filter(Boolean);
+  const wrongQuestoes = wrongList.map((w) => qMap[w.qid]).filter(Boolean);
 
   ctx.el.innerHTML = html`
-    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem">
-      <a href="#/estudos" style="color:var(--text-muted);text-decoration:none;font-size:0.9rem">← Estudos</a>
-    </div>
-    <h1 tabindex="-1">📓 Caderno de Erros</h1>
-    <p class="text-muted mb-2">${wrongQuestoes.length} questão(ões) para revisar</p>
+    <a href="#/estudos" class="back-link">${raw(icon('back', 18))} Estudos</a>
+    <h1 tabindex="-1">Caderno de erros</h1>
+    <p class="page-sub">${wrongQuestoes.length} ${wrongQuestoes.length === 1 ? 'questão' : 'questões'} para revisar. Acertou, sai da lista.</p>
     <div data-caderno-content></div>
   `;
 
-  const contentEl = ctx.el.querySelector('[data-caderno-content]');
-  let idx = 0;
-  let answered = false;
-
-  function renderWrongQuestion() {
-    const q = wrongQuestoes[idx];
-
-    contentEl.innerHTML = html`
-      <div style="display:flex;justify-content:space-between;margin-bottom:1rem">
-        <span class="text-small text-muted">${idx + 1} / ${wrongQuestoes.length}</span>
-        <span class="text-small text-muted">${q.subjectTitle}</span>
-      </div>
-      <div class="card mb-1">
-        <p style="font-weight:500;line-height:1.6;margin:0">${q.texto}</p>
-      </div>
-      <div data-opts style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem">
-        ${raw(q.opcoes.map((op, i) =>
-          `<button type="button" data-opt="${i}"
-            style="text-align:left;padding:1rem;border-radius:0.75rem;border:2px solid var(--border);
-            background:var(--surface);cursor:pointer;line-height:1.5;transition:all 120ms">
-            <span style="font-weight:600;margin-right:0.5rem">${String.fromCharCode(65 + i)})</span>${op}
-          </button>`
-        ).join(''))}
-      </div>
-      <div data-exp style="display:none"></div>
-    `;
-
-    contentEl.querySelectorAll('[data-opt]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (answered) return;
-        answered = true;
-        const chosen = parseInt(btn.dataset.opt, 10);
-        const correct = chosen === q.correta;
-
-        repo.study.recordAnswer(q.subjectId, q.id, correct);
-
-        contentEl.querySelectorAll('[data-opt]').forEach(b => {
-          const i = parseInt(b.dataset.opt, 10);
-          if (i === q.correta) {
-            b.style.borderColor = 'var(--success, #22c55e)';
-            b.style.background = 'rgba(34,197,94,0.12)';
-          } else if (i === chosen && !correct) {
-            b.style.borderColor = 'var(--danger, #ef4444)';
-            b.style.background = 'rgba(239,68,68,0.12)';
-          }
-          b.style.cursor = 'default';
-        });
-
-        const expEl = contentEl.querySelector('[data-exp]');
-        expEl.style.display = 'block';
-        expEl.innerHTML = `
-          <div class="card" style="border-left:4px solid ${correct ? 'var(--success,#22c55e)' : 'var(--danger,#ef4444)'}">
-            <p style="font-weight:600;margin:0 0 0.5rem">${correct ? '✅ Correto!' : '❌ Incorreto'}</p>
-            <p style="margin:0;line-height:1.6;font-size:0.95rem">${q.explicacao}</p>
-          </div>`;
-
-        const nextBtn = document.createElement('button');
-        nextBtn.type = 'button';
-        nextBtn.className = 'btn btn--primary';
-        nextBtn.style.cssText = 'width:100%;margin-top:1rem';
-        nextBtn.textContent = idx < wrongQuestoes.length - 1 ? 'Próxima →' : 'Finalizar';
-        nextBtn.addEventListener('click', () => {
-          idx++;
-          answered = false;
-          if (idx < wrongQuestoes.length) renderWrongQuestion();
-          else {
-            contentEl.innerHTML = html`
-              <div class="empty" style="padding:2rem 0">
-                <div class="empty-emoji">🎉</div>
-                <h2 class="empty-title">Caderno concluído!</h2>
-                <a href="#/estudos" class="btn btn--primary" style="margin-top:1rem">Voltar aos Estudos</a>
-              </div>`;
-          }
-        });
-        expEl.appendChild(nextBtn);
-      });
-    });
-  }
-
-  renderWrongQuestion();
+  runQuestions(ctx.el.querySelector('[data-caderno-content]'), wrongQuestoes, {
+    subjectIdOf: (q) => q.subjectId,
+    labelOf: (q) => q.subjectTitle,
+    finishHtml: () => `<h2>Revisão concluída</h2><p class="text-muted">As que você acertou saíram do caderno.</p>
+      <div class="practice-row"><a href="#/estudos/caderno" class="btn btn--ghost">Revisar de novo</a><a href="#/estudos" class="btn btn--primary">Voltar</a></div>`,
+  });
   return {};
 }

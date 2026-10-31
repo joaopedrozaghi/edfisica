@@ -37,6 +37,17 @@ export async function main(ctx) {
   const wrongCount = Object.keys(studyData.wrong).length;
   const accuracy = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
 
+  // Últimos 7 dias (ativo = treinou, estudou ou bateu a meta de água)
+  const actSet = new Set(activityKeys);
+  const DOW = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+  const week = [];
+  for (let i = 6; i >= 0; i--) {
+    const [y, m, d] = today.split('-').map(Number);
+    const dt = new Date(y, m - 1, d - i, 12);
+    const key = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+    week.push({ label: DOW[dt.getDay()], on: actSet.has(key), today: i === 0 });
+  }
+
   // Gráfico peso/IMC
   const bodyPoints = bodyHistory.slice(-15);
   const weightPoints = bodyPoints.map(e => ({ y: e.weightKg }));
@@ -45,48 +56,24 @@ export async function main(ctx) {
 
   ctx.el.innerHTML = html`
     <h1 tabindex="-1">Progresso</h1>
+    <p class="page-sub">Sua constância nos últimos dias.</p>
 
-    <div class="home-grid" style="margin-bottom:1.5rem">
-      <div class="card">
-        <h2 style="font-size:1rem;margin-bottom:0.75rem">🔥 Sequência</h2>
-        <div class="stat">
-          <div class="stat-value" style="font-size:2.5rem">${streakVal}</div>
-          <div class="stat-label">${streakVal === 1 ? 'dia seguido' : 'dias seguidos'}</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2 style="font-size:1rem;margin-bottom:0.75rem">💪 Treinos</h2>
-        <div class="stat">
-          <div class="stat-value" style="font-size:2.5rem">${totalWorkouts}</div>
-          <div class="stat-label">no total</div>
-        </div>
-        <p class="text-small text-muted" style="margin-top:0.5rem">${minThisWeek} min esta semana</p>
-      </div>
+    <div class="week">
+      ${raw(week.map((d) => `<div class="week-d${d.on ? ' is-on' : ''}${d.today ? ' is-today' : ''}"><i></i><span>${d.label}</span></div>`).join(''))}
     </div>
 
-    <div class="card mb-1">
-      <h2 style="font-size:1rem;margin-bottom:0.75rem">📊 Estudos</h2>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem">
-        <div class="stat">
-          <div class="stat-value" style="font-size:1.75rem">${totalAnswered}</div>
-          <div class="stat-label">questões respondidas</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" style="font-size:1.75rem">${accuracy}%</div>
-          <div class="stat-label">aproveitamento</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" style="font-size:1.75rem">${wrongCount}</div>
-          <div class="stat-label">para revisar</div>
-        </div>
-      </div>
-      ${wrongCount > 0 ? raw(`<a href="#/estudos/caderno" class="btn btn--secondary btn--small" style="margin-top:0.75rem">Revisar erros →</a>`) : ''}
+    <div class="kpis">
+      <div class="kpi kpi--y"><b>${streakVal}</b><span>${streakVal === 1 ? 'dia seguido' : 'dias seguidos'}</span></div>
+      <div class="kpi"><b>${totalWorkouts}</b><span>treinos feitos</span></div>
+      <div class="kpi"><b>${minThisWeek}</b><span>min nesta semana</span></div>
+      <div class="kpi"><b>${totalAnswered}</b><span>questões respondidas</span></div>
+      <div class="kpi"><b>${accuracy}%</b><span>de acerto</span></div>
+      <a class="kpi kpi--link" href="#/estudos/caderno"><b>${wrongCount}</b><span>para revisar →</span></a>
     </div>
 
     ${bodyPoints.length > 1 ? raw(`
       <div class="card mb-1">
-        <h2 style="font-size:1rem;margin-bottom:0.75rem">⚖️ Evolução do Peso</h2>
+        <h2 style="font-size:1rem;margin-bottom:0.75rem">Evolução do Peso</h2>
         <div style="overflow-x:auto">
           ${line(weightPoints, {
             width: 300, height: 160,
@@ -110,19 +97,19 @@ export async function main(ctx) {
             ${bodyPoints[bodyPoints.length - 1].bmi ? '· IMC ' + fmt1(bodyPoints[bodyPoints.length - 1].bmi) : ''}
           </p>
         ` : ''}
-        <a href="#/imc" class="btn btn--secondary btn--small" style="margin-top:0.75rem">Registrar peso →</a>
+        <a href="#/imc" class="btn btn--ghost btn--small" style="margin-top:0.75rem">Registrar peso →</a>
       </div>
     `) : raw(`
       <div class="card mb-1">
-        <h2 style="font-size:1rem;margin-bottom:0.5rem">⚖️ Evolução do Peso</h2>
+        <h2 style="font-size:1rem;margin-bottom:0.5rem">Evolução do Peso</h2>
         <p class="text-muted text-small">Faça seu primeiro teste de IMC para iniciar o acompanhamento.</p>
-        <a href="#/imc" class="btn btn--secondary btn--small" style="margin-top:0.75rem">Testar IMC →</a>
+        <a href="#/imc" class="btn btn--ghost btn--small" style="margin-top:0.75rem">Testar IMC →</a>
       </div>
     `)}
 
     ${(favExercises.length + favPrograms.length + favFoods.length) > 0 ? raw(`
       <div class="card mb-1">
-        <h2 style="font-size:1rem;margin-bottom:0.75rem">⭐ Favoritos</h2>
+        <h2 style="font-size:1rem;margin-bottom:0.75rem">Favoritos</h2>
         ${favExercises.length > 0 ? `<p class="text-small" style="margin-bottom:0.25rem"><strong>Exercícios:</strong> ${favExercises.length} favoritos · <a href="#/treino">Ver →</a></p>` : ''}
         ${favPrograms.length > 0 ? `<p class="text-small" style="margin-bottom:0.25rem"><strong>Programas:</strong> ${favPrograms.length} favoritos · <a href="#/treino/programas">Ver →</a></p>` : ''}
         ${favFoods.length > 0 ? `<p class="text-small"><strong>Alimentos:</strong> ${favFoods.length} favoritos · <a href="#/dieta">Ver →</a></p>` : ''}
@@ -130,9 +117,9 @@ export async function main(ctx) {
     `) : ''}
 
     <div class="card mb-2">
-      <h2 style="font-size:1rem;margin-bottom:0.75rem">🗂️ Gestão de dados</h2>
+      <h2 style="font-size:1rem;margin-bottom:0.75rem">Gestão de dados</h2>
       <p class="text-small text-muted" style="margin-bottom:0.75rem">Exporte, importe ou redefina seus dados em Perfil.</p>
-      <a href="#/perfil" class="btn btn--secondary btn--small">Ir para Perfil →</a>
+      <a href="#/perfil" class="btn btn--ghost btn--small">Ir para Perfil →</a>
     </div>
   `;
 
