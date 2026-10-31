@@ -1,4 +1,4 @@
-# EdFísica PRO — Guia de uso e publicação
+# EducaFit — Guia de uso e publicação
 
 App PWA estático de Educação Física: página de vendas (`/index.html`) + app offline (`/app/`).  
 Sem build, sem servidor, sem banco de dados — abre direto no navegador.
@@ -26,8 +26,8 @@ Abra `config.js` e mude apenas os campos que precisar. Cada campo tem um coment�
 ### Nome e frase principal
 ```js
 product: {
-  name: 'EdFísica PRO',       // aparece na página e no app
-  shortName: 'EdFísica',
+  name: 'EducaFit',           // aparece na página e no app
+  shortName: 'EducaFit',
   tagline: 'Estude, treine e coma melhor em um só app',
 }
 ```
@@ -54,7 +54,7 @@ checkout: {
 ```js
 support: {
   whatsapp: '5511999999999',  // só dígitos, DDI + DDD + número
-  message: 'Olá! Preciso de ajuda com o EdFísica PRO.',
+  message: 'Olá! Preciso de ajuda com o EducaFit.',
 }
 ```
 
@@ -190,5 +190,5 @@ python tests/run_headless.py
 
 ## Créditos
 
-Projeto gerado com EdFísica PRO template — PWA estático, vanilla ES modules, localStorage.  
+Projeto gerado com EducaFit template — PWA estático, vanilla ES modules, localStorage.  
 Nenhuma dependência externa de runtime.

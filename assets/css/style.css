@@ -516,28 +516,102 @@ main { outline: none; }
 .m-brand em { background: none; color: var(--y); border: 1px solid var(--y); }
 .m-logo { background: none; width: auto; height: auto; }
 
-/* ---------- O que tem dentro ---------- */
-.mods { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.mod { display: grid; gap: 4px; align-content: start; padding: 14px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
-.mod i { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: var(--surface-2); color: var(--y); margin-bottom: 6px; }
-.mod i svg { width: 19px; height: 19px; }
-.mod b { font-size: .9375rem; }
-.mod > span { font-size: .78rem; color: var(--muted); line-height: 1.35; }
-.facts { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; }
+/* ---------- Título com palavra que troca ---------- */
+.hero h1 > span:first-child { display: block; }
+.rot { position: relative; display: block; height: 1.3em; overflow: hidden; margin-bottom: -.12em; }
+.rot-w { line-height: 1.3; }
+.rot-w { position: absolute; left: 0; top: 0; white-space: nowrap; transform: translateY(140%); opacity: 0; transition: transform 520ms var(--ease), opacity 380ms; }
+.rot-w.is-on { transform: none; opacity: 1; }
+.rot-w.is-out { transform: translateY(-140%); opacity: 0; }
+.rot-w .mark::after { animation: none; transform: skewX(-12deg) scaleX(0); }
+.rot-w.is-on .mark::after { animation: mark-in 600ms 180ms var(--ease) forwards; }
+.hero-sub strong { color: var(--text); font-weight: 600; }
+.hero-proof { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.hero-proof li { font-size: .78rem; color: var(--muted); padding: 5px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+.hero-proof b { color: var(--text); }
+
+/* ---------- Carrossel genérico ---------- */
+.car {
+  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  margin: 0 calc(var(--pad) * -1); padding: 4px var(--pad) 8px; scrollbar-width: none; outline: none;
+  -webkit-overflow-scrolling: touch;
+}
+.car::-webkit-scrollbar { display: none; }
+.car > * { scroll-snap-align: center; flex-shrink: 0; }
+.car-dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+.car-dots button { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 6px; background: rgba(255, 255, 255, .22); transition: width 260ms var(--ease), background 260ms; }
+.car-dots button.on { width: 20px; background: var(--y); }
+.block--car { overflow: hidden; }
+
+/* ---------- Por dentro do app: iPhones em perspectiva ---------- */
+.gal { padding: 34px 0 10px; overflow: hidden; }
+.gal-head { padding: 0 var(--pad); max-width: 520px; margin: 0 auto 6px; }
+.gal-head h2 { font-size: 1.6rem; }
+.gal-head p { color: var(--muted); font-size: .9375rem; margin-top: 4px; }
+.gal-track { margin: 0; padding: 26px calc(50% - 105px) 8px; gap: 0; }
+.gal-item { width: 210px; margin: 0; perspective: 900px; display: grid; justify-items: center; gap: 16px; transition: opacity 200ms; }
+.tilt { --dir: 1; transform-style: preserve-3d; transition: transform 120ms linear; will-change: transform; }
+.iphone--gal {
+  --w: 196px; margin: 0;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 255, 255, .14),
+    inset 0 0 0 4px #0c0c0e,
+    calc(var(--dir) * 1px) 1px 0 #3a3b40,
+    calc(var(--dir) * 2px) 2px 0 #303135,
+    calc(var(--dir) * 3px) 3px 0 #2a2b2f,
+    calc(var(--dir) * 4px) 4px 0 #242528,
+    calc(var(--dir) * 5px) 5px 0 #1e1f22,
+    calc(var(--dir) * 6px) 6px 0 #18191b,
+    calc(var(--dir) * 28px) 40px 50px -18px rgba(0, 0, 0, .85);
+}
+.gal-item figcaption { text-align: center; max-width: 220px; font-size: .8125rem; color: var(--muted); opacity: 0; transform: translateY(6px); transition: opacity 260ms, transform 260ms var(--ease); }
+.gal-item figcaption b { display: block; color: var(--text); font-size: .9375rem; margin-bottom: 2px; }
+.gal-item.is-active figcaption { opacity: 1; transform: none; }
+.gal .car-dots { margin-top: 4px; }
+.g-card { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: .7em; padding: 1.2em; border-radius: 1.1em; background: var(--surface); border: 1px solid rgba(255, 214, 10, .4); }
+.g-imc { font-family: var(--head); font-weight: 800; font-size: 3.2em; line-height: 1; text-align: center; letter-spacing: -.04em; margin-top: .4em; }
+.g-scale { display: grid; grid-template-columns: 1fr 1.3fr 1fr 1fr; gap: 4px; margin: .4em 0; }
+.g-scale i { height: 7px; border-radius: 4px; background: var(--surface-2); }
+.g-scale i.on { background: var(--green); }
+
+/* ---------- O que tem dentro (carrossel) ---------- */
+.mods { gap: 10px; }
+.mod {
+  width: 72%; max-width: 280px; display: grid; gap: 4px; align-content: start; padding: 18px; border-radius: 20px;
+  background: var(--surface); border: 1px solid var(--line); min-height: 190px;
+}
+.mod i { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; background: var(--y); color: var(--ink); margin-bottom: 10px; }
+.mod i svg { width: 22px; height: 22px; }
+.mod small { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.mod b { font-family: var(--head); font-size: 1.1rem; letter-spacing: -.01em; }
+.mod > span { font-size: .875rem; color: var(--muted); line-height: 1.4; }
+.facts { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; }
 .facts li { font-size: .8125rem; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .facts li::before { content: "✓"; color: var(--y); font-weight: 800; }
-@media (min-width: 720px) { .mods { grid-template-columns: repeat(3, 1fr); } }
 
-/* ---------- Para quem é ---------- */
-.who-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin-bottom: 12px; }
-.who-tabs::-webkit-scrollbar { display: none; }
-.who-tabs button {
-  flex-shrink: 0; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface);
-  font-size: .875rem; font-weight: 700; color: var(--muted); transition: background 180ms, color 180ms, border-color 180ms;
+/* ---------- Para quem é (carrossel) ---------- */
+.who { gap: 10px; }
+.who-card { width: 84%; max-width: 330px; padding: 20px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); }
+.who-card:nth-child(1) { background: linear-gradient(160deg, rgba(255, 214, 10, .10), transparent 55%), var(--surface); }
+.who-card:nth-child(2) { background: linear-gradient(160deg, rgba(107, 180, 255, .10), transparent 55%), var(--surface); }
+.who-card:nth-child(3) { background: linear-gradient(160deg, rgba(74, 222, 128, .10), transparent 55%), var(--surface); }
+.who-tag { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--text); color: var(--bg); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+.who-lead { font-family: var(--head); font-weight: 700; font-size: 1.15rem; letter-spacing: -.015em; line-height: 1.25; margin: 14px 0 12px; }
+.who-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.who-card li { display: flex; gap: 10px; font-size: .9375rem; color: var(--muted); }
+.who-card li::before { content: "✓"; color: var(--y); font-weight: 800; }
+
+@media (min-width: 960px) {
+  .gal-head { max-width: 1040px; }
 }
-.who-tabs button[aria-selected="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
-.who-panel { padding: 18px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); animation: faq-in 260ms var(--ease); }
-.who-lead { font-family: var(--head); font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; margin-bottom: 12px; }
-.who-panel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
-.who-panel li { display: flex; gap: 10px; font-size: .9375rem; color: var(--muted); }
-.who-panel li::before { content: "✓"; color: var(--y); font-weight: 800; }
+@media (prefers-reduced-motion: reduce) {
+  .rot { height: auto; }
+  .rot-w { position: static; transform: none; opacity: 1; display: none; }
+  .rot-w:first-child { display: block; }
+  .rot-w .mark::after { transform: skewX(-12deg); }
+  .gal-item figcaption { opacity: 1; transform: none; }
+}
+
+/* Wordmark EducaFit */
+.wm { font-family: var(--head); font-weight: 800; letter-spacing: -.035em; }
+.wm em, .m-brand b em { font-style: normal; color: var(--y); background: none; border: 0; padding: 0; font-size: inherit; letter-spacing: inherit; }

@@ -162,7 +162,7 @@ export async function main(ctx) {
     `) : ''}
     
     <div class="card mb-1">
-      <h2 style="font-size:1.125rem;margin-bottom:1rem">Sobre o EdFísica PRO</h2>
+      <h2 style="font-size:1.125rem;margin-bottom:1rem">Sobre o EducaFit</h2>
       
       <button type="button" class="btn btn--ghost" style="width:100%;margin-bottom:0.75rem" data-credits>Créditos e licenças</button>
       <button type="button" class="btn btn--ghost" style="width:100%;margin-bottom:0.75rem" data-formulas>Fórmulas utilizadas</button>
@@ -281,7 +281,7 @@ export async function main(ctx) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `edfisica-pro-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `educafit-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
     

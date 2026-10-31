@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>EdFísica PRO · Estudos, Treino em Casa e Dieta em um só app</title>
+  <title>EducaFit · Estudos, Treino em Casa e Dieta em um só app</title>
   <meta name="description" content="App de Educação Física com estudos para provas, treinos em casa guiados, dieta com calculadora de alimentos, teste de IMC e avaliação física.">
   <link rel="canonical" href="https://edfisicapro.vercel.app/">
   <meta name="theme-color" content="#0B0C0E">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
-  <meta property="og:title" content="EdFísica PRO · Estudos, Treino em Casa e Dieta em um só app">
+  <meta property="og:title" content="EducaFit · Estudos, Treino em Casa e Dieta em um só app">
   <meta property="og:description" content="Estude para provas, treine em casa com o app guiando cada exercício e monte sua dieta com calculadora de alimentos. Tudo em um só app.">
   <meta property="og:url" content="https://edfisicapro.vercel.app/">
   <meta property="og:image" content="https://edfisicapro.vercel.app/assets/img/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="EdFísica PRO: estudos, treino em casa e dieta em um só app">
+  <meta property="og:image:alt" content="EducaFit: estudos, treino em casa e dieta em um só app">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="EdFísica PRO · Estudos, Treino em Casa e Dieta em um só app">
+  <meta name="twitter:title" content="EducaFit · Estudos, Treino em Casa e Dieta em um só app">
   <meta name="twitter:description" content="Estudos para provas, treinos em casa, dieta com calculadora de alimentos e teste de IMC em um só app.">
   <meta name="twitter:image" content="https://edfisicapro.vercel.app/assets/img/og-image.png">
   <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
@@ -29,9 +29,9 @@
   <a class="skip-link" href="#main">Pular para o conteúdo</a>
 
   <header class="top">
-    <a href="#main" class="brand" aria-label="EdFísica PRO, início">
-      <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><path d="M8.5 26h7l3.5-9 6 17 4-12 2.5 4h8" fill="none" stroke="#0B0C0E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span data-cfg="product.shortName">EdFísica</span><b>PRO</b>
+    <a href="#main" class="brand" aria-label="EducaFit, início">
+      <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><g fill="none" stroke="#0B0C0E" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 38V17h7l11-6.5"/><path d="M15 38h16M15 27.5h11"/><path d="M27.5 9.5l6 .7-1.7 5.8"/></g></svg>
+      <span class="wm">Educa<em>Fit</em></span>
     </a>
     <a class="top-login" href="#oferta">Ver planos</a>
   </header>
@@ -40,9 +40,17 @@
 
     <!-- 1. Hero + iPhone interativo -->
     <section class="hero" aria-labelledby="hero-title">
-      <p class="kicker">App de Educação Física</p>
-      <h1 id="hero-title">Estude, treine e coma melhor. <span class="mark">Num app só.</span></h1>
-      <p class="hero-sub">Matérias para provas, treino em casa guiado e dieta com alimentos brasileiros. Abre no celular, sem baixar nada.</p>
+      <p class="kicker">Para estudar, ensinar e treinar</p>
+      <h1 id="hero-title" aria-label="O app de Educação Física para passar na prova, treinar em casa, comer melhor e dar aula.">
+        <span aria-hidden="true">O app de Educação Física para</span>
+        <span class="rot" aria-hidden="true" data-rot><span class="rot-w is-on"><span class="mark">passar na prova.</span></span><span class="rot-w"><span class="mark">treinar em casa.</span></span><span class="rot-w"><span class="mark">comer melhor.</span></span><span class="rot-w"><span class="mark">dar aula.</span></span></span>
+      </h1>
+      <p class="hero-sub">Revise a matéria em 10 minutos por dia, treine com o app contando cada série e monte sua dieta com comida de verdade. Tudo no celular, <strong>sem mensalidade</strong>.</p>
+      <ul class="hero-proof">
+        <li><b data-cfg="contentStats.questions" data-fmt="int">90</b> questões comentadas</li>
+        <li><b data-cfg="contentStats.exercises" data-fmt="int">24</b> exercícios guiados</li>
+        <li><b data-cfg="contentStats.foods" data-fmt="int">60</b> alimentos</li>
+      </ul>
 
       <div class="show" data-show>
         <div class="show-tabs" role="tablist" aria-label="Telas do app">
@@ -133,8 +141,94 @@
         <a id="hero-cta" class="btn btn-main" href="#oferta">
           Ver planos <span class="btn-price">a partir de <span data-cfg="derived.fromBRL">R$&nbsp;14,90</span></span>
         </a>
-        <p class="micro">Pagamento único · Acesso na hora · <span data-cfg="guarantee.days" data-fmt="int">7</span> dias de garantia</p>
+        <p class="micro">Acesso na hora pelo e-mail · <span data-cfg="guarantee.days" data-fmt="int">7</span> dias de garantia ou seu dinheiro de volta</p>
       </div>
+    </section>
+
+    <!-- 1b. Por dentro do app: carrossel de iPhones em perspectiva -->
+    <section class="gal" aria-labelledby="gal-title">
+      <div class="gal-head">
+        <h2 id="gal-title">Por dentro do app</h2>
+        <p>Arraste para o lado e veja cada tela.</p>
+      </div>
+      <div class="car gal-track" data-car data-cover tabindex="0" aria-label="Telas do app">
+
+        <figure class="gal-item">
+          <div class="tilt"><div class="iphone iphone--gal"><div class="iphone-screen"><div class="scr scr--static">
+            <div class="m-brand"><span class="m-logo"><svg viewBox="0 0 48 48" width="14" height="14" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><g fill="none" stroke="#0B0C0E" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 38V17h7l11-6.5"/><path d="M15 38h16M15 27.5h11"/><path d="M27.5 9.5l6 .7-1.7 5.8"/></g></svg></span><b>Educa<em>Fit</em></b></div>
+            <b class="m-title">Bem-vindo de volta</b>
+            <span class="dim m-s">Entre para continuar de onde parou.</span>
+            <div class="m-tabs"><span class="on">Entrar</span><span>Criar conta</span></div>
+            <div class="m-in"><small>E-mail</small>ana@email.com</div>
+            <div class="m-in"><small>Senha</small>••••••••</div>
+            <span class="m-btn">Entrar</span>
+          </div></div></div></div>
+          <figcaption><b>Sua conta, sua senha</b>Seu progresso fica salvo e protegido.</figcaption>
+        </figure>
+
+        <figure class="gal-item">
+          <div class="tilt"><div class="iphone iphone--gal"><div class="iphone-screen"><div class="scr scr--static">
+            <div class="a-top"><div><b class="a-h">Olá, Ana</b><span class="a-sub">Sábado, 31 de outubro</span></div><span class="a-av">A</span></div>
+            <div class="a-today">
+              <div class="a-ring"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="33" class="trk"/><circle cx="40" cy="40" r="33" class="val" style="stroke-dashoffset:60"/></svg><div><b>1.710</b><span>de 2.000</span></div></div>
+              <div class="a-side"><span class="a-k">Sequência</span><b><i data-i="flame"></i> 12 dias</b><span class="a-k">Restam</span><b>290 kcal</b></div>
+            </div>
+            <div class="a-water"><i class="a-drop" data-i="droplet"></i><div><p><b>Água</b><span>2.250 / 2.800 ml</span></p><div class="a-bar"><i style="width:80%"></i></div></div><span class="a-plus">+</span></div>
+            <div class="a-next"><div><small>Treino sugerido</small><b>HIIT 15 min</b><span>sem equipamento</span></div><span class="a-play" data-i="play"></span></div>
+          </div></div></div></div>
+          <figcaption><b>Seu dia em uma tela</b>Calorias, água, sequência e o treino de hoje.</figcaption>
+        </figure>
+
+        <figure class="gal-item">
+          <div class="tilt"><div class="iphone iphone--gal"><div class="iphone-screen"><div class="scr scr--static">
+            <div class="a-row"><span class="a-back">‹ Anatomia</span><span class="dim">7 de 15</span></div>
+            <div class="a-bar"><i style="width:47%"></i></div>
+            <div class="g-card">
+              <span class="lbl lbl--y">Resposta</span>
+              <span class="q">Supraespinhoso, infraespinhoso, redondo menor e subescapular.</span>
+              <span class="dim">Os 4 músculos do manguito rotador.</span>
+            </div>
+            <div class="pair"><span class="pill pill--no">Errei</span><span class="pill pill--yes">Acertei</span></div>
+          </div></div></div></div>
+          <figcaption><b>Flashcards que grudam</b>Repetição espaçada: você revisa o que mais esquece.</figcaption>
+        </figure>
+
+        <figure class="gal-item">
+          <div class="tilt"><div class="iphone iphone--gal"><div class="iphone-screen"><div class="scr scr--static">
+            <div class="segs"><i class="on"></i><i class="on"></i><i class="on"></i><i class="now"></i><i></i></div>
+            <p class="dim center">HIIT 15 min · 4 de 5</p>
+            <div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="trk"/><circle cx="60" cy="60" r="52" class="val" style="stroke-dashoffset:120"/></svg><div class="ring-c"><b>0:18</b><span>descanso</span></div></div>
+            <p class="ex">Burpee</p>
+            <div class="row-card"><span class="dim">Dica</span><strong>Desça controlando o peito</strong></div>
+          </div></div></div></div>
+          <figcaption><b>Treino guiado</b>O app conta o tempo, fala a troca e mostra o próximo.</figcaption>
+        </figure>
+
+        <figure class="gal-item">
+          <div class="tilt"><div class="iphone iphone--gal"><div class="iphone-screen"><div class="scr scr--static">
+            <div class="a-row"><b class="a-h a-h--sm">Adicionar</b><span class="dim">Almoço</span></div>
+            <div class="m-in"><small>Buscar</small>frango</div>
+            <div class="a-meal"><div><b>Frango grelhado</b><span>100 g · 159 kcal · 32 g prot</span></div><span class="a-add">+</span></div>
+            <div class="a-meal"><div><b>Arroz branco</b><span>100 g · 128 kcal</span></div><span class="a-add">+</span></div>
+            <div class="a-meal"><div><b>Feijão carioca</b><span>100 g · 76 kcal</span></div><span class="a-add">+</span></div>
+            <div class="a-meal"><div><b>Batata-doce</b><span>100 g · 77 kcal</span></div><span class="a-add">+</span></div>
+          </div></div></div></div>
+          <figcaption><b>Comida brasileira de verdade</b>Arroz, feijão, frango: tudo pela Tabela TACO.</figcaption>
+        </figure>
+
+        <figure class="gal-item">
+          <div class="tilt"><div class="iphone iphone--gal"><div class="iphone-screen"><div class="scr scr--static">
+            <div class="a-row"><b class="a-h a-h--sm">Teste de IMC</b><span class="dim">70 kg · 1,75 m</span></div>
+            <p class="g-imc">22,9</p>
+            <p class="center"><span class="pill pill--yes">Peso normal</span></p>
+            <div class="g-scale"><i></i><i class="on"></i><i></i><i></i></div>
+            <div class="row-card"><span class="dim">Faixa saudável</span><strong>56,7 a 76,3 kg</strong></div>
+          </div></div></div></div>
+          <figcaption><b>IMC e avaliação física</b>% de gordura, RCQ, frequência cardíaca e 1RM.</figcaption>
+        </figure>
+
+      </div>
+      <div class="car-dots" data-car-dots aria-hidden="true"></div>
     </section>
 
     <!-- 2. Como funciona: 3 iPhones -->
@@ -145,7 +239,7 @@
         <div class="iphone iphone--sm fan-l">
           <div class="iphone-screen">
             <div class="scr scr--static">
-              <div class="m-brand"><span class="m-logo"><svg viewBox="0 0 48 48" width="14" height="14" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><path d="M8.5 26h7l3.5-9 6 17 4-12 2.5 4h8" fill="none" stroke="#0B0C0E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>EdFísica</b><em>PRO</em></div>
+              <div class="m-brand"><span class="m-logo"><svg viewBox="0 0 48 48" width="14" height="14" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><g fill="none" stroke="#0B0C0E" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 38V17h7l11-6.5"/><path d="M15 38h16M15 27.5h11"/><path d="M27.5 9.5l6 .7-1.7 5.8"/></g></svg></span><b>Educa<em>Fit</em></b></div>
               <b class="m-title">Crie sua conta</b>
               <span class="dim m-s">Leva menos de um minuto.</span>
               <div class="m-tabs"><span>Entrar</span><span class="on">Criar conta</span></div>
@@ -201,17 +295,18 @@
       </ul>
     </section>
 
-    <!-- 3b. O que tem dentro -->
-    <section class="block" aria-labelledby="mods-title">
+    <!-- 3b. O que tem dentro (carrossel) -->
+    <section class="block block--car" aria-labelledby="mods-title">
       <h2 id="mods-title">O que tem dentro</h2>
-      <div class="mods">
-        <div class="mod"><i data-i="book"></i><b>Estudos</b><span><span data-cfg="contentStats.subjects" data-fmt="int">6</span> matérias com resumo, flashcards e quiz</span></div>
-        <div class="mod"><i data-i="timer"></i><b>Simulados</b><span>Prova com tempo, gabarito e caderno de erros</span></div>
-        <div class="mod"><i data-i="dumbbell"></i><b>Treino em casa</b><span>Player guiado com timer, voz e descanso</span></div>
-        <div class="mod"><i data-i="apple"></i><b>Dieta</b><span>Metas, macros e alimentos da Tabela TACO</span></div>
-        <div class="mod"><i data-i="scale"></i><b>IMC e avaliação</b><span>% de gordura, RCQ, frequência cardíaca e 1RM</span></div>
-        <div class="mod"><i data-i="chart"></i><b>Progresso</b><span>Sequência, peso e evolução da semana</span></div>
+      <div class="car mods" data-car tabindex="0" aria-label="Módulos do app">
+        <div class="mod"><i data-i="book"></i><small>Módulo 1</small><b>Estudos para prova</b><span><span data-cfg="contentStats.subjects" data-fmt="int">6</span> matérias com resumo direto, flashcards e quiz comentado.</span></div>
+        <div class="mod"><i data-i="timer"></i><small>Módulo 2</small><b>Simulados</b><span>Prova com tempo, gabarito na hora e caderno com só o que você errou.</span></div>
+        <div class="mod"><i data-i="dumbbell"></i><small>Módulo 3</small><b>Treino em casa</b><span><span data-cfg="contentStats.exercises" data-fmt="int">24</span> exercícios, <span data-cfg="contentStats.programs" data-fmt="int">5</span> programas e player com timer e voz.</span></div>
+        <div class="mod"><i data-i="apple"></i><small>Módulo 4</small><b>Dieta</b><span>Metas de calorias e macros, <span data-cfg="contentStats.foods" data-fmt="int">60</span>+ alimentos e planos prontos.</span></div>
+        <div class="mod"><i data-i="scale"></i><small>Módulo 5</small><b>IMC e avaliação</b><span>IMC, % de gordura, RCQ, zonas de frequência cardíaca e 1RM.</span></div>
+        <div class="mod"><i data-i="chart"></i><small>Módulo 6</small><b>Progresso</b><span>Sequência de dias, histórico de peso e resumo da semana.</span></div>
       </div>
+      <div class="car-dots" data-car-dots aria-hidden="true"></div>
       <ul class="facts">
         <li>Android e iPhone</li>
         <li>Funciona sem internet</li>
@@ -220,40 +315,39 @@
       </ul>
     </section>
 
-    <!-- 3c. Para quem é -->
-    <section class="block" aria-labelledby="who-title">
+    <!-- 3c. Para quem é (carrossel) -->
+    <section class="block block--car" aria-labelledby="who-title">
       <h2 id="who-title">Para quem é</h2>
-      <div class="who" data-who>
-        <div class="who-tabs" role="tablist" aria-label="Perfis">
-          <button type="button" role="tab" aria-selected="true" data-who-tab="0">Estudante</button>
-          <button type="button" role="tab" aria-selected="false" data-who-tab="1">Professor</button>
-          <button type="button" role="tab" aria-selected="false" data-who-tab="2">Treina em casa</button>
-        </div>
-        <div class="who-panel" role="tabpanel" data-who-panel="0">
-          <p class="who-lead">Vai fazer prova, concurso ou está na faculdade de Educação Física.</p>
+      <div class="car who" data-car tabindex="0" aria-label="Perfis">
+        <article class="who-card">
+          <span class="who-tag">Estudante</span>
+          <p class="who-lead">Vai fazer prova, concurso ou está na faculdade.</p>
           <ul>
             <li>Resumos diretos das matérias que mais caem</li>
-            <li>Flashcards com repetição espaçada para memorizar</li>
-            <li>Simulados com tempo e revisão só do que errou</li>
+            <li>Flashcards para memorizar sem decoreba</li>
+            <li>Simulados com tempo e revisão do que errou</li>
           </ul>
-        </div>
-        <div class="who-panel" role="tabpanel" data-who-panel="1" hidden>
-          <p class="who-lead">Dá aula, é personal ou acompanha alunos.</p>
+        </article>
+        <article class="who-card">
+          <span class="who-tag">Professor e personal</span>
+          <p class="who-lead">Dá aula ou acompanha alunos.</p>
           <ul>
             <li>Avaliação física com fórmulas reconhecidas</li>
-            <li>Programas prontos, inclusive para terceira idade</li>
-            <li>Material de consulta rápida no celular</li>
+            <li>Programas prontos, inclusive terceira idade</li>
+            <li>Consulta rápida no celular, na quadra</li>
           </ul>
-        </div>
-        <div class="who-panel" role="tabpanel" data-who-panel="2" hidden>
+        </article>
+        <article class="who-card">
+          <span class="who-tag">Treina em casa</span>
           <p class="who-lead">Quer treinar e comer melhor, sem academia.</p>
           <ul>
             <li>Treinos guiados só com itens de casa</li>
-            <li>Dieta com comida brasileira de verdade</li>
-            <li>IMC, água e sequência para manter o ritmo</li>
+            <li>Dieta com arroz, feijão e comida de verdade</li>
+            <li>Água, IMC e sequência para manter o ritmo</li>
           </ul>
-        </div>
+        </article>
       </div>
+      <div class="car-dots" data-car-dots aria-hidden="true"></div>
     </section>
 
     <!-- 4. Depoimentos (só aparecem os reais) -->
@@ -351,7 +445,7 @@
   </main>
 
   <footer class="foot">
-    <p>© <span data-cfg="derived.year">2026</span> <span data-cfg="product.name">EdFísica PRO</span></p>
+    <p>© <span data-cfg="derived.year">2026</span> <span data-cfg="product.name">EducaFit</span></p>
     <p data-cfg-show="seller.name" hidden><span data-cfg="seller.name"></span><span data-cfg-show="seller.document" hidden> · <span data-cfg="seller.document"></span></span></p>
     <p class="foot-links">
       <a href="#" data-cfg-href="legal.termsUrl" data-cfg-show="legal.termsUrl" hidden>Termos de uso</a>

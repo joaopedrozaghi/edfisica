@@ -10,8 +10,8 @@
 export const CONFIG = Object.freeze({
   // Nome e frase principal do produto (aparecem na página e no app).
   product: {
-    name: 'EdFísica PRO',          // nome completo
-    shortName: 'EdFísica',         // versão curta (espaços pequenos)
+    name: 'EducaFit',              // nome completo
+    shortName: 'EducaFit',         // versão curta (espaços pequenos)
     tagline: 'Estude, treine e coma melhor em um só app',
   },
 
@@ -65,7 +65,7 @@ export const CONFIG = Object.freeze({
   // Suporte ao comprador.
   support: {
     whatsapp: '',              // só dígitos com DDI+DDD, ex.: '5511999999999'. Vazio = oculta.
-    message: 'Olá! Preciso de ajuda com o EdFísica PRO.', // mensagem inicial no WhatsApp
+    message: 'Olá! Preciso de ajuda com o EducaFit.', // mensagem inicial no WhatsApp
     email: '',                 // opcional
   },
 
@@ -92,7 +92,7 @@ export const CONFIG = Object.freeze({
   },
 
   // Produto principal na pilha de valor.
-  mainProduct: { title: 'App EdFísica PRO completo (todos os módulos)', value: 97.00 }, // sem números fixos no título
+  mainProduct: { title: 'App EducaFit completo (todos os módulos)', value: 97.00 }, // sem números fixos no título
 
   // Bônus (título, descrição, valor e emoji).
   bonuses: [
