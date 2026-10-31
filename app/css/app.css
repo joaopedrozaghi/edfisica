@@ -1876,3 +1876,24 @@ body::before {
 .badge-card.is-done { opacity: 1; border-color: rgba(96,165,250,.35); }
 .badge-card.is-done .badge-ico { background: linear-gradient(135deg, #2563EB, #38BDF8); color: #fff; box-shadow: 0 8px 20px -10px rgba(59,130,246,.9); }
 .badge-card.is-done span { color: #60A5FA; font-weight: 700; }
+
+/* ===================================================================
+   AZUL EM DOIS TONS: azul claro junto com azul escuro
+   =================================================================== */
+:root, [data-theme="dark"] { --accent: #93C5FD; --border: rgba(147,197,253,.13); }
+.btn--primary { background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 55%, #60A5FA 100%); border: 1px solid rgba(147,197,253,.3); }
+.quick-action-icon, .list-item-icon, .tile .list-item-icon, .prog-ex-n, .keypoints li span, .opt-l, .incl-n { background: linear-gradient(135deg, rgba(191,219,254,.95), rgba(147,197,253,.95)); color: #1E3A8A; }
+.bottom-nav a[aria-current="page"] .ico { background: #BFDBFE; color: #1E3A8A; }
+.avatar, .auth-acc-av { background: linear-gradient(135deg, #BFDBFE, #93C5FD); color: #1E3A8A; }
+.mission { background: linear-gradient(145deg, #1E3A8A 0%, #1D4ED8 45%, #60A5FA 100%); }
+.next-workout { background: linear-gradient(135deg, #1E3A8A, #2563EB 55%, #60A5FA); }
+.next-workout-play { background: #BFDBFE; color: #1E3A8A; }
+.seg-ind { background: #BFDBFE; }
+.seg button[aria-selected="true"] { color: #1E3A8A; }
+.chip.chip--active, .tab-btn--active { background: #BFDBFE; color: #1E3A8A; }
+.subj-ico, .locked-ico, .steps-list li span { background: linear-gradient(135deg, #BFDBFE, #93C5FD); color: #1E3A8A; }
+.badge-card.is-done .badge-ico, .kpi--y { background: linear-gradient(135deg, #1E3A8A, #3B82F6 60%, #60A5FA); }
+.water-btn--add { background: #BFDBFE; color: #1E3A8A; }
+.wm-fit, .auth-mark b { color: #93C5FD !important; }
+.opt.is-right .opt-l { background: #4ADE80; color: #06210f; }
+.opt.is-wrong .opt-l { background: #FF6B6B; color: #2a0606; }
