@@ -4,10 +4,10 @@
 
 import { repo, MEALS } from '../repo.js';
 import { html, raw, toast } from '../ui.js';
-import { ring } from '../charts.js';
 import { dateKey } from '../utils.js';
 import { getInstallPrompt } from '../main.js';
 import * as calc from '../calc.js';
+import { icon } from '../icons.js';
 
 export async function main(ctx) {
   const profile = repo.profile.get();
@@ -53,49 +53,60 @@ export async function main(ctx) {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
   const showInstallBanner = !settings.installDismissed && (getInstallPrompt() || (isIOS && !isStandalone));
   
-  // Persona-ordered quick actions (B6.0)
+  // Atalhos por persona (B6.0)
   const allActions = {
     estudante: [
-      { href: '#/estudos', icon: '📚', label: 'Estudos' },
-      { href: '#/simulado', icon: '⏱️', label: 'Simulado' },
-      { href: '#/estudos/anatomia?tab=flashcards', icon: '🔄', label: 'Flashcards' },
-      { href: '#/estudos/caderno', icon: '📓', label: 'Caderno de Erros' },
+      { href: '#/estudos', icon: 'book', label: 'Estudos' },
+      { href: '#/simulado', icon: 'timer', label: 'Simulado' },
+      { href: '#/estudos/anatomia?tab=flashcards', icon: 'cards', label: 'Flashcards' },
+      { href: '#/estudos/caderno', icon: 'notebook', label: 'Erros' },
     ],
     professor: [
-      { href: '#/estudos', icon: '📚', label: 'Estudos' },
-      { href: '#/simulado', icon: '⏱️', label: 'Simulado' },
-      { href: '#/avaliacao', icon: '📏', label: 'Avaliação' },
-      { href: '#/perfil', icon: '👤', label: 'Perfil' },
+      { href: '#/estudos', icon: 'book', label: 'Estudos' },
+      { href: '#/simulado', icon: 'timer', label: 'Simulado' },
+      { href: '#/avaliacao', icon: 'ruler', label: 'Avaliação' },
+      { href: '#/progresso', icon: 'chart', label: 'Progresso' },
     ],
     casa: [
-      { href: '#/treino', icon: '💪', label: 'Treino' },
-      { href: '#/dieta', icon: '🥗', label: 'Dieta' },
-      { href: '#/imc', icon: '⚖️', label: 'IMC' },
-      { href: '#/estudos', icon: '📚', label: 'Estudos' },
+      { href: '#/treino', icon: 'dumbbell', label: 'Treino' },
+      { href: '#/dieta', icon: 'apple', label: 'Dieta' },
+      { href: '#/imc', icon: 'scale', label: 'IMC' },
+      { href: '#/estudos', icon: 'book', label: 'Estudos' },
     ],
   };
-  
   const quickActions = allActions[profile.persona] || allActions.casa;
-  
+
+  const kcalGoal = targets ? targets.kcal : 0;
+  const R = 46;
+  const C = 2 * Math.PI * R;
+  const kcalPct = kcalGoal > 0 ? Math.min(1, consumedKcal / kcalGoal) : 0;
+  const waterPct = (ml) => Math.min(100, (ml / waterGoal.ml) * 100);
+  const initial = (name || 'A').trim().charAt(0).toUpperCase();
+
   ctx.el.innerHTML = html`
-    <h1 class="greeting" tabindex="-1">Olá, ${name} 👋</h1>
-    <p class="home-date">${dateStr}</p>
-    
+    <div class="home-top">
+      <div>
+        <h1 class="home-hello" tabindex="-1">Olá, ${name}</h1>
+        <p class="home-date">${dateStr}</p>
+      </div>
+      <a href="#/perfil" class="avatar" aria-label="Seu perfil">${initial}</a>
+    </div>
+
     ${showProfileBanner ? raw(`
       <div class="banner">
         <div class="banner-content">
           <div class="banner-title">Complete seu perfil</div>
-          <p class="banner-text">Para aproveitar melhor as calculadoras e metas</p>
+          <p class="banner-text">Assim as metas e calculadoras ficam certas para você.</p>
         </div>
         <a href="#/perfil" class="btn btn--small btn--primary">Completar</a>
       </div>
     `) : ''}
-    
+
     ${showInstallBanner ? raw(`
       <div class="banner" data-install-banner>
         <div class="banner-content">
           <div class="banner-title">${isIOS ? 'Adicione à tela inicial' : 'Instale o app'}</div>
-          <p class="banner-text">${isIOS ? 'Toque em Compartilhar → Adicionar à Tela de Início' : 'Use o app offline e acesse mais rápido'}</p>
+          <p class="banner-text">${isIOS ? 'Toque em Compartilhar → Adicionar à Tela de Início' : 'Abre mais rápido e funciona sem internet.'}</p>
         </div>
         ${!isIOS ? `<button type="button" class="btn btn--small btn--primary" data-install>Instalar</button>` : ''}
         <button type="button" class="banner-close" aria-label="Dispensar" data-dismiss-install>
@@ -103,64 +114,80 @@ export async function main(ctx) {
         </button>
       </div>
     `) : ''}
-    
-    <div class="home-grid">
-      <div class="card">
-        <h2 style="font-size:1.125rem;margin-bottom:1rem">🔥 Sequência</h2>
-        <div class="stat">
-          <div class="stat-value">${streak}</div>
-          <div class="stat-label">${streak === 1 ? 'dia seguido' : 'dias seguidos'}</div>
-        </div>
+
+    <section class="today" aria-label="Resumo de hoje">
+      <div class="today-ring">
+        <svg viewBox="0 0 108 108" aria-hidden="true">
+          <circle cx="54" cy="54" r="${R}" fill="none" class="trk" stroke-width="10"/>
+          <circle cx="54" cy="54" r="${R}" fill="none" class="val" stroke-width="10" stroke-linecap="round"
+            stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" data-ring="${(C * (1 - kcalPct)).toFixed(1)}"/>
+        </svg>
+        <div class="today-ring-c"><b>${consumedKcal}</b><span>${kcalGoal ? `de ${kcalGoal} kcal` : 'kcal hoje'}</span></div>
       </div>
-      
-      <div class="card">
-        <h2 style="font-size:1.125rem;margin-bottom:1rem">Hoje</h2>
-        
-        ${targets ? raw(`
-          <div class="ring mb-1">
-            ${ring(consumedKcal, targets.kcal, { size: 100, label: consumedKcal.toString(), sublabel: `de ${targets.kcal}` })}
-            <p class="text-small text-muted" style="margin-top:0.5rem">kcal</p>
-          </div>
-        `) : raw(`
-          <p class="text-muted text-small mb-1">
-            Consumido: <strong>${consumedKcal} kcal</strong><br>
-            <a href="#/dieta/metas">Defina sua meta →</a>
-          </p>
-        `)}
-        
-        <div style="margin-top:1rem">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
-            <span class="text-small">Água</span>
-            <span class="text-small text-muted">${habitDay.waterMl} / ${waterGoal.ml} ml</span>
-          </div>
-          <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-            <div style="height:100%;background:var(--accent);width:${Math.min(100, (habitDay.waterMl / waterGoal.ml) * 100)}%;transition:width 300ms"></div>
-          </div>
-          ${waterGoal.source === 'padrao' ? raw(`<p class="text-small text-muted" style="margin-top:0.25rem">padrão (complete seu peso)</p>`) : ''}
+      <div class="today-side">
+        <div>
+          <div class="today-k">Sequência</div>
+          <div class="today-v">${raw(icon('flame', 18))} ${streak} ${streak === 1 ? 'dia' : 'dias'}</div>
         </div>
+        <div>
+          <div class="today-k">${kcalGoal ? 'Restam' : 'Meta'}</div>
+          ${kcalGoal
+            ? raw(`<div class="today-v">${Math.max(0, kcalGoal - consumedKcal)} kcal</div>`)
+            : raw(`<a class="today-link" href="#/dieta/metas">Definir meta →</a>`)}
+        </div>
+        <a class="today-link" href="#/dieta">Registrar refeição →</a>
       </div>
+    </section>
+
+    <div class="water">
+      <div class="water-ico">${raw(icon('droplet', 20))}</div>
+      <div class="water-main">
+        <div class="water-top"><strong>Água</strong><span data-water-txt>${habitDay.waterMl} / ${waterGoal.ml} ml</span></div>
+        <div class="water-bar"><b data-water-bar style="width:${waterPct(habitDay.waterMl)}%"></b></div>
+      </div>
+      <button type="button" class="water-btn" data-water-undo aria-label="Desfazer último copo">${raw(icon('minus', 18))}</button>
+      <button type="button" class="water-btn" data-water-add aria-label="Adicionar 250 ml">${raw(icon('plus', 18))}</button>
     </div>
-    
-    <h2 style="font-size:1.25rem;margin:2rem 0 1rem">Acesso rápido</h2>
+
+    <p class="section-label">Atalhos</p>
     <div class="quick-actions">
       ${raw(quickActions.map(action => `
         <a href="${action.href}" class="quick-action">
-          <div class="quick-action-icon">${action.icon}</div>
+          <div class="quick-action-icon">${icon(action.icon, 20)}</div>
           <div class="quick-action-label">${action.label}</div>
         </a>
       `).join(''))}
     </div>
 
-    <div class="card" style="margin-top:2rem">
-      <h2 style="font-size:1rem;margin-bottom:.75rem">💪 Treino sugerido</h2>
-      <p class="text-muted text-small" style="margin-bottom:.75rem">Full Body Iniciante · 25 min · Sem equipamento</p>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-        <a href="#/treino/player/full-body-iniciante" class="btn btn--primary btn--small">▶ Iniciar</a>
-        <a href="#/treino/programas" class="btn btn--secondary btn--small">Ver todos</a>
+    <a href="#/treino/player/full-body-iniciante" class="next-workout">
+      <div class="next-workout-txt">
+        <small>Treino sugerido</small>
+        <strong>Full Body Iniciante</strong>
+        <span>25 min · sem equipamento</span>
       </div>
-    </div>
+      <div class="next-workout-play">${raw(icon('play', 22))}</div>
+    </a>
   `;
-  
+
+  // Anel de calorias anima ao abrir
+  const ringEl = ctx.el.querySelector('[data-ring]');
+  if (ringEl) requestAnimationFrame(() => requestAnimationFrame(() => { ringEl.style.strokeDashoffset = ringEl.dataset.ring; }));
+
+  // Água: +250 ml / desfazer, sem recarregar a tela
+  const paintWater = (day) => {
+    ctx.el.querySelector('[data-water-txt]').textContent = `${day.waterMl} / ${waterGoal.ml} ml`;
+    ctx.el.querySelector('[data-water-bar]').style.width = waterPct(day.waterMl) + '%';
+  };
+  ctx.el.querySelector('[data-water-add]')?.addEventListener('click', () => {
+    const { day, goalJustHit } = repo.habits.addWater(dateKey(), 250);
+    paintWater(day);
+    if (navigator.vibrate && settings.vibration) navigator.vibrate(10);
+    if (goalJustHit) toast('Meta de água batida hoje!', { type: 'success' });
+  });
+  ctx.el.querySelector('[data-water-undo]')?.addEventListener('click', () => {
+    paintWater(repo.habits.undoWater(dateKey()));
+  });
+
   // Install button handler
   ctx.el.querySelector('[data-install]')?.addEventListener('click', async () => {
     const prompt = getInstallPrompt();

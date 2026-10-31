@@ -29,7 +29,7 @@ export async function main(ctx) {
   currentScreen = 1;
   formData = {
     persona: null,
-    name: '',
+    name: profile.name || '',
     age: null,
     sex: null,
     weightKg: null,

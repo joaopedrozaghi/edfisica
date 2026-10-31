@@ -10,7 +10,8 @@ export const PREFIX = 'edf:v1:';
 export const BACKUP_PREFIX = 'edf:backup:';
 export const SCHEMA = 1;
 
-const PROBE_KEY = PREFIX + '__probe';
+let prefix = PREFIX; // muda por usuário (ver init({ prefix }))
+const probeKey = () => prefix + '__probe';
 const MSG_NO_STORAGE = 'Seus dados não serão salvos neste navegador.';
 const MSG_QUOTA = 'Armazenamento cheio. Exporte um backup e limpe dados antigos em Perfil.';
 
@@ -78,9 +79,9 @@ function notify(name, value) {
 }
 
 function probe(b) {
-  b.setItem(PROBE_KEY, '1');
-  if (b.getItem(PROBE_KEY) !== '1') throw new Error('probe');
-  b.removeItem(PROBE_KEY);
+  b.setItem(probeKey(), '1');
+  if (b.getItem(probeKey()) !== '1') throw new Error('probe');
+  b.removeItem(probeKey());
 }
 
 function useMemory() {
@@ -99,8 +100,8 @@ function listenStorageEvents() {
   if (storageListening || typeof window === 'undefined' || !window.addEventListener) return;
   storageListening = true;
   window.addEventListener('storage', (ev) => {
-    if (!ev.key || ev.key.indexOf(PREFIX) !== 0) return;
-    const name = ev.key.slice(PREFIX.length);
+    if (!ev.key || ev.key.indexOf(prefix) !== 0) return;
+    const name = ev.key.slice(prefix.length);
     let value = null;
     if (ev.newValue !== null) {
       try { value = JSON.parse(ev.newValue); } catch (e) { value = null; }
@@ -135,10 +136,12 @@ function runMigrations() {
  * Inicializa o store.
  * @param {object} [opts]
  * @param {Storage} [opts.backend] backend com interface de Storage (padrão: localStorage)
+ * @param {string} [opts.prefix] namespace das chaves (padrão 'edf:v1:'; cada conta usa o seu)
  * @param {(msg:string)=>void} [opts.onWarn] aviso único "dados não serão salvos"
  * @param {(msg:string)=>void} [opts.onError] erro de armazenamento cheio
  */
-function init({ backend: b, onWarn: w, onError: er } = {}) {
+function init({ backend: b, onWarn: w, onError: er, prefix: px } = {}) {
+  prefix = typeof px === 'string' && px ? px : PREFIX;
   if (w !== undefined) onWarn = w;
   if (er !== undefined) onError = er;
   subscribers = new Map();
@@ -173,7 +176,7 @@ function setNotifier({ onWarn: w, onError: er } = {}) {
 
 /** Valor salvo (JSON) ou uma CÓPIA do fallback. JSON corrompido → backup + fallback. */
 function get(name, fallback) {
-  const key = PREFIX + name;
+  const key = prefix + name;
   let raw = null;
   try {
     raw = backend.getItem(key);
@@ -197,7 +200,7 @@ function get(name, fallback) {
 
 /** Grava; em cota cheia chama o handler e tenta de novo uma vez. Retorna true/false. */
 function set(name, value) {
-  const key = PREFIX + name;
+  const key = prefix + name;
   const str = JSON.stringify(value);
   try {
     backend.setItem(key, str);
@@ -227,7 +230,7 @@ function set(name, value) {
 
 function remove(name) {
   try {
-    backend.removeItem(PREFIX + name);
+    backend.removeItem(prefix + name);
   } catch (e) {
     console.warn('[store] falha ao remover', name, e);
   }
@@ -237,8 +240,8 @@ function remove(name) {
 /** Nomes (sem prefixo) de todas as chaves edf:v1:*. */
 function keys() {
   return allKeys()
-    .filter((k) => k.indexOf(PREFIX) === 0 && k !== PROBE_KEY)
-    .map((k) => k.slice(PREFIX.length));
+    .filter((k) => k.indexOf(prefix) === 0 && k !== probeKey())
+    .map((k) => k.slice(prefix.length));
 }
 
 /** Assina mudanças de um nome (nesta aba e, com localStorage, em outras abas). Retorna o cancelamento. */
@@ -256,7 +259,7 @@ function clearAll({ keep = [] } = {}) {
   for (const name of keys()) {
     if (keep.indexOf(name) !== -1) continue;
     try {
-      backend.removeItem(PREFIX + name);
+      backend.removeItem(prefix + name);
     } catch (e) {
       console.warn('[store] falha ao remover', name, e);
     }

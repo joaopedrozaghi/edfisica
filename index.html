@@ -6,7 +6,7 @@
   <title>EdFísica PRO · Estudos, Treino em Casa e Dieta em um só app</title>
   <meta name="description" content="App de Educação Física com estudos para provas, treinos em casa guiados, dieta com calculadora de alimentos, teste de IMC e avaliação física.">
   <link rel="canonical" href="https://SEU-SITE.netlify.app/">
-  <meta name="theme-color" content="#07080A">
+  <meta name="theme-color" content="#0B0C0E">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="EdFísica PRO · Estudos, Treino em Casa e Dieta em um só app">
@@ -26,681 +26,203 @@
   <script type="module" src="./assets/js/main.js"></script>
 </head>
 <body>
-  <!-- 0. Pular para o conteúdo -->
   <a class="skip-link" href="#main">Pular para o conteúdo</a>
 
-  <!-- 1. Barra superior -->
-  <div id="topbar" class="topbar">
-    <div class="topbar-inner">
-      <p class="tb-msg">
-        <span class="tb-long">Acesso vitalício por <strong data-cfg="derived.priceBRL">R$&nbsp;27,90</strong> · Pagamento único · Garantia <span data-cfg="guarantee.days" data-fmt="int">7</span> dias</span>
-        <span class="tb-short"><strong data-cfg="derived.priceBRL">R$&nbsp;27,90</strong> · Vitalício</span>
-      </p>
-      <p class="tb-count" data-countdown-wrap>
-        <span class="tb-label" data-cfg="countdown.label">Condição especial encerra em</span>
-        <span class="tb-sep" aria-hidden="true">·</span>
-        <span class="timer" role="timer" aria-label="Tempo restante da condição especial" data-countdown>15:00</span>
-      </p>
-    </div>
-  </div>
-
-  <!-- 2. Cabeçalho -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="#main" aria-label="EdFísica PRO, início da página">
-        <img src="./assets/img/logo.svg" alt="EdFísica PRO" width="168" height="30">
-      </a>
-      <a class="btn btn-ghost btn-sm" href="./app/" data-cfg-href="site.appPath" data-cfg-show="site.showDemoLink" hidden>Ver demonstração</a>
-      <a class="btn btn-ghost btn-sm" href="#oferta" data-cfg-hide="site.showDemoLink">Ver oferta</a>
-    </div>
+  <header class="top">
+    <a href="#main" class="brand" aria-label="EdFísica PRO, início">
+      <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><path d="M27 9 15 27h8l-2 12 12-18h-8z" fill="#0B0C0E"/></svg>
+      <span data-cfg="product.shortName">EdFísica</span><b>PRO</b>
+    </a>
+    <a class="top-login" href="./app/" data-cfg-href="site.appPath">Já comprei · Entrar</a>
   </header>
 
   <main id="main" tabindex="-1">
-    <!-- 3. Hero -->
-    <section id="hero" class="hero">
-      <div class="glow glow-lime" aria-hidden="true"></div>
-      <div class="glow glow-gold" aria-hidden="true"></div>
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="pill"><span class="pill-dot" aria-hidden="true"></span>Para estudantes, professores e quem treina em casa</p>
-          <h1>Educação Física completa <span class="hl">no seu bolso</span></h1>
-          <p class="lead">Estude para provas e concursos, treine em casa com o app guiando cada exercício e monte sua dieta com calculadora de alimentos. Tudo em um só app, direto no celular.</p>
-          <p class="callout"><strong>NÃO é PDF. NÃO é curso gravado.</strong> É um app que você abre e usa em 10 segundos.</p>
 
-          <ol class="steps" aria-label="Como funciona">
-            <li><span class="step-n" aria-hidden="true">1</span><span>Compre</span></li>
-            <li><span class="step-n" aria-hidden="true">2</span><span>Receba o acesso no e-mail</span></li>
-            <li><span class="step-n" aria-hidden="true">3</span><span>Abra no celular e instale</span></li>
-          </ol>
+    <!-- 1. Hero + vitrine interativa do app -->
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="kicker">App de Educação Física</p>
+      <h1 id="hero-title">Estude, treine e coma melhor. <span class="mark">Num app só.</span></h1>
+      <p class="hero-sub">Matérias para provas, treino em casa guiado e dieta com alimentos brasileiros. Abre no celular, sem baixar nada.</p>
 
-          <ul class="checks">
-            <li><span data-cfg="contentStats.subjects" data-fmt="int">6</span> matérias com flashcards e simulados</li>
-            <li><span data-cfg="contentStats.exercises" data-fmt="int">24</span>+ exercícios guiados sem aparelhos de academia, só com itens de casa</li>
-            <li>Calculadora de dieta com <span data-cfg="contentStats.foods" data-fmt="int">60</span>+ alimentos brasileiros</li>
-            <li>IMC, % de gordura, FC e 1RM</li>
-            <li>Avaliação física completa</li>
-          </ul>
+      <div class="show" data-show>
+        <div class="show-tabs" role="tablist" aria-label="Partes do app">
+          <button type="button" role="tab" aria-selected="true" data-tab="0">Estudar</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="1">Treinar</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="2">Comer</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="3">Medir</button>
+          <span class="show-ind" aria-hidden="true"></span>
+        </div>
 
-          <p class="trust-line" data-cfg-show="socialProof.enabled" hidden>
-            <span class="stars" aria-hidden="true">★★★★★</span>
-            <span data-cfg="socialProof.rating" data-fmt="dec1">0</span> · +<span data-cfg="socialProof.customers" data-fmt="int">0</span> <span data-cfg="socialProof.label">alunos e professores</span>
-          </p>
-          <p class="trust-line" data-cfg-hide="socialProof.enabled">
-            <span data-cfg="contentStats.questions" data-fmt="int">90</span> questões · <span data-cfg="contentStats.flashcards" data-fmt="int">72</span> flashcards · <span data-cfg="contentStats.exercises" data-fmt="int">24</span> exercícios · <span data-cfg="contentStats.foods" data-fmt="int">60</span> alimentos
-          </p>
+        <div class="phone" data-phone>
+          <div class="phone-notch" aria-hidden="true"></div>
+          <div class="screens" data-screens>
 
-          <div class="cta-block">
-            <a id="hero-cta" class="btn btn-primary btn-xl pulse" href="#oferta" data-cta>
-              Quero meu acesso agora
-              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <p class="hero-price">Acesso vitalício por <span data-cfg="derived.priceBRL" data-fmt="text">R$&nbsp;27,90</span></p>
-            <p class="micro"><span aria-hidden="true">🛡️</span> Garantia de <span data-cfg="guarantee.days" data-fmt="int">7</span> dias · Acesso imediato · Pagamento único</p>
+            <!-- Estudar: flashcard que vira de verdade -->
+            <div class="scr" role="tabpanel" aria-label="Flashcards de Fisiologia">
+              <div class="scr-head"><span>‹ Fisiologia</span><span class="dim">4 de 15</span></div>
+              <div class="bar"><i style="width:27%"></i></div>
+              <button type="button" class="flash" data-flip aria-label="Virar o cartão">
+                <span class="flash-in">
+                  <span class="flash-face">
+                    <span class="lbl">Pergunta</span>
+                    <span class="q">Qual sistema energético predomina em esforços de até 10 segundos?</span>
+                    <span class="hint">Toque para ver a resposta</span>
+                  </span>
+                  <span class="flash-face flash-back">
+                    <span class="lbl lbl--y">Resposta</span>
+                    <span class="q">ATP-CP (fosfagênio)</span>
+                    <span class="dim">Esforços máximos e curtos, como um sprint de 100 m.</span>
+                  </span>
+                </span>
+              </button>
+              <div class="pair"><span class="pill pill--no">Errei</span><span class="pill pill--yes">Acertei</span></div>
+            </div>
+
+            <!-- Treinar: player -->
+            <div class="scr" role="tabpanel" aria-label="Player de treino">
+              <div class="segs"><i class="on"></i><i class="on"></i><i class="now"></i><i></i><i></i><i></i></div>
+              <p class="dim center">Full Body · 3 de 6</p>
+              <div class="ring">
+                <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="trk"/><circle cx="60" cy="60" r="52" class="val" data-ring/></svg>
+                <div class="ring-c"><b data-clock>0:30</b><span>trabalho</span></div>
+              </div>
+              <p class="ex">Agachamento livre</p>
+              <p class="dim center">Joelhos na direção da ponta dos pés</p>
+              <div class="row-card"><span class="dim">A seguir</span><strong>Flexão inclinada</strong></div>
+            </div>
+
+            <!-- Comer: dieta -->
+            <div class="scr" role="tabpanel" aria-label="Diário de dieta">
+              <div class="scr-head"><strong>Hoje</strong><span class="dim">1.420 de 2.000 kcal</span></div>
+              <div class="macro"><p><span>Proteínas</span><span>92 / 130 g</span></p><div class="bar"><i style="width:71%"></i></div></div>
+              <div class="macro"><p><span>Carboidratos</span><span>168 / 245 g</span></p><div class="bar"><i style="width:69%"></i></div></div>
+              <div class="macro"><p><span>Gorduras</span><span>38 / 62 g</span></p><div class="bar"><i style="width:61%"></i></div></div>
+              <ul class="meals">
+                <li><span>Café da manhã</span><span>410</span></li>
+                <li><span>Almoço · arroz, feijão, frango</span><span>690</span></li>
+                <li><span>Lanche · banana com aveia</span><span>320</span></li>
+                <li class="dim"><span>Jantar</span><span>+ adicionar</span></li>
+              </ul>
+            </div>
+
+            <!-- Medir: IMC -->
+            <div class="scr" role="tabpanel" aria-label="Teste de IMC">
+              <div class="scr-head"><strong>Teste de IMC</strong><span class="dim">70 kg · 1,75 m</span></div>
+              <p class="imc">22,9</p>
+              <p class="center"><span class="pill pill--yes">Peso normal</span></p>
+              <div class="scale"><i></i><i class="on"></i><i></i><i></i></div>
+              <div class="scale-l"><span>18,5</span><span>25</span><span>30</span></div>
+              <div class="row-card"><span class="dim">Faixa saudável para 1,75 m</span><strong>56,7 a 76,3 kg</strong></div>
+            </div>
           </div>
         </div>
 
-        <div class="hero-visual">
-          <div class="orbit" aria-hidden="true"></div>
-          <!-- Mockup 1: Início -->
-          <div class="phone phone--hero" role="img" aria-label="Tela inicial do app com sequência de dias, flashcards do dia, treino de hoje e água">
-            <div class="screen" aria-hidden="true">
-              <div class="mock-status"><span>9:41</span><span class="mock-sig"><i></i><i></i><i></i></span></div>
-              <div class="mock-body">
-                <p class="mock-muted">Bom dia 👋</p>
-                <p class="mock-title">Vamos treinar hoje?</p>
-                <div class="mock-card mock-streak">
-                  <div><p class="mock-strong">🔥 5 dias seguidos</p><p class="mock-muted">Continue assim!</p></div>
-                  <div class="mock-week"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
-                </div>
-                <div class="mock-card mock-row">
-                  <span class="mock-ico">📚</span>
-                  <div class="mock-grow"><p class="mock-strong">Flashcards do dia</p><p class="mock-muted">15 cartões · Fisiologia</p><span class="mock-bar"><b style="width:40%"></b></span></div>
-                </div>
-                <div class="mock-card mock-row">
-                  <span class="mock-ico">💪</span>
-                  <div class="mock-grow"><p class="mock-strong">Treino de hoje</p><p class="mock-muted">Iniciante Full Body · 20 min</p></div>
-                  <span class="mock-chip">Iniciar</span>
-                </div>
-                <div class="mock-card mock-row">
-                  <span class="mock-ico">💧</span>
-                  <div class="mock-grow"><p class="mock-strong">Água</p><p class="mock-muted">1,2 de 2,8 L</p><span class="mock-bar mock-bar--blue"><b style="width:43%"></b></span></div>
-                </div>
-                <div class="mock-card">
-                  <div class="mock-topline"><span class="mock-strong">Sua semana</span><span class="mock-muted">95 min treinados</span></div>
-                  <div class="mock-bars"><i class="on" style="height:55%"></i><i class="on" style="height:80%"></i><i style="height:25%"></i><i class="on" style="height:65%"></i><i class="on" style="height:95%"></i><i style="height:12%"></i><i style="height:12%"></i></div>
-                  <div class="mock-days"><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span><span>D</span></div>
-                </div>
-              </div>
-              <div class="mock-tabs"><span class="on">🏠<em>Início</em></span><span>📚<em>Estudos</em></span><span>💪<em>Treino</em></span><span>🥗<em>Dieta</em></span><span>☰<em>Mais</em></span></div>
-            </div>
-          </div>
-          <div class="float-badge float-badge--a glass" aria-hidden="true"><span>⚡</span> Funciona offline</div>
-          <div class="float-badge float-badge--b glass" aria-hidden="true"><span>⚖️</span> IMC 22,9 · Peso normal</div>
-        </div>
+        <p class="show-cap" data-cap aria-live="polite">6 matérias com resumos, flashcards e questões comentadas.</p>
       </div>
-    </section>
 
-    <!-- 4. Demonstração -->
-    <section id="demo" class="section section-alt">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Por dentro do app</p>
-          <h2>Veja o app por dentro</h2>
-          <p class="lead">Telas reais do que você recebe: estudo, treino guiado, dieta e IMC, tudo com o mesmo visual escuro e fácil de usar.</p>
-        </div>
-      </div>
-      <div class="demo-track" data-demo-track>
-        <figure class="demo-item reveal">
-          <div class="phone phone--demo" role="img" aria-label="Tela inicial do app">
-            <div class="screen" aria-hidden="true">
-              <div class="mock-status"><span>9:41</span><span class="mock-sig"><i></i><i></i><i></i></span></div>
-              <div class="mock-body">
-                <p class="mock-muted">Bom dia 👋</p>
-                <p class="mock-title">Vamos treinar hoje?</p>
-                <div class="mock-card mock-streak">
-                  <div><p class="mock-strong">🔥 5 dias seguidos</p><p class="mock-muted">Continue assim!</p></div>
-                  <div class="mock-week"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
-                </div>
-                <div class="mock-card mock-row">
-                  <span class="mock-ico">📚</span>
-                  <div class="mock-grow"><p class="mock-strong">Flashcards do dia</p><p class="mock-muted">15 cartões · Fisiologia</p><span class="mock-bar"><b style="width:40%"></b></span></div>
-                </div>
-                <div class="mock-card mock-row">
-                  <span class="mock-ico">💪</span>
-                  <div class="mock-grow"><p class="mock-strong">Treino de hoje</p><p class="mock-muted">Full Body · 20 min</p></div>
-                  <span class="mock-chip">Iniciar</span>
-                </div>
-                <div class="mock-card mock-row">
-                  <span class="mock-ico">💧</span>
-                  <div class="mock-grow"><p class="mock-strong">Água</p><p class="mock-muted">1,2 de 2,8 L</p><span class="mock-bar mock-bar--blue"><b style="width:43%"></b></span></div>
-                </div>
-                <div class="mock-card">
-                  <div class="mock-topline"><span class="mock-strong">Sua semana</span><span class="mock-muted">95 min treinados</span></div>
-                  <div class="mock-bars"><i class="on" style="height:55%"></i><i class="on" style="height:80%"></i><i style="height:25%"></i><i class="on" style="height:65%"></i><i class="on" style="height:95%"></i><i style="height:12%"></i><i style="height:12%"></i></div>
-                  <div class="mock-days"><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span><span>D</span></div>
-                </div>
-              </div>
-              <div class="mock-tabs"><span class="on">🏠<em>Início</em></span><span>📚<em>Estudos</em></span><span>💪<em>Treino</em></span><span>🥗<em>Dieta</em></span><span>☰<em>Mais</em></span></div>
-            </div>
-          </div>
-          <figcaption><strong>Início</strong> Seu dia em uma tela: sequência, estudo, treino e água.</figcaption>
-        </figure>
-
-        <figure class="demo-item reveal">
-          <div class="phone phone--demo" role="img" aria-label="Flashcard de Fisiologia: qual sistema energético predomina em esforços de até 10 segundos? Resposta: ATP-CP (fosfagênio)">
-            <div class="screen" aria-hidden="true">
-              <div class="mock-status"><span>9:41</span><span class="mock-sig"><i></i><i></i><i></i></span></div>
-              <div class="mock-body mock-flash">
-                <div class="mock-topline"><span class="mock-back">‹ Fisiologia</span><span class="mock-muted">4 de 15</span></div>
-                <span class="mock-bar"><b style="width:27%"></b></span>
-                <div class="mock-fcard">
-                  <span class="mock-chip mock-chip--ghost mock-chip--topic">⚡ Sistemas energéticos</span>
-                  <div class="mock-fbody">
-                    <p class="mock-label">Pergunta</p>
-                    <p class="mock-q">Qual sistema energético predomina em esforços de até ~10 s?</p>
-                    <hr>
-                    <p class="mock-label mock-label--lime">Resposta</p>
-                    <p class="mock-a">ATP-CP (fosfagênio)</p>
-                    <p class="mock-muted">Esforços máximos e curtos, como um sprint de 100 m.</p>
-                  </div>
-                  <p class="mock-hint">↻ Toque no cartão para virar</p>
-                </div>
-                <div class="mock-actions"><span class="mock-btn mock-btn--no">✕ Errei</span><span class="mock-btn mock-btn--yes">✓ Acertei</span></div>
-                <div class="mock-boxes"><span>Caixa 1</span><span class="on">Caixa 2</span><span>Caixa 3</span></div>
-              </div>
-            </div>
-          </div>
-          <figcaption><strong>Flashcards</strong> Repetição espaçada para memorizar de verdade.</figcaption>
-        </figure>
-
-        <figure class="demo-item reveal">
-          <div class="phone phone--demo" role="img" aria-label="Player de treino: Agachamento livre, 0:32 restantes, próximo exercício Flexão inclinada">
-            <div class="screen" aria-hidden="true">
-              <div class="mock-status"><span>9:41</span><span class="mock-sig"><i></i><i></i><i></i></span></div>
-              <div class="mock-body mock-player">
-                <div class="mock-segs"><i class="done"></i><i class="done"></i><i class="now"></i><i></i><i></i><i></i><i></i></div>
-                <p class="mock-muted mock-center">Full Body · Exercício 3 de 7</p>
-                <div class="mock-ring">
-                  <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="trk"/><circle cx="60" cy="60" r="52" class="val" stroke-dasharray="261 327"/></svg>
-                  <div class="mock-ring-c"><span class="mock-time">0:32</span><span class="mock-label mock-label--lime">Trabalho</span></div>
-                </div>
-                <p class="mock-ex">Agachamento livre</p>
-                <p class="mock-muted mock-center">Coxas e glúteos · ritmo controlado</p>
-                <div class="mock-card mock-row mock-next">
-                  <span class="mock-ico">⏭️</span>
-                  <div class="mock-grow"><p class="mock-muted">A seguir</p><p class="mock-strong">Próximo: Flexão inclinada</p></div>
-                </div>
-                <div class="mock-card mock-row">
-                  <span class="mock-ico">💡</span>
-                  <div class="mock-grow"><p class="mock-muted">Dica de execução</p><p class="mock-strong">Joelhos na direção da ponta dos pés</p></div>
-                </div>
-                <div class="mock-stats"><p><b>2/3</b><span>série</span></p><p><b>4:10</b><span>tempo</span></p><p><b>38</b><span>kcal</span></p></div>
-                <div class="mock-ctrl"><span>⏮</span><span class="main">❚❚</span><span>⏭</span></div>
-              </div>
-            </div>
-          </div>
-          <figcaption><strong>Treino guiado</strong> Timer, bipes, voz e o próximo exercício na tela.</figcaption>
-        </figure>
-
-        <figure class="demo-item reveal">
-          <div class="phone phone--demo" role="img" aria-label="Dieta: 1.420 de 2.000 kcal consumidas, barras de proteínas, carboidratos e gorduras">
-            <div class="screen" aria-hidden="true">
-              <div class="mock-status"><span>9:41</span><span class="mock-sig"><i></i><i></i><i></i></span></div>
-              <div class="mock-body">
-                <div class="mock-topline"><span class="mock-title mock-title--sm">Dieta</span><span class="mock-chip mock-chip--ghost">Hoje</span></div>
-                <div class="mock-kcal">
-                  <div class="mock-ring mock-ring--sm">
-                    <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" class="trk"/><circle cx="60" cy="60" r="50" class="val" stroke-dasharray="223 314"/></svg>
-                    <div class="mock-ring-c"><span class="mock-kv">1.420</span><span class="mock-muted">de 2.000 kcal</span></div>
-                  </div>
-                  <div class="mock-left"><p class="mock-muted">Restam</p><p class="mock-strong mock-big">580</p><p class="mock-muted">kcal hoje</p></div>
-                </div>
-                <div class="mock-macro"><p><span>Proteínas</span><span>92 / 130 g</span></p><span class="mock-bar"><b style="width:71%"></b></span></div>
-                <div class="mock-macro"><p><span>Carboidratos</span><span>168 / 245 g</span></p><span class="mock-bar mock-bar--gold"><b style="width:69%"></b></span></div>
-                <div class="mock-macro"><p><span>Gorduras</span><span>38 / 62 g</span></p><span class="mock-bar mock-bar--coral"><b style="width:61%"></b></span></div>
-                <div class="mock-meals">
-                  <p><span>☕ Café da manhã</span><span>410 kcal</span></p>
-                  <p><span>🍛 Almoço</span><span>690 kcal</span></p>
-                  <p><span>🍎 Lanche</span><span>320 kcal</span></p>
-                  <p><span>🌙 Jantar</span><span class="mock-add">+ adicionar</span></p>
-                </div>
-                <div class="mock-card mock-row">
-                  <span class="mock-ico">💧</span>
-                  <div class="mock-grow"><p class="mock-strong">Água 1,8 de 2,8 L</p><span class="mock-bar mock-bar--blue"><b style="width:64%"></b></span></div>
-                </div>
-                <span class="mock-btn mock-btn--yes mock-btn--full">+ Adicionar alimento</span>
-              </div>
-            </div>
-          </div>
-          <figcaption><strong>Dieta + calculadora</strong> Calorias e macros do dia, com alimentos brasileiros.</figcaption>
-        </figure>
-
-        <figure class="demo-item reveal">
-          <div class="phone phone--demo" role="img" aria-label="Teste de IMC: 22,9, Peso normal, faixa saudável de 56,7 a 76,3 kg">
-            <div class="screen" aria-hidden="true">
-              <div class="mock-status"><span>9:41</span><span class="mock-sig"><i></i><i></i><i></i></span></div>
-              <div class="mock-body">
-                <div class="mock-topline"><span class="mock-title mock-title--sm">Teste de IMC</span><span class="mock-muted">70 kg · 175 cm</span></div>
-                <div class="mock-gauge">
-                  <svg viewBox="0 0 200 112">
-                    <path d="M20 100A80 80 0 0 1 27.6 65.9" class="g g1"/>
-                    <path d="M28.6 63.6A80 80 0 0 1 74.4 24.2" class="g g2"/>
-                    <path d="M76.6 23.5A80 80 0 0 1 123.4 23.5" class="g g3"/>
-                    <path d="M125.6 24.2A80 80 0 0 1 180 100" class="g g4"/>
-                    <line x1="100" y1="100" x2="61.8" y2="41.4" class="needle"/>
-                    <circle cx="100" cy="100" r="7" class="hub"/>
-                  </svg>
-                </div>
-                <p class="mock-imc">22,9</p>
-                <p class="mock-center"><span class="mock-chip">Peso normal</span></p>
-                <div class="mock-card">
-                  <p class="mock-muted">Faixa saudável para 1,75 m</p>
-                  <p class="mock-strong">56,7 kg a 76,3 kg</p>
-                </div>
-                <div class="mock-card">
-                  <p class="mock-muted">Histórico de peso</p>
-                  <svg class="mock-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><polyline points="0,8 20,11 40,14 60,16 80,21 100,23"/></svg>
-                </div>
-                <div class="mock-scale"><span class="s1">&lt;18,5</span><span class="s2">18,5–24,9</span><span class="s3">25–29,9</span><span class="s4">30+</span></div>
-                <span class="mock-btn mock-btn--yes mock-btn--full">Salvar no histórico</span>
-              </div>
-            </div>
-          </div>
-          <figcaption><strong>Teste de IMC</strong> Classificação da OMS, faixa saudável e histórico.</figcaption>
-        </figure>
-      </div>
-      <div class="demo-dots" aria-hidden="true" data-demo-dots><i class="on"></i><i></i><i></i><i></i><i></i></div>
-      <div class="container center reveal">
-        <a class="btn btn-ghost" href="./app/" data-cfg-href="site.appPath" data-cfg-show="site.showDemoLink" hidden>Abrir demonstração ao vivo</a>
-        <a class="btn btn-primary btn-lg" href="#oferta" data-cta data-cfg-hide="site.showDemoLink">
-          Quero meu acesso
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <div class="cta-block">
+        <a id="hero-cta" class="btn btn-main" href="#oferta" data-cta>
+          Quero o app <span class="btn-price" data-cfg="derived.priceBRL">R$&nbsp;27,90</span>
         </a>
+        <p class="micro">Pagamento único · Acesso na hora · <span data-cfg="guarantee.days" data-fmt="int">7</span> dias de garantia</p>
       </div>
     </section>
 
-    <!-- 5. Para quem é -->
-    <section id="para-quem" class="section">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Para quem é</p>
-          <h2>Feito para 3 tipos de pessoa</h2>
-          <p class="lead">Cada um abre o app e encontra exatamente o que precisa, sem enrolação.</p>
-        </div>
-        <div class="grid grid-3">
-          <article class="card glass reveal">
-            <span class="card-emoji" aria-hidden="true">🎓</span>
-            <h3>Estudante</h3>
-            <p class="card-sub">Para provas, concursos e TCC</p>
-            <ul class="checks checks--sm">
-              <li>Resumos objetivos de <span data-cfg="contentStats.subjects" data-fmt="int">12</span> matérias</li>
-              <li>Flashcards com repetição espaçada</li>
-              <li>Simulados cronometrados e caderno de erros</li>
-            </ul>
-          </article>
-          <article class="card glass card--featured reveal">
-            <span class="card-emoji" aria-hidden="true">📣</span>
-            <h3>Professor e Personal</h3>
-            <p class="card-sub">Para embasar aulas e avaliações</p>
-            <ul class="checks checks--sm">
-              <li>Resumos das matérias e simulados para revisar conteúdo</li>
-              <li>Avaliação física dos alunos em segundos</li>
-              <li>Calculadora de IMC, FC e 1RM sempre à mão</li>
-            </ul>
-          </article>
-          <article class="card glass reveal">
-            <span class="card-emoji" aria-hidden="true">🏠</span>
-            <h3>Quem treina em casa</h3>
-            <p class="card-sub">Sem academia e sem aparelhos</p>
-            <ul class="checks checks--sm">
-              <li>Treinos guiados com timer e voz</li>
-              <li>Dieta com calculadora de alimentos</li>
-              <li>IMC, avaliação física e evolução no gráfico</li>
-            </ul>
-          </article>
-        </div>
-      </div>
+    <!-- 2. Números -->
+    <section class="nums" aria-label="Conteúdo do app em números">
+      <ul>
+        <li><b data-countup data-cfg="contentStats.questions" data-fmt="int">90</b><span>questões comentadas</span></li>
+        <li><b data-countup data-cfg="contentStats.flashcards" data-fmt="int">72</b><span>flashcards</span></li>
+        <li><b data-countup data-cfg="contentStats.exercises" data-fmt="int">24</b><span>exercícios guiados</span></li>
+        <li><b data-countup data-cfg="contentStats.foods" data-fmt="int">60</b><span>alimentos brasileiros</span></li>
+      </ul>
     </section>
 
-    <!-- 6. Dores -->
-    <section id="dores" class="section section-alt">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">A realidade</p>
-          <h2>Você se identifica?</h2>
-        </div>
-        <div class="grid grid-3">
-          <article class="card glass pain reveal"><span class="card-emoji" aria-hidden="true">📚</span><h3>Prova chegando e conteúdo espalhado</h3><p>Anatomia num PDF, fisiologia num vídeo, BNCC num site. Você perde mais tempo procurando do que estudando.</p></article>
-          <article class="card glass pain reveal"><span class="card-emoji" aria-hidden="true">💸</span><h3>Academia cara ou sem tempo de ir</h3><p>Mensalidade pesando no bolso, trânsito e horário lotado. E o treino fica sempre para amanhã.</p></article>
-          <article class="card glass pain reveal"><span class="card-emoji" aria-hidden="true">🍽️</span><h3>Dieta confusa, sem saber quanto comer</h3><p>Cada lugar diz uma coisa. Sem conhecer suas calorias e macros, você come no chute e não vê resultado.</p></article>
-          
-          <article class="card glass pain reveal"><span class="card-emoji" aria-hidden="true">📄</span><h3>PDFs gigantes que você nunca abre</h3><p>Você comprou, baixou e esqueceu na pasta de downloads. Conteúdo parado não muda nada.</p></article>
-          <article class="card glass pain reveal"><span class="card-emoji" aria-hidden="true">🔁</span><h3>Um app para cada coisa (e todos pagos)</h3><p>Um para treino, outro para dieta, outro para estudar. Assinaturas somando todo mês.</p></article>
-        </div>
-        <p class="closing reveal">O <span data-cfg="product.name">EdFísica PRO</span> junta tudo isso em um único app, <span class="hl">por menos que um lanche.</span></p>
-      </div>
+    <!-- 3. Depoimentos (só aparecem os reais) -->
+    <section id="depoimentos" class="block" aria-labelledby="dep-title" hidden>
+      <h2 id="dep-title">Quem usa</h2>
+      <div class="quotes" data-render="testimonials"></div>
     </section>
 
-    <!-- 7. Solução -->
-    <section id="solucao" class="section">
-      <div class="glow glow-lime glow--left" aria-hidden="true"></div>
-      <div class="container split">
-        <div class="split-copy reveal">
-          <p class="eyebrow">A solução</p>
-          <h2>O que é o <span data-cfg="product.name">EdFísica PRO</span></h2>
-          <p class="lead">Um app completo de Educação Física que roda direto no navegador. Você abre o link, instala na tela inicial em dois toques e tem estudos, treinos, dieta e avaliação física sempre à mão, até sem internet.</p>
-          <ul class="checks">
-            <li>Funciona no celular e no computador</li>
-            <li>Instala como app e funciona offline</li>
-            <li>Seus dados ficam no seu aparelho</li>
-            <li>Atualizações incluídas</li>
-          </ul>
+    <!-- 4. Oferta -->
+    <section id="oferta" class="block offer" aria-labelledby="offer-title">
+      <div class="offer-card">
+        <div class="offer-top">
+          <h2 id="offer-title">Tudo incluso</h2>
+          <p class="offer-count" data-countdown-wrap><span data-cfg="countdown.label">Condição especial encerra em</span> <b class="timer" role="timer" data-countdown>15:00</b></p>
         </div>
-        <div class="split-visual reveal">
-          <div class="phone phone--side" role="img" aria-label="Flashcard de Fisiologia com a resposta ATP-CP (fosfagênio)">
-            <div class="screen" aria-hidden="true">
-              <div class="mock-status"><span>9:41</span><span class="mock-sig"><i></i><i></i><i></i></span></div>
-              <div class="mock-body mock-flash">
-                <div class="mock-topline"><span class="mock-back">‹ Fisiologia</span><span class="mock-muted">4 de 15</span></div>
-                <span class="mock-bar"><b style="width:27%"></b></span>
-                <div class="mock-fcard">
-                  <span class="mock-chip mock-chip--ghost mock-chip--topic">⚡ Sistemas energéticos</span>
-                  <div class="mock-fbody">
-                    <p class="mock-label">Pergunta</p>
-                    <p class="mock-q">Qual sistema energético predomina em esforços de até ~10 s?</p>
-                    <hr>
-                    <p class="mock-label mock-label--lime">Resposta</p>
-                    <p class="mock-a">ATP-CP (fosfagênio)</p>
-                    <p class="mock-muted">Esforços máximos e curtos, como um sprint de 100 m.</p>
-                  </div>
-                  <p class="mock-hint">↻ Toque no cartão para virar</p>
-                </div>
-                <div class="mock-actions"><span class="mock-btn mock-btn--no">✕ Errei</span><span class="mock-btn mock-btn--yes">✓ Acertei</span></div>
-                <div class="mock-boxes"><span>Caixa 1</span><span class="on">Caixa 2</span><span>Caixa 3</span></div>
-              </div>
-            </div>
-          </div>
+
+        <ul class="incl" data-render="included"></ul>
+
+        <div class="price">
+          <p class="price-from" data-cfg-show="price.anchor" hidden>De <s data-cfg="derived.anchorBRL">R$&nbsp;197,00</s> por</p>
+          <p class="price-big" data-cfg="derived.priceBRL">R$&nbsp;27,90</p>
+          <p class="price-inst" data-cfg="price.installmentsText">ou 4x de R$ 7,57</p>
+        </div>
+
+        <p class="bump" data-cfg-show="orderBump.enabled" hidden><strong>No checkout:</strong> <span data-cfg="orderBump.text"></span></p>
+
+        <a class="btn btn-main btn-full" href="#oferta" data-cta>Garantir meu acesso</a>
+        <p class="micro center"><span data-cfg="price.paymentNote">Pagamento único · Sem mensalidades</span></p>
+
+        <div class="guar">
+          <span class="guar-seal"><b data-cfg="guarantee.days" data-fmt="int">7</b>dias</span>
+          <p>Teste por <span data-cfg="guarantee.days" data-fmt="int">7</span> dias. Se não gostar, devolvemos 100% do valor, sem perguntas.</p>
         </div>
       </div>
     </section>
 
-    <!-- 8. Módulos -->
-    <section id="modulos" class="section section-alt">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Tudo incluso</p>
-          <h2><span data-cfg="contentStats.modules" data-fmt="int">6</span> módulos em um só lugar</h2>
-          <p class="lead">Um app que substitui a pilha de PDFs, planilhas e assinaturas.</p>
-        </div>
-        <div class="grid grid-4">
-          
-          
-        </div>
-      </div>
-    </section>
-
-    <!-- 9. Números -->
-    <section id="numeros" class="numbers" aria-label="Conteúdo do app em números">
-      <div class="container">
-        <ul class="stats reveal">
-          <li><strong data-countup data-cfg="contentStats.subjects" data-fmt="int">6</strong><span>matérias para provas</span></li>
-          <li><strong data-countup data-cfg="contentStats.questions" data-fmt="int">90</strong><span>questões comentadas</span></li>
-          <li><strong data-countup data-cfg="contentStats.exercises" data-fmt="int">24</strong><span>exercícios guiados</span></li>
-          <li><strong data-countup data-cfg="contentStats.foods" data-fmt="int">60</strong><span>alimentos brasileiros</span></li>
-          <li><strong data-countup data-cfg="contentStats.modules" data-fmt="int">6</strong><span>módulos integrados</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 10. Bônus + pilha de valor -->
-    <section id="bonus" class="section">
-      <div class="glow glow-gold glow--right" aria-hidden="true"></div>
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow eyebrow--gold">Só nesta oferta</p>
-          <h2>Bônus exclusivos</h2>
-          <p class="lead">Além do app completo, você leva estes extras sem pagar nada a mais.</p>
-        </div>
-        <div class="grid grid-4" data-render="bonuses">
-          
-          <article class="card glass bonus reveal">
-            <div class="bonus-top"><span class="bonus-tag">★ Bônus 3</span><span class="card-emoji" aria-hidden="true">🥗</span></div>
-            <h3>Planos alimentares prontos</h3>
-            <p>Cardápios para emagrecer, manter, ganhar massa ou seguir uma alimentação vegetariana, aplicados ao seu diário com um toque.</p>
-            <p class="bonus-price"><s class="was" data-cfg-show="price.anchor" hidden>De R$&nbsp;20,00</s><span class="incl" data-cfg-hide="price.anchor">Incluso</span><span class="free">GRÁTIS</span></p>
-          </article>
-          <article class="card glass bonus reveal">
-            <div class="bonus-top"><span class="bonus-tag">★ Bônus 4</span><span class="card-emoji" aria-hidden="true">🧘</span></div>
-            <h3>Programas Terceira Idade &amp; Mobilidade</h3>
-            <p>Treinos guiados de baixo impacto, com apoio de cadeira e parede, para ganhar mobilidade, equilíbrio e autonomia no dia a dia.</p>
-            <p class="bonus-price"><s class="was" data-cfg-show="price.anchor" hidden>De R$&nbsp;25,00</s><span class="incl" data-cfg-hide="price.anchor">Incluso</span><span class="free">GRÁTIS</span></p>
-          </article>
-        </div>
-
-        <p class="bump reveal" data-cfg-show="orderBump.enabled" hidden><strong>Oferta especial no checkout:</strong> <span data-cfg="orderBump.text"></span></p>
-
-        <div class="stack glass reveal">
-          <h3 class="stack-title">Tudo o que você recebe</h3>
-          <ul class="value-list" data-render="value-stack">
-            <li><span>App EdFísica PRO completo (todos os módulos)</span><span class="v"><span data-cfg-show="price.anchor" hidden>R$&nbsp;97,00</span><span data-cfg-hide="price.anchor">Incluso</span></span></li>
-            <li><span>Simulados cronometrados + Caderno de erros</span><span class="v"><span data-cfg-show="price.anchor" hidden>R$&nbsp;30,00</span><span data-cfg-hide="price.anchor">Incluso</span></span></li>
-            <li><span>Planos alimentares prontos</span><span class="v"><span data-cfg-show="price.anchor" hidden>R$&nbsp;20,00</span><span data-cfg-hide="price.anchor">Incluso</span></span></li>
-            <li><span>Programas Terceira Idade &amp; Mobilidade</span><span class="v"><span data-cfg-show="price.anchor" hidden>R$&nbsp;25,00</span><span data-cfg-hide="price.anchor">Incluso</span></span></li>
-          </ul>
-          <p class="stack-total" data-cfg-show="price.anchor" hidden>Valor total: <s data-cfg="derived.stackTotalBRL">R$&nbsp;197,00</s></p>
-          <p class="stack-today">Hoje por apenas <strong data-cfg="derived.priceBRL">R$&nbsp;27,90</strong></p>
-          <a class="btn btn-primary btn-lg" href="#oferta" data-cta>
-            Quero tudo isso
-            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- 11. Antes x Depois -->
-    <section id="antes-depois" class="section section-alt">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">A diferença</p>
-          <h2>Antes e depois do app</h2>
-        </div>
-        <div class="compare">
-          <div class="compare-col compare-col--bad glass reveal">
-            <h3>Sem o <span data-cfg="product.name">EdFísica PRO</span></h3>
-            <ul class="xs">
-              <li>Conteúdo da prova espalhado em PDFs, apostilas e vídeos</li>
-              <li>Pagar academia ou ficar parado por falta de tempo</li>
-              <li>Comer no chute, sem saber quantas calorias precisa</li>
-              
-              <li>Vários apps pagos que não conversam entre si</li>
-            </ul>
-          </div>
-          <div class="compare-col compare-col--good glass reveal">
-            <h3>Com o <span data-cfg="product.name">EdFísica PRO</span></h3>
-            <ul class="checks">
-              <li>Matérias resumidas com flashcards, questões e simulados</li>
-              <li>Treinos guiados em casa, com timer, voz e próximo exercício</li>
-              <li>Meta de calorias calculada e diário de alimentos</li>
-              
-              <li>Tudo em um só app, com pagamento único</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 12. Depoimentos (somente reais; os exemplos ficam marcados) -->
-    <section id="depoimentos" class="section" data-cfg-show="testimonials.enabled">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Depoimentos</p>
-          <h2>O que dizem nossos alunos</h2>
-          <p class="notice" data-testi-notice>Espaço reservado para depoimentos reais de clientes.</p>
-        </div>
-        <div class="grid grid-3" data-render="testimonials">
-          <figure class="card glass testi reveal"><span class="testi-tag">Exemplo: substitua por um depoimento real</span><blockquote>“Escreva aqui o depoimento real de um(a) estudante.”</blockquote><figcaption>Estudante de Ed. Física</figcaption></figure>
-          <figure class="card glass testi reveal"><span class="testi-tag">Exemplo: substitua por um depoimento real</span><blockquote>“Escreva aqui o depoimento real de um(a) professor(a).”</blockquote><figcaption>Professor(a) de Ed. Física</figcaption></figure>
-          <figure class="card glass testi reveal"><span class="testi-tag">Exemplo: substitua por um depoimento real</span><blockquote>“Escreva aqui o depoimento real de alguém que treina em casa.”</blockquote><figcaption>Treina em casa</figcaption></figure>
-          <figure class="card glass testi reveal"><span class="testi-tag">Exemplo: substitua por um depoimento real</span><blockquote>“Escreva aqui o depoimento real de quem estuda para concurso.”</blockquote><figcaption>Concurseiro(a)</figcaption></figure>
-          <figure class="card glass testi reveal"><span class="testi-tag">Exemplo: substitua por um depoimento real</span><blockquote>“Escreva aqui o depoimento real de um(a) personal trainer.”</blockquote><figcaption>Personal trainer</figcaption></figure>
-          <figure class="card glass testi reveal"><span class="testi-tag">Exemplo: substitua por um depoimento real</span><blockquote>“Escreva aqui o depoimento real de alguém que usa a dieta do app.”</blockquote><figcaption>Usa a dieta do app</figcaption></figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- 13. Oferta -->
-    <section id="oferta" class="section section-alt offer">
-      <div class="glow glow-lime glow--center" aria-hidden="true"></div>
-      <div class="container">
-        <div class="price-card reveal">
-          <p class="ribbon">Oferta especial</p>
-          <div class="price-inner">
-            <p class="badge">Acesso completo e vitalício</p>
-            <p class="price-from" data-cfg-show="price.anchor" hidden>De <s data-cfg="derived.anchorBRL">R$&nbsp;197,00</s> por apenas</p>
-            <p class="price-from" data-cfg-hide="price.anchor">Por apenas</p>
-            <p class="price-big" data-cfg="derived.priceBRL">R$&nbsp;27,90</p>
-            <p class="price-inst" data-cfg="price.installmentsText">ou 4x de R$ 7,57</p>
-            <p class="price-note" data-cfg="price.paymentNote">Pagamento único · Sem mensalidades</p>
-            <p class="price-count" data-countdown-wrap><span aria-hidden="true">⏳</span> <span data-cfg="countdown.label">Condição especial encerra em</span> <span class="timer" role="timer" aria-label="Tempo restante da condição especial" data-countdown>15:00</span></p>
-
-            <ul class="value-list value-list--strike" data-render="value-stack" data-strike>
-              <li><span>App EdFísica PRO completo (todos os módulos)</span><span class="v"><s data-cfg-show="price.anchor" hidden>R$&nbsp;97,00</s><span data-cfg-hide="price.anchor">Incluso</span></span></li>
-              <li><span>Simulados cronometrados + Caderno de erros</span><span class="v"><s data-cfg-show="price.anchor" hidden>R$&nbsp;30,00</s><span data-cfg-hide="price.anchor">Incluso</span></span></li>
-              <li><span>Planos alimentares prontos</span><span class="v"><s data-cfg-show="price.anchor" hidden>R$&nbsp;20,00</s><span data-cfg-hide="price.anchor">Incluso</span></span></li>
-              <li><span>Programas Terceira Idade &amp; Mobilidade</span><span class="v"><s data-cfg-show="price.anchor" hidden>R$&nbsp;25,00</s><span data-cfg-hide="price.anchor">Incluso</span></span></li>
-            </ul>
-            <p class="savings" data-cfg-show="price.anchor" hidden>Você economiza <strong data-cfg="derived.savingsBRL">R$&nbsp;169,10</strong> (<span data-cfg="derived.percentOff">86</span>% OFF)</p>
-
-            <ul class="checks checks--sm price-checks">
-              <li>Todos os <span data-cfg="contentStats.modules" data-fmt="int">6</span> módulos do app</li>
-              <li><span data-cfg="contentStats.questions" data-fmt="int">90</span> questões comentadas e simulados</li>
-              <li><span data-cfg="contentStats.exercises" data-fmt="int">24</span>+ exercícios guiados só com itens de casa</li>
-              <li><span data-cfg="contentStats.foods" data-fmt="int">60</span>+ alimentos brasileiros</li>
-              <li>Planos alimentares prontos</li>
-              
-              <li>Funciona offline, no celular e no computador</li>
-              <li>Atualizações incluídas</li>
-            </ul>
-
-            <p class="bump" data-cfg-show="orderBump.enabled" hidden><strong>Oferta especial no checkout:</strong> <span data-cfg="orderBump.text"></span></p>
-
-            <a class="btn btn-primary btn-xl btn-block pulse" href="#oferta" data-cta>
-              Garantir meu acesso
-              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <p class="trust-row"><span><span aria-hidden="true">🔒</span> Compra segura</span><span><span aria-hidden="true">⚡</span> Acesso imediato</span><span><span aria-hidden="true">🛡️</span> <span data-cfg="guarantee.days" data-fmt="int">7</span> dias de garantia</span></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 14. Garantia -->
-    <section id="garantia" class="section">
-      <div class="container guarantee glass reveal">
-        <div class="seal" aria-hidden="true">
-          <span class="seal-days"><span data-cfg="guarantee.days" data-fmt="int">7</span></span>
-          <span class="seal-label">DIAS</span>
-        </div>
-        <div class="guarantee-copy">
-          <p class="eyebrow eyebrow--gold">Risco zero</p>
-          <h2>Garantia incondicional de <span data-cfg="guarantee.days" data-fmt="int">7</span> dias</h2>
-          <p class="lead">Teste por <span data-cfg="guarantee.days" data-fmt="int">7</span> dias. Se não gostar, peça o reembolso e devolvemos 100% do valor, sem perguntas.</p>
-          <p class="fine">O direito de arrependimento em compras on-line é garantido pelo Código de Defesa do Consumidor (art. 49).</p>
-          <p class="trust-row trust-row--left"><span>⚡ Acesso imediato</span><span>💳 Pagamento único</span><span>🔒 Compra segura</span><span>⚖️ Seus direitos garantidos pelo CDC</span></p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 15. FAQ -->
-    <section id="faq" class="section section-alt">
-      <div class="container container--narrow">
-        <div class="section-head reveal">
-          <p class="eyebrow">Transparência total</p>
-          <h2>Perguntas frequentes</h2>
-        </div>
-        <div class="faq reveal">
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-1">Como recebo o acesso?</button></h3>
-            <div class="faq-a" id="faq-1"><div><p>Logo após a confirmação do pagamento, você recebe no e-mail da compra o link do app. Pix e cartão costumam ser aprovados na hora; boleto segue o prazo de compensação do banco.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-2">Funciona no celular? Preciso instalar algo?</button></h3>
-            <div class="faq-a" id="faq-2"><div><p>Funciona em qualquer celular, tablet ou computador com navegador atualizado (Android, iPhone, Windows e Mac). Não precisa baixar nada em loja: abra o link e, se quiser, toque em “Adicionar à tela inicial” para usar como app.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-3">Funciona sem internet?</button></h3>
-            <div class="faq-a" id="faq-3"><div><p>Sim. Depois do primeiro acesso, o app fica salvo no aparelho e funciona offline, ideal para a academia, a quadra ou o ônibus.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-4">É assinatura?</button></h3>
-            <div class="faq-a" id="faq-4"><div><p>Não. É pagamento único de <span data-cfg="derived.priceBRL">R$&nbsp;27,90</span>, sem mensalidades e com acesso vitalício.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-5">Serve para concurso e faculdade?</button></h3>
-            <div class="faq-a" id="faq-5"><div><p>Sim. São <span data-cfg="contentStats.subjects" data-fmt="int">6</span> matérias que mais caem em provas de Educação Física (anatomia, fisiologia, treinamento, BNCC e legislação, primeiros socorros e mais), com resumos, flashcards, <span data-cfg="contentStats.questions" data-fmt="int">90</span> questões comentadas e simulados cronometrados.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-6">Nunca treinei, consigo usar?</button></h3>
-            <div class="faq-a" id="faq-6"><div><p>Consegue. Cada exercício tem figura animada, passo a passo e erros comuns, e os programas começam no nível iniciante. O player controla o tempo de trabalho e descanso por você.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-7">A dieta substitui um nutricionista?</button></h3>
-            <div class="faq-a" id="faq-7"><div><p>Não. A calculadora usa fórmulas reconhecidas (Mifflin-St Jeor) e valores da Tabela TACO para estimar suas metas e organizar o dia, mas não substitui a avaliação individual de um nutricionista.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-8">Onde ficam meus dados?</button></h3>
-            <div class="faq-a" id="faq-8"><div><p>No seu próprio aparelho: nada é enviado para servidores. Para trocar de celular, use “Exportar backup” no Perfil e importe o arquivo no aparelho novo.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-9">E se eu não gostar?</button></h3>
-            <div class="faq-a" id="faq-9"><div><p>Você tem <span data-cfg="guarantee.days" data-fmt="int">7</span> dias de garantia. Peça o reembolso dentro desse prazo e devolvemos 100% do valor, sem perguntas.</p></div></div>
-          </div>
-          <div class="faq-item">
-            <h3><button class="faq-q" type="button" aria-expanded="true" aria-controls="faq-10">Como falo com o suporte?</button></h3>
-            <div class="faq-a" id="faq-10"><div><p data-support-answer>Pelo e-mail da compra: responda à mensagem de confirmação do seu acesso e a nossa equipe te ajuda.</p></div></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 16. CTA final -->
-    <section id="cta-final" class="section final">
-      <div class="glow glow-lime glow--center" aria-hidden="true"></div>
-      <div class="container center reveal">
-        <h2>Seu próximo treino, prova ou aula <span class="hl">já fica pronto hoje</span></h2>
-        <p class="lead">Estudos, treinos, dieta e avaliações em um só app por <strong class="gold" data-cfg="derived.priceBRL">R$&nbsp;27,90</strong>.</p>
-        <a class="btn btn-primary btn-xl pulse" href="#oferta" data-cta>
-          Quero meu acesso agora
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <p class="trust-row"><span>🔒 Compra segura</span><span>⚡ Acesso imediato</span><span>🛡️ <span data-cfg="guarantee.days" data-fmt="int">7</span> dias de garantia</span></p>
+    <!-- 5. Dúvidas -->
+    <section id="faq" class="block" aria-labelledby="faq-title">
+      <h2 id="faq-title">Dúvidas</h2>
+      <div class="faq">
+        <details>
+          <summary>Como recebo o acesso?</summary>
+          <p>Logo após a confirmação do pagamento, chega no e-mail da compra o link do app. Você cria sua conta com e-mail e senha e já começa a usar. Pix e cartão são aprovados na hora.</p>
+        </details>
+        <details>
+          <summary>Preciso baixar alguma coisa?</summary>
+          <p>Não. Funciona no navegador do celular (Android e iPhone) e do computador. Se quiser, toque em “Adicionar à tela inicial” e ele vira um app, que funciona até sem internet.</p>
+        </details>
+        <details>
+          <summary>Tem mensalidade?</summary>
+          <p>Não. É pagamento único de <span data-cfg="derived.priceBRL">R$&nbsp;27,90</span>, com acesso vitalício.</p>
+        </details>
+        <details>
+          <summary>Serve para provas e concursos?</summary>
+          <p>Sim. São <span data-cfg="contentStats.subjects" data-fmt="int">6</span> matérias que mais caem (anatomia, fisiologia, treinamento, primeiros socorros e mais), com resumos, flashcards, <span data-cfg="contentStats.questions" data-fmt="int">90</span> questões comentadas e simulados com tempo.</p>
+        </details>
+        <details>
+          <summary>Nunca treinei. Consigo usar?</summary>
+          <p>Consegue. Cada exercício tem passo a passo e erros comuns, os programas começam no iniciante e o player controla o tempo de treino e descanso por você.</p>
+        </details>
+        <details>
+          <summary>A dieta substitui o nutricionista?</summary>
+          <p>Não. A calculadora usa fórmulas reconhecidas e a Tabela TACO para estimar metas e organizar o dia, mas não substitui um acompanhamento individual.</p>
+        </details>
+        <details>
+          <summary>Como falo com o suporte?</summary>
+          <p data-support-answer>Responda o e-mail de confirmação da sua compra e a nossa equipe te ajuda.</p>
+        </details>
       </div>
     </section>
   </main>
 
-  <!-- 17. Rodapé -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <img src="./assets/img/logo.svg" alt="EdFísica PRO" width="146" height="26" loading="lazy">
-      <p>© <span data-cfg="derived.year">2026</span> <span data-cfg="product.name">EdFísica PRO</span>. Todos os direitos reservados.</p>
-      <p data-cfg-show="seller.name" hidden><span data-cfg="seller.name"></span><span data-cfg-show="seller.document" hidden> · <span data-cfg="seller.document"></span></span></p>
-      <nav class="footer-links" aria-label="Links legais">
-        <a href="#" data-cfg-href="legal.termsUrl" data-cfg-show="legal.termsUrl" hidden>Termos de uso</a>
-        <a href="#" data-cfg-href="legal.privacyUrl" data-cfg-show="legal.privacyUrl" hidden>Política de privacidade</a>
-        <a href="#" data-support-link hidden>Suporte</a>
-      </nav>
-      <p class="fine">O <span data-cfg="product.name">EdFísica PRO</span> tem caráter educativo e não substitui a orientação de profissionais de Educação Física, médicos ou nutricionistas. Resultados variam de pessoa para pessoa.</p>
-      <p class="fine" data-cfg-show="legal.showMetaDisclaimer">Este site não é afiliado ao Facebook/Meta.</p>
-    </div>
+  <footer class="foot">
+    <p>© <span data-cfg="derived.year">2026</span> <span data-cfg="product.name">EdFísica PRO</span></p>
+    <p data-cfg-show="seller.name" hidden><span data-cfg="seller.name"></span><span data-cfg-show="seller.document" hidden> · <span data-cfg="seller.document"></span></span></p>
+    <p class="foot-links">
+      <a href="#" data-cfg-href="legal.termsUrl" data-cfg-show="legal.termsUrl" hidden>Termos de uso</a>
+      <a href="#" data-cfg-href="legal.privacyUrl" data-cfg-show="legal.privacyUrl" hidden>Privacidade</a>
+      <a href="#" data-support-link hidden>Suporte</a>
+    </p>
+    <p class="fine">Conteúdo educativo. Não substitui a orientação de profissionais de Educação Física, médicos ou nutricionistas.</p>
+    <p class="fine" data-cfg-show="legal.showMetaDisclaimer">Este site não é afiliado ao Facebook/Meta.</p>
   </footer>
 
-  <!-- 18. Barra fixa de compra (celular) -->
-  <div id="sticky-cta" class="sticky-cta glass" aria-hidden="true">
-    <div class="sc-price">
-      <strong data-cfg="derived.priceBRL">R$&nbsp;27,90</strong>
-      <span data-cfg="price.installmentsText">ou 4x de R$ 7,57</span>
-    </div>
-    <a class="btn btn-primary btn-sm" href="#oferta" data-cta tabindex="-1">Quero acesso</a>
+  <div id="sticky-cta" class="sticky" aria-hidden="true">
+    <div class="sticky-p"><b data-cfg="derived.priceBRL">R$&nbsp;27,90</b><span>pagamento único</span></div>
+    <a class="btn btn-main" href="#oferta" data-cta tabindex="-1">Quero o app</a>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>

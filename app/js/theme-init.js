@@ -1,20 +1,21 @@
 // theme-init.js: define o tema antes do CSS pintar (evita flash).
-// Script clássico (não módulo) carregado no <head> antes do CSS, conforme B4.1.
-// Sem importações, sem side effects além de ler o storage e setar data-theme.
+// Script clássico (não módulo) carregado no <head> antes do CSS.
+// Lê as preferências da conta logada (edf:u:<id>:settings).
 
 (function() {
   try {
-    const stored = localStorage.getItem('edf:v1:settings');
+    var session = JSON.parse(localStorage.getItem('edf:auth:session') || 'null');
+    var key = session && session.id ? 'edf:u:' + session.id + ':settings' : 'edf:v1:settings';
+    var stored = localStorage.getItem(key);
     if (stored) {
-      const settings = JSON.parse(stored);
+      var settings = JSON.parse(stored);
       if (settings.theme === 'light' || settings.theme === 'dark') {
         document.documentElement.dataset.theme = settings.theme;
         return;
       }
     }
   } catch (e) {
-    // storage indisponível ou JSON inválido: deixa no padrão dark (CSS)
+    // storage indisponível ou JSON inválido: fica no escuro
   }
-  // Padrão: dark (CSS já define, mas setamos explicitamente para consistência)
   document.documentElement.dataset.theme = 'dark';
 })();
