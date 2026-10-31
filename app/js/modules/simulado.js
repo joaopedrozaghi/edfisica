@@ -2,7 +2,8 @@
 // Sem efeitos colaterais na importação
 
 import { repo } from '../repo.js';
-import { html, raw, toast } from '../ui.js';
+import { html, raw, toast, confetti } from '../ui.js';
+import { markStudy } from '../missions.js';
 import { uid } from '../utils.js';
 import { SUBJECTS, LOADERS } from '../../data/subjects/index.js';
 
@@ -299,6 +300,8 @@ function renderRun(ctx, active) {
     };
 
     repo.study.saveSimulado(result);
+    markStudy();
+    if (result.total && result.score / result.total >= 0.7) setTimeout(() => confetti(), 300);
 
     const pct = Math.round((score / result.total) * 100);
 

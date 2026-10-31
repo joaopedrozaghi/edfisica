@@ -6,7 +6,7 @@
 import { EXERCISES_BY_ID, POSES } from '../../data/exercises.js';
 import { PROGRAMS_BY_ID } from '../../data/programs.js';
 import { repo } from '../repo.js';
-import { html, raw, toast } from '../ui.js';
+import { html, raw, toast, confetti } from '../ui.js';
 import { beep, countdown321 } from '../audio.js';
 import { acquireWakeLock, releaseWakeLock } from '../wakelock.js';
 import { dateKey } from '../utils.js';
@@ -287,6 +287,7 @@ export async function main(ctx) {
       durationSec: totalElapsedSec,
       totalSets: workouts,
     });
+    setTimeout(() => confetti({ count: 90 }), 300);
 
     ctx.el.innerHTML = html`
       <div style="min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem">

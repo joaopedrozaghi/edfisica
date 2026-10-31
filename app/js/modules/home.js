@@ -3,11 +3,12 @@
 // Sem efeitos colaterais na importação
 
 import { repo, MEALS } from '../repo.js';
-import { html, raw, toast } from '../ui.js';
+import { html, raw, toast, confetti } from '../ui.js';
 import { dateKey } from '../utils.js';
 import { getInstallPrompt } from '../main.js';
 import * as calc from '../calc.js';
 import { icon } from '../icons.js';
+import { todayMissions, level } from '../missions.js';
 
 export async function main(ctx) {
   const profile = repo.profile.get();
@@ -77,20 +78,33 @@ export async function main(ctx) {
   const quickActions = allActions[profile.persona] || allActions.casa;
 
   const kcalGoal = targets ? targets.kcal : 0;
-  const R = 46;
-  const C = 2 * Math.PI * R;
-  const kcalPct = kcalGoal > 0 ? Math.min(1, consumedKcal / kcalGoal) : 0;
   const waterPct = (ml) => Math.min(100, (ml / waterGoal.ml) * 100);
   const initial = (name || 'A').trim().charAt(0).toUpperCase();
+  const lv = level();
+  const mission = todayMissions();
+  const MR = 30;
+  const MC = 2 * Math.PI * MR;
+  const tip = TIPS[Math.floor(Date.now() / 86400000) % TIPS.length];
+  const hour = new Date().getHours();
+  const hello = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
 
   ctx.el.innerHTML = html`
     <div class="home-top">
       <div>
-        <h1 class="home-hello" tabindex="-1">Olá, ${name}</h1>
         <p class="home-date">${dateStr}</p>
+        <h1 class="home-hello" tabindex="-1">${hello}, ${name}</h1>
       </div>
-      <a href="#/perfil" class="avatar" aria-label="Seu perfil">${initial}</a>
+      <a href="#/progresso" class="lv-badge" aria-label="Nível ${lv.n}, ${lv.title}. Ver progresso">
+        <span class="avatar">${initial}</span>
+        <span class="lv-n">${lv.n}</span>
+      </a>
     </div>
+
+    <a href="#/progresso" class="lv-bar" aria-label="Experiência">
+      <span><b>Nível ${lv.n}</b> · ${lv.title}</span>
+      <span>${lv.into}/${lv.need} XP</span>
+      <i><b style="width:${lv.pct}%"></b></i>
+    </a>
 
     ${showProfileBanner ? raw(`
       <div class="banner">
@@ -115,29 +129,32 @@ export async function main(ctx) {
       </div>
     `) : ''}
 
-    <section class="today" aria-label="Resumo de hoje">
-      <div class="today-ring">
-        <svg viewBox="0 0 108 108" aria-hidden="true">
-          <circle cx="54" cy="54" r="${R}" fill="none" class="trk" stroke-width="10"/>
-          <circle cx="54" cy="54" r="${R}" fill="none" class="val" stroke-width="10" stroke-linecap="round"
-            stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" data-ring="${(C * (1 - kcalPct)).toFixed(1)}"/>
-        </svg>
-        <div class="today-ring-c"><b>${consumedKcal}</b><span>${kcalGoal ? `de ${kcalGoal} kcal` : 'kcal hoje'}</span></div>
-      </div>
-      <div class="today-side">
+    <section class="mission${mission.done === mission.total ? ' is-done' : ''}" aria-label="Missão de hoje">
+      <div class="mission-head">
         <div>
-          <div class="today-k">Sequência</div>
-          <div class="today-v">${raw(icon('flame', 18))} ${streak} ${streak === 1 ? 'dia' : 'dias'}</div>
+          <small>Missão de hoje</small>
+          <b>${mission.done === mission.total ? 'Dia completo!' : `${mission.done} de ${mission.total} feitas`}</b>
         </div>
-        <div>
-          <div class="today-k">${kcalGoal ? 'Restam' : 'Meta'}</div>
-          ${kcalGoal
-            ? raw(`<div class="today-v">${Math.max(0, kcalGoal - consumedKcal)} kcal</div>`)
-            : raw(`<a class="today-link" href="#/dieta/metas">Definir meta →</a>`)}
+        <div class="mission-ring">
+          <svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="${MR}" class="trk"/><circle cx="36" cy="36" r="${MR}" class="val" stroke-dasharray="${MC.toFixed(1)}" stroke-dashoffset="${MC.toFixed(1)}" data-mring="${(MC * (1 - mission.done / mission.total)).toFixed(1)}"/></svg>
+          <span>${Math.round((mission.done / mission.total) * 100)}%</span>
         </div>
-        <a class="today-link" href="#/dieta">Registrar refeição →</a>
       </div>
+      <ul class="mission-list">
+        ${raw(mission.items.map((m) => `
+          <li class="${m.done ? 'is-done' : ''}">
+            <a href="${m.href}">
+              <span class="mission-check">${m.done ? icon('check', 14) : ''}</span>
+              <span class="mission-t"><b>${m.label}</b><span>${m.done ? 'Feito' : m.hint}</span></span>
+            </a>
+          </li>`).join(''))}
+      </ul>
     </section>
+
+    <div class="mini-stats">
+      <a href="#/progresso" class="mini"><span class="mini-ico">${raw(icon('flame', 18))}</span><b>${streak}</b><span>${streak === 1 ? 'dia seguido' : 'dias seguidos'}</span></a>
+      <a href="#/dieta" class="mini"><span class="mini-ico">${raw(icon('apple', 18))}</span><b>${consumedKcal}</b><span>${kcalGoal ? `de ${kcalGoal} kcal` : 'kcal hoje'}</span></a>
+    </div>
 
     <div class="water">
       <div class="water-ico">${raw(icon('droplet', 20))}</div>
@@ -146,17 +163,7 @@ export async function main(ctx) {
         <div class="water-bar"><b data-water-bar style="width:${waterPct(habitDay.waterMl)}%"></b></div>
       </div>
       <button type="button" class="water-btn" data-water-undo aria-label="Desfazer último copo">${raw(icon('minus', 18))}</button>
-      <button type="button" class="water-btn" data-water-add aria-label="Adicionar 250 ml">${raw(icon('plus', 18))}</button>
-    </div>
-
-    <p class="section-label">Atalhos</p>
-    <div class="quick-actions">
-      ${raw(quickActions.map(action => `
-        <a href="${action.href}" class="quick-action">
-          <div class="quick-action-icon">${icon(action.icon, 20)}</div>
-          <div class="quick-action-label">${action.label}</div>
-        </a>
-      `).join(''))}
+      <button type="button" class="water-btn water-btn--add" data-water-add aria-label="Adicionar 250 ml">${raw(icon('plus', 18))}</button>
     </div>
 
     <a href="#/treino/player/full-body-iniciante" class="next-workout">
@@ -167,13 +174,36 @@ export async function main(ctx) {
       </div>
       <div class="next-workout-play">${raw(icon('play', 22))}</div>
     </a>
+
+    <p class="section-label" style="margin-top:1.25rem">Atalhos</p>
+    <div class="quick-actions">
+      ${raw(quickActions.map(action => `
+        <a href="${action.href}" class="quick-action">
+          <div class="quick-action-icon">${icon(action.icon, 20)}</div>
+          <div class="quick-action-label">${action.label}</div>
+        </a>
+      `).join(''))}
+    </div>
+
+    <div class="tip">
+      <span class="tip-tag">Dica do dia · ${tip.tag}</span>
+      <p>${tip.text}</p>
+    </div>
   `;
 
-  // Anel de calorias anima ao abrir
-  const ringEl = ctx.el.querySelector('[data-ring]');
-  if (ringEl) requestAnimationFrame(() => requestAnimationFrame(() => { ringEl.style.strokeDashoffset = ringEl.dataset.ring; }));
+  // Anéis animam ao abrir
+  const mring = ctx.el.querySelector('[data-mring]');
+  if (mring) requestAnimationFrame(() => requestAnimationFrame(() => { mring.style.strokeDashoffset = mring.dataset.mring; }));
 
-  // Água: +250 ml / desfazer, sem recarregar a tela
+  // Missão completa: comemora uma vez por dia
+  if (mission.done === mission.total) {
+    const key = 'edf:celebrated:' + dateKey();
+    let seen = false;
+    try { seen = sessionStorage.getItem(key) === '1'; sessionStorage.setItem(key, '1'); } catch (e) { seen = true; }
+    if (!seen) setTimeout(() => confetti(), 350);
+  }
+
+  // Água: +250 ml / desfazer
   const paintWater = (day) => {
     ctx.el.querySelector('[data-water-txt]').textContent = `${day.waterMl} / ${waterGoal.ml} ml`;
     ctx.el.querySelector('[data-water-bar]').style.width = waterPct(day.waterMl) + '%';
@@ -182,7 +212,11 @@ export async function main(ctx) {
     const { day, goalJustHit } = repo.habits.addWater(dateKey(), 250);
     paintWater(day);
     if (navigator.vibrate && settings.vibration) navigator.vibrate(10);
-    if (goalJustHit) toast('Meta de água batida hoje!', { type: 'success' });
+    if (goalJustHit) {
+      confetti();
+      toast('Meta de água batida hoje!', { type: 'success' });
+      setTimeout(() => main(ctx), 900);
+    }
   });
   ctx.el.querySelector('[data-water-undo]')?.addEventListener('click', () => {
     paintWater(repo.habits.undoWater(dateKey()));
@@ -214,3 +248,21 @@ export async function main(ctx) {
   
   return {};
 }
+
+// Dicas que mudam a cada dia
+const TIPS = [
+  { tag: 'Estudo', text: 'Revisar no dia seguinte fixa muito mais do que reler tudo de uma vez. Faça 10 flashcards hoje.' },
+  { tag: 'Treino', text: 'Aqueça 5 minutos antes de treinar: mobilidade de quadril e ombros já reduz o risco de lesão.' },
+  { tag: 'Dieta', text: 'Inclua uma fonte de proteína em cada refeição: ovo, frango, feijão ou iogurte.' },
+  { tag: 'Hábito', text: 'Deixe uma garrafa de água à vista. Quem vê, bebe mais.' },
+  { tag: 'Estudo', text: 'Errou uma questão? Ótimo: ela foi para o caderno de erros. Revise até acertar.' },
+  { tag: 'Treino', text: 'Qualidade antes de quantidade: 10 repetições bem feitas valem mais que 20 mal feitas.' },
+  { tag: 'Sono', text: 'Dormir 7 a 9 horas melhora a memória e a recuperação muscular.' },
+  { tag: 'Dieta', text: 'Arroz com feijão é uma ótima combinação de proteína vegetal. Valorize o prato brasileiro.' },
+  { tag: 'Estudo', text: 'Simulados com tempo treinam a cabeça para o dia da prova. Faça um por semana.' },
+  { tag: 'Treino', text: 'Constância vence intensidade: 3 treinos curtos por semana já trazem resultado.' },
+  { tag: 'Hábito', text: 'Marque um horário fixo para treinar ou estudar. Vira rotina em poucas semanas.' },
+  { tag: 'Dieta', text: 'Frutas inteiras saciam mais do que suco. Prefira a fruta no lanche.' },
+  { tag: 'Estudo', text: 'Explique o conteúdo em voz alta como se fosse dar aula: é o melhor teste de entendimento.' },
+  { tag: 'Treino', text: 'Respire: solte o ar na fase de esforço do exercício, nunca prenda a respiração.' },
+];

@@ -2,9 +2,10 @@
 // Sem efeitos colaterais na importação
 
 import { repo } from '../repo.js';
-import { html, raw, esc } from '../ui.js';
+import { html, raw, esc, confetti } from '../ui.js';
 import { SUBJECTS, LOADERS } from '../../data/subjects/index.js';
 import { icon } from '../icons.js';
+import { markStudy } from '../missions.js';
 
 // ─────────────────────────────────────────────────────────────────────
 // Entrada principal: roteada por ctx.params.subjectId e ctx.query.tab
@@ -212,6 +213,8 @@ function renderFlashcards(el, subject) {
     const advance = () => {
       if (idx < cards.length - 1) { idx++; render(); return; }
       repo.study.finishSession({ kind: 'flashcards', subjectId: subject.id, count: cards.length });
+      markStudy();
+      if (right / cards.length >= 0.7) setTimeout(() => confetti(), 200);
       el.innerHTML = html`
         <div class="done">
           ${raw(scoreRing(right, cards.length))}
@@ -310,6 +313,8 @@ function runQuestions(el, questoes, opts) {
 
   function finish() {
     if (opts.onFinish) opts.onFinish(score);
+    markStudy();
+    if (questoes.length && score / questoes.length >= 0.7) setTimeout(() => confetti(), 250);
     el.innerHTML = `<div class="done">${scoreRing(score, questoes.length)}${opts.finishHtml(score)}</div>`;
     el.querySelector('[data-restart]')?.addEventListener('click', () => { idx = 0; score = 0; renderQuestion(); });
   }

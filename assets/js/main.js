@@ -315,7 +315,7 @@ function initCountUp() {
 
 // ---------- Vitrine: abas, arrastar no celular, flashcard e timer ----------
 const CAPTIONS = [
-  () => 'Seu dia em uma tela: calorias, água, sequência e o treino de hoje.',
+  () => 'Missão do dia, nível, água e o treino de hoje: tudo para manter o ritmo.',
   () => `${fmtInt(CONFIG.contentStats.subjects)} matérias com resumos, flashcards e questões comentadas. Toque no cartão.`,
   () => 'O app conta o tempo, avisa a troca e mostra o próximo exercício.',
   () => `Monte o dia com ${fmtInt(CONFIG.contentStats.foods)}+ alimentos brasileiros e veja calorias e macros.`,

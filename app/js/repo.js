@@ -59,7 +59,7 @@ const WATER_MAX_ML = 10000;
 const BACKUP_KEYS = Object.freeze({
   meta: 'object', settings: 'object', profile: 'object', body: 'array', study: 'object',
   'simulado-active': 'object', workouts: 'object', diet: 'object', habits: 'object',
-  assess: 'array', prof: 'object', favs: 'object', activity: 'array',
+  assess: 'array', prof: 'object', favs: 'object', activity: 'array', missions: 'object',
 });
 
 // ---------------------------------------------------------------------
