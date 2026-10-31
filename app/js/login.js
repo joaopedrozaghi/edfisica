@@ -161,6 +161,6 @@ export function renderLogin(app) {
 
 function mark() {
   return `<div class="auth-mark" aria-hidden="true">
-    <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#3B82F6"/><g fill="none" stroke="#FFFFFF" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 38V17h7l11-6.5"/><path d="M15 38h16M15 27.5h11"/><path d="M27.5 9.5l6 .7-1.7 5.8"/></g></svg>
+    <svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#1E3A8A"/><g fill="none" stroke="#BFDBFE" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 38V17h7l11-6.5"/><path d="M15 38h16M15 27.5h11"/><path d="M27.5 9.5l6 .7-1.7 5.8"/></g></svg>
     <span>Educa<b>Fit</b></span></div>`;
 }
