@@ -1,7 +1,7 @@
 // sw.js: service worker (B8.2)
 // Network-first para navigation e config, cache-first para o resto, offline após first load
 
-const VERSION = 'edf-v1.2.0';
+const VERSION = 'edf-v1.3.0';
 const TIMEOUT_MS = 3000;
 
 /*PRECACHE-START*/

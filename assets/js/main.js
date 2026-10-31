@@ -2,7 +2,6 @@
 // Não importa código do app (/app/), só a configuração.
 import { CONFIG } from '../../config.js';
 
-const PLACEHOLDER = 'SEU-CHECKOUT-AQUI';
 const DEADLINE_KEY = 'edf:sales:deadline';
 const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
@@ -25,12 +24,18 @@ export function computeDerived(cfg, now = new Date()) {
   const anchor = cfg.price.anchor;
   const hasAnchor = typeof anchor === 'number' && anchor > 0;
   const stack = cfg.mainProduct.value + cfg.bonuses.reduce((s, b) => s + b.value, 0);
+  const basic = cfg.plans && cfg.plans.basic;
+  const hasBasic = !!(basic && basic.enabled && typeof basic.price === 'number' && basic.price > 0);
   return {
     priceBRL: fmtBRL(cur),
     anchorBRL: hasAnchor ? fmtBRL(anchor) : null,
     savingsBRL: hasAnchor ? fmtBRL(Math.round((anchor - cur) * 100) / 100) : null,
     percentOff: hasAnchor ? Math.round((1 - cur / anchor) * 100) : null,
     stackTotalBRL: hasAnchor ? fmtBRL(stack) : null,
+    basicBRL: hasBasic ? fmtBRL(basic.price) : null,
+    deltaBRL: hasBasic ? fmtBRL(Math.round((cur - basic.price) * 100) / 100) : null,
+    fromBRL: fmtBRL(hasBasic ? Math.min(basic.price, cur) : cur),
+    bonusCount: cfg.bonuses.length,
     year: now.getFullYear(),
   };
 }
@@ -88,9 +93,10 @@ function showToast(text) {
 }
 
 // ---------- CTAs → checkout ----------
-export function checkoutHref(cfg, search) {
-  const raw = String(cfg.checkout.url || '');
-  if (raw.indexOf(PLACEHOLDER) !== -1) return null;
+/** Link de checkout com os parâmetros de campanha (utm etc.) repassados. null se não configurado. */
+export function buildCheckoutHref(raw, cfg, search) {
+  raw = String(raw || '');
+  if (!raw || raw.indexOf('SEU-CHECKOUT') !== -1) return null;
   let url;
   try { url = new URL(raw); } catch (e) { return null; }
   const q = new URLSearchParams(search || '');
@@ -101,19 +107,24 @@ export function checkoutHref(cfg, search) {
   return url.toString();
 }
 
+export function checkoutHref(cfg, search) {
+  return buildCheckoutHref(cfg.checkout.url, cfg, search);
+}
+
 function bindCTAs() {
-  const href = checkoutHref(CONFIG, location.search);
-  const ctas = document.querySelectorAll('[data-cta]');
-  if (href) {
-    ctas.forEach((a) => a.setAttribute('href', href));
-    return;
-  }
-  console.warn('[config] checkout.url não configurado: os botões não levam ao checkout.');
-  ctas.forEach((a) => {
+  const hrefs = {
+    full: checkoutHref(CONFIG, location.search),
+    basic: buildCheckoutHref(CONFIG.plans && CONFIG.plans.basic && CONFIG.plans.basic.checkoutUrl, CONFIG, location.search),
+  };
+  document.querySelectorAll('[data-cta]').forEach((a) => {
+    const plan = a.getAttribute('data-cta') === 'basic' ? 'basic' : 'full';
+    const href = hrefs[plan];
+    if (href) { a.setAttribute('href', href); return; }
+    console.warn(`[config] checkout do plano ${plan} não configurado.`);
     a.setAttribute('href', '#oferta');
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      showToast('Configure o link do checkout em config.js');
+      showToast(plan === 'basic' ? 'Configure plans.basic.checkoutUrl em config.js' : 'Configure checkout.url em config.js');
     });
   });
 }
@@ -125,17 +136,19 @@ function replaceWith(container, markup) {
 }
 
 function renderIncluded() {
-  const ul = document.querySelector('[data-render="included"]');
-  if (!ul) return;
-  const hasAnchor = derived.anchorBRL !== null;
-  const items = [{ title: CONFIG.mainProduct.title, desc: 'Estudos, treinos, dieta, IMC, avaliação física e progresso.', value: CONFIG.mainProduct.value }]
-    .concat(CONFIG.bonuses.map((b) => ({ title: b.title, value: b.value, bonus: true })));
-  replaceWith(ul, items.map((it, i) => `
-    <li>
-      <span class="incl-n">${i === 0 ? '★' : i}</span>
-      <span class="incl-t"><strong>${esc(it.title)}</strong>${it.desc ? `<span>${esc(it.desc)}</span>` : ""}</span>
-      <span class="incl-v">${hasAnchor ? `<s>${esc(fmtBRL(it.value))}</s>` : (it.bonus ? 'Bônus' : 'Incluso')}</span>
-    </li>`).join(''));
+  const app = { title: 'App completo', desc: 'Estudos, treinos, dieta, IMC, avaliação física e progresso.' };
+  const full = document.querySelector('[data-render="included-full"]');
+  replaceWith(full, [`<li><span class="ok">✓</span><span class="incl-t"><strong>${esc(app.title)}</strong><span>${esc(app.desc)}</span></span></li>`]
+    .concat(CONFIG.bonuses.map((b) => `<li><span class="ok">✓</span><span class="incl-t"><strong>${esc(b.title)}</strong></span><span class="tag">Bônus</span></li>`)).join(''));
+  const basic = document.querySelector('[data-render="included-basic"]');
+  replaceWith(basic, [`<li><span class="ok">✓</span><span class="incl-t"><strong>${esc(app.title)}</strong></span></li>`]
+    .concat(CONFIG.bonuses.map((b) => `<li class="no"><span class="x">✕</span><span class="incl-t"><strong>${esc(b.title)}</strong></span></li>`)).join(''));
+
+  // Sem plano Básico: a página fica com um plano só
+  if (derived.basicBRL === null) {
+    document.querySelector('[data-plan-basic]')?.remove();
+    document.querySelector('[data-plan-delta]')?.remove();
+  }
 }
 
 function renderTestimonials() {

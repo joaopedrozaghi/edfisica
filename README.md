@@ -91,6 +91,16 @@ Substitua os itens `example: true` por depoimentos reais com autorização por e
 
 ---
 
+## Dois planos (Básico e Completo)
+
+A página mostra dois planos. O **Completo** (destacado) usa `price.current` e `checkout.url`. O **Básico** fica em `plans.basic` (preço, parcelas e `checkoutUrl`). Para voltar a ter um plano só, use `plans.basic.enabled: false`.
+
+Para o app saber o plano de cada comprador, ligue `access.requireCode: true` e crie **um código para cada plano**:
+- hash do código do Completo em `access.codeHashes`
+- hash do código do Básico em `access.basicCodeHashes`
+
+Coloque cada código na mensagem de entrega do produto certo no checkout (Kiwify/Hotmart). Quem cria a conta com o código do Básico vê a tela "Disponível no plano Completo" ao abrir um bônus e pode liberar depois digitando o código do Completo.
+
 ## Login do app (e-mail e senha)
 
 Ao abrir o app, cada pessoa cria a própria conta (nome, e-mail e senha) e depois entra com ela. Cada conta tem seus próprios dados (treinos, dieta, estudos). A senha nunca é guardada em texto: só um hash PBKDF2.

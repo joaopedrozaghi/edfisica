@@ -472,3 +472,40 @@ main { outline: none; }
   .js .rise { opacity: 1; transform: none; }
   .faq details p { animation: none; }
 }
+
+/* ---------- Planos ---------- */
+.offer .offer-top { margin-bottom: 16px; }
+.plans { display: grid; gap: 14px; }
+.plan { position: relative; padding: 22px 18px 18px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); display: grid; gap: 14px; }
+.plan--full {
+  border: 2px solid var(--y);
+  background: linear-gradient(180deg, rgba(255, 214, 10, .07), rgba(255, 214, 10, 0) 45%), var(--surface);
+  box-shadow: 0 24px 50px -30px rgba(255, 214, 10, .35);
+}
+.plan-badge {
+  position: absolute; top: -12px; left: 18px; padding: 4px 10px; border-radius: 999px;
+  background: var(--y); color: var(--ink); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
+}
+.plan-head h3 { font-size: 1.35rem; }
+.plan-head p { font-size: .875rem; color: var(--muted); }
+.plan-price { display: grid; gap: 2px; }
+.plan-price b { font-family: var(--head); font-weight: 800; font-size: 2.6rem; line-height: 1; letter-spacing: -.04em; }
+.plan-price span { font-size: .8125rem; color: var(--muted); }
+.plan-price--sm b { font-size: 1.9rem; }
+.plan .incl li { padding: 9px 0; gap: 10px; align-items: flex-start; }
+.plan .incl li:first-child { padding-top: 0; }
+.plan .incl .ok { color: var(--green); font-weight: 800; width: 18px; flex-shrink: 0; }
+.plan .incl .x { color: var(--muted); width: 18px; flex-shrink: 0; opacity: .7; }
+.plan .incl li.no strong { color: var(--muted); font-weight: 500; text-decoration: line-through; text-decoration-color: rgba(255, 255, 255, .25); }
+.plan .incl .tag { flex-shrink: 0; font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--y); padding-top: 3px; }
+.plan-delta { font-size: .8125rem; text-align: center; color: var(--muted); }
+.plan-delta b { color: var(--text); }
+.plan--basic { padding: 18px; }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid rgba(255, 255, 255, .18); }
+.pay-note { margin-top: 14px; }
+.offer .guar { border-top: 0; padding-top: 0; margin-top: 14px; }
+.sticky-p span { order: -1; }
+@media (min-width: 720px) {
+  .offer { max-width: 760px; }
+  .plans { grid-template-columns: 1.1fr 1fr; align-items: center; }
+}

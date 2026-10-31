@@ -130,8 +130,8 @@
       </div>
 
       <div class="cta-block">
-        <a id="hero-cta" class="btn btn-main" href="#oferta" data-cta>
-          Quero o app <span class="btn-price" data-cfg="derived.priceBRL">R$&nbsp;27,90</span>
+        <a id="hero-cta" class="btn btn-main" href="#oferta">
+          Ver planos <span class="btn-price">a partir de <span data-cfg="derived.fromBRL">R$&nbsp;14,90</span></span>
         </a>
         <p class="micro">Pagamento único · Acesso na hora · <span data-cfg="guarantee.days" data-fmt="int">7</span> dias de garantia</p>
       </div>
@@ -207,31 +207,51 @@
       <div class="quotes" data-render="testimonials"></div>
     </section>
 
-    <!-- 5. Oferta -->
+    <!-- 5. Planos -->
     <section id="oferta" class="block offer" aria-labelledby="offer-title">
-      <div class="offer-card">
-        <div class="offer-top">
-          <h2 id="offer-title">Tudo incluso</h2>
-          <p class="offer-count" data-countdown-wrap><span data-cfg="countdown.label">Condição especial encerra em</span> <b class="timer" role="timer" data-countdown>15:00</b></p>
-        </div>
+      <div class="offer-top">
+        <h2 id="offer-title">Escolha seu plano</h2>
+        <p class="offer-count" data-countdown-wrap><span data-cfg="countdown.label">Condição especial encerra em</span> <b class="timer" role="timer" data-countdown>15:00</b></p>
+      </div>
 
-        <ul class="incl" data-render="included"></ul>
+      <div class="plans">
+        <!-- Completo (destacado) -->
+        <article class="plan plan--full" aria-labelledby="plan-full-name">
+          <span class="plan-badge" data-cfg="plans.full.badge">Mais escolhido</span>
+          <div class="plan-head">
+            <h3 id="plan-full-name" data-cfg="plans.full.name">Completo</h3>
+            <p data-cfg="plans.full.tagline">App + todos os bônus</p>
+          </div>
+          <div class="plan-price">
+            <p class="price-from" data-cfg-show="price.anchor" hidden>De <s data-cfg="derived.anchorBRL">R$&nbsp;197,00</s> por</p>
+            <b data-cfg="derived.priceBRL">R$&nbsp;21,90</b>
+            <span data-cfg="price.installmentsText">ou 3x de R$ 7,30</span>
+          </div>
+          <ul class="incl" data-render="included-full"></ul>
+          <a class="btn btn-main btn-full" href="#oferta" data-cta="full">Quero o Completo</a>
+          <p class="plan-delta" data-plan-delta>Só <b data-cfg="derived.deltaBRL">R$&nbsp;7,00</b> a mais que o Básico e você leva os <span data-cfg="derived.bonusCount">3</span> bônus.</p>
+        </article>
 
-        <div class="price">
-          <p class="price-from" data-cfg-show="price.anchor" hidden>De <s data-cfg="derived.anchorBRL">R$&nbsp;197,00</s> por</p>
-          <p class="price-big" data-cfg="derived.priceBRL">R$&nbsp;27,90</p>
-          <p class="price-inst" data-cfg="price.installmentsText">ou 4x de R$ 7,57</p>
-        </div>
+        <!-- Básico -->
+        <article class="plan plan--basic" aria-labelledby="plan-basic-name" data-plan-basic>
+          <div class="plan-head">
+            <h3 id="plan-basic-name" data-cfg="plans.basic.name">Básico</h3>
+            <p data-cfg="plans.basic.tagline">Só o app, sem os bônus</p>
+          </div>
+          <div class="plan-price plan-price--sm">
+            <b data-cfg="derived.basicBRL">R$&nbsp;14,90</b>
+            <span data-cfg="plans.basic.installmentsText">ou 2x de R$ 7,45</span>
+          </div>
+          <ul class="incl incl--basic" data-render="included-basic"></ul>
+          <a class="btn btn-ghost btn-full" href="#oferta" data-cta="basic">Quero o Básico</a>
+        </article>
+      </div>
 
-        <p class="bump" data-cfg-show="orderBump.enabled" hidden><strong>No checkout:</strong> <span data-cfg="orderBump.text"></span></p>
+      <p class="micro center pay-note"><span data-cfg="price.paymentNote">Pagamento único · Sem mensalidades</span></p>
 
-        <a class="btn btn-main btn-full" href="#oferta" data-cta>Garantir meu acesso</a>
-        <p class="micro center"><span data-cfg="price.paymentNote">Pagamento único · Sem mensalidades</span></p>
-
-        <div class="guar">
-          <span class="guar-seal"><b data-cfg="guarantee.days" data-fmt="int">7</b>dias</span>
-          <p>Teste por <span data-cfg="guarantee.days" data-fmt="int">7</span> dias. Se não gostar, devolvemos 100% do valor, sem perguntas.</p>
-        </div>
+      <div class="guar">
+        <span class="guar-seal"><b data-cfg="guarantee.days" data-fmt="int">7</b>dias</span>
+        <p>Teste por <span data-cfg="guarantee.days" data-fmt="int">7</span> dias. Se não gostar, devolvemos 100% do valor, sem perguntas.</p>
       </div>
     </section>
 
@@ -248,8 +268,12 @@
           <p>Não. Funciona no navegador do celular (Android e iPhone) e do computador. Se quiser, toque em “Adicionar à tela inicial” e ele vira um app, que funciona até sem internet.</p>
         </details>
         <details>
+          <summary>Qual a diferença entre os planos?</summary>
+          <p>Os dois têm o app completo: estudos, treinos, dieta, IMC e avaliação física. O Completo inclui também os bônus: simulados com caderno de erros, planos alimentares prontos e os programas de Terceira Idade e Mobilidade.</p>
+        </details>
+        <details>
           <summary>Tem mensalidade?</summary>
-          <p>Não. É pagamento único de <span data-cfg="derived.priceBRL">R$&nbsp;27,90</span>, com acesso vitalício.</p>
+          <p>Não. É pagamento único, com acesso vitalício, nos dois planos.</p>
         </details>
         <details>
           <summary>Serve para provas e concursos?</summary>
@@ -284,8 +308,8 @@
   </footer>
 
   <div id="sticky-cta" class="sticky" aria-hidden="true">
-    <div class="sticky-p"><b data-cfg="derived.priceBRL">R$&nbsp;27,90</b><span>pagamento único</span></div>
-    <a class="btn btn-main" href="#oferta" data-cta tabindex="-1">Quero o app</a>
+    <div class="sticky-p"><span data-cfg="plans.full.name">Completo</span><b data-cfg="derived.priceBRL">R$&nbsp;21,90</b></div>
+    <a class="btn btn-main" href="#oferta" data-cta="full" tabindex="-1">Quero o Completo</a>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
