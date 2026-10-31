@@ -30,10 +30,10 @@
 
   <header class="top">
     <a href="#main" class="brand" aria-label="EdFísica PRO, início">
-      <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><path d="M27 9 15 27h8l-2 12 12-18h-8z" fill="#0B0C0E"/></svg>
+      <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><path d="M8.5 26h7l3.5-9 6 17 4-12 2.5 4h8" fill="none" stroke="#0B0C0E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span data-cfg="product.shortName">EdFísica</span><b>PRO</b>
     </a>
-    <a class="top-login" href="./app/" data-cfg-href="site.appPath">Já comprei · Entrar</a>
+    <a class="top-login" href="#oferta">Ver planos</a>
   </header>
 
   <main id="main" tabindex="-1">
@@ -145,7 +145,7 @@
         <div class="iphone iphone--sm fan-l">
           <div class="iphone-screen">
             <div class="scr scr--static">
-              <div class="m-brand"><span class="m-logo" data-i="bolt"></span><b>EdFísica</b><em>PRO</em></div>
+              <div class="m-brand"><span class="m-logo"><svg viewBox="0 0 48 48" width="14" height="14" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#FFD60A"/><path d="M8.5 26h7l3.5-9 6 17 4-12 2.5 4h8" fill="none" stroke="#0B0C0E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>EdFísica</b><em>PRO</em></div>
               <b class="m-title">Crie sua conta</b>
               <span class="dim m-s">Leva menos de um minuto.</span>
               <div class="m-tabs"><span>Entrar</span><span class="on">Criar conta</span></div>
@@ -185,8 +185,8 @@
         </div>
       </div>
       <ol class="steps">
-        <li><b>1</b><span><strong>Compre e receba o link</strong> no e-mail na hora.</span></li>
-        <li><b>2</b><span><strong>Crie sua conta</strong> com e-mail e senha.</span></li>
+        <li><b>1</b><span><strong>Compre</strong> e receba no e-mail o link do app e o seu código de acesso.</span></li>
+        <li><b>2</b><span><strong>Crie sua conta</strong> com e-mail, senha e o código.</span></li>
         <li><b>3</b><span><strong>Estude, treine e acompanhe</strong> sua evolução.</span></li>
       </ol>
     </section>
@@ -199,6 +199,61 @@
         <li><b data-countup data-cfg="contentStats.exercises" data-fmt="int">24</b><span>exercícios guiados</span></li>
         <li><b data-countup data-cfg="contentStats.foods" data-fmt="int">60</b><span>alimentos brasileiros</span></li>
       </ul>
+    </section>
+
+    <!-- 3b. O que tem dentro -->
+    <section class="block" aria-labelledby="mods-title">
+      <h2 id="mods-title">O que tem dentro</h2>
+      <div class="mods">
+        <div class="mod"><i data-i="book"></i><b>Estudos</b><span><span data-cfg="contentStats.subjects" data-fmt="int">6</span> matérias com resumo, flashcards e quiz</span></div>
+        <div class="mod"><i data-i="timer"></i><b>Simulados</b><span>Prova com tempo, gabarito e caderno de erros</span></div>
+        <div class="mod"><i data-i="dumbbell"></i><b>Treino em casa</b><span>Player guiado com timer, voz e descanso</span></div>
+        <div class="mod"><i data-i="apple"></i><b>Dieta</b><span>Metas, macros e alimentos da Tabela TACO</span></div>
+        <div class="mod"><i data-i="scale"></i><b>IMC e avaliação</b><span>% de gordura, RCQ, frequência cardíaca e 1RM</span></div>
+        <div class="mod"><i data-i="chart"></i><b>Progresso</b><span>Sequência, peso e evolução da semana</span></div>
+      </div>
+      <ul class="facts">
+        <li>Android e iPhone</li>
+        <li>Funciona sem internet</li>
+        <li>Sem mensalidade</li>
+        <li>Conta com senha</li>
+      </ul>
+    </section>
+
+    <!-- 3c. Para quem é -->
+    <section class="block" aria-labelledby="who-title">
+      <h2 id="who-title">Para quem é</h2>
+      <div class="who" data-who>
+        <div class="who-tabs" role="tablist" aria-label="Perfis">
+          <button type="button" role="tab" aria-selected="true" data-who-tab="0">Estudante</button>
+          <button type="button" role="tab" aria-selected="false" data-who-tab="1">Professor</button>
+          <button type="button" role="tab" aria-selected="false" data-who-tab="2">Treina em casa</button>
+        </div>
+        <div class="who-panel" role="tabpanel" data-who-panel="0">
+          <p class="who-lead">Vai fazer prova, concurso ou está na faculdade de Educação Física.</p>
+          <ul>
+            <li>Resumos diretos das matérias que mais caem</li>
+            <li>Flashcards com repetição espaçada para memorizar</li>
+            <li>Simulados com tempo e revisão só do que errou</li>
+          </ul>
+        </div>
+        <div class="who-panel" role="tabpanel" data-who-panel="1" hidden>
+          <p class="who-lead">Dá aula, é personal ou acompanha alunos.</p>
+          <ul>
+            <li>Avaliação física com fórmulas reconhecidas</li>
+            <li>Programas prontos, inclusive para terceira idade</li>
+            <li>Material de consulta rápida no celular</li>
+          </ul>
+        </div>
+        <div class="who-panel" role="tabpanel" data-who-panel="2" hidden>
+          <p class="who-lead">Quer treinar e comer melhor, sem academia.</p>
+          <ul>
+            <li>Treinos guiados só com itens de casa</li>
+            <li>Dieta com comida brasileira de verdade</li>
+            <li>IMC, água e sequência para manter o ritmo</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- 4. Depoimentos (só aparecem os reais) -->
@@ -261,7 +316,7 @@
       <div class="faq">
         <details>
           <summary>Como recebo o acesso?</summary>
-          <p>Logo após a confirmação do pagamento, chega no e-mail da compra o link do app. Você cria sua conta com e-mail e senha e já começa a usar. Pix e cartão são aprovados na hora.</p>
+          <p>Logo após a confirmação do pagamento, chega no e-mail da compra o link do app e o seu código de acesso. Você cria sua conta com e-mail, senha e o código e já começa a usar. Pix e cartão são aprovados na hora.</p>
         </details>
         <details>
           <summary>Preciso baixar alguma coisa?</summary>
