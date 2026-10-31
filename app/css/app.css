@@ -1462,3 +1462,48 @@ input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent-f
   .shake, .sheet, .auth-submit.is-loading::after { animation: none; }
   .btn:active, .list-item:active, .quick-action:active, .exercise-card:active, .tile:active { transform: none; }
 }
+
+/* ===================================================================
+   AJUSTES GERAIS 2: cores de texto, conta, estudos
+   =================================================================== */
+:root, [data-theme="dark"], [data-theme="light"] { --text-muted: var(--muted); }
+a.card, a.list-item, a.tile, a.banner { color: var(--text); }
+.list-item-content > span { display: block; }
+
+/* Conta (Perfil) */
+.account-card {
+  padding: 1rem; margin-bottom: 1rem; border-radius: 18px;
+  background: var(--surface); border: 1px solid var(--border);
+}
+.account-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .875rem; }
+.link-danger {
+  display: block; width: 100%; margin-top: .75rem; padding: .5rem; border: 0; background: none;
+  color: var(--danger); font-size: .875rem; font-weight: 600; text-align: center;
+}
+
+/* Estudos */
+.study-cta { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: 1.25rem; }
+.study-cta .btn { padding: .75rem .5rem; white-space: nowrap; }
+.study-cta .badge { background: var(--accent-fill); color: var(--accent-ink); margin-left: .15rem; }
+.subject-list { display: grid; gap: .5rem; }
+.subject-bar { height: 4px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-top: .5rem; }
+.subject-bar i { display: block; height: 100%; background: var(--accent-fill); border-radius: 4px; }
+
+/* Dieta */
+.dieta-header { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: 1rem; }
+.dieta-header .btn { width: 42px; min-height: 42px; padding: 0; }
+.diet-sum {
+  display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: center;
+  padding: 1.25rem; margin-bottom: .625rem; border-radius: 22px; background: var(--surface); border: 1px solid var(--border);
+}
+.diet-macros { display: grid; gap: .625rem; }
+.diet-macro p { display: flex; justify-content: space-between; font-size: .78rem; margin: 0 0 4px; }
+.diet-macro p span:last-child { color: var(--muted); }
+.diet-bar { height: 6px; border-radius: 6px; background: var(--surface-2); overflow: hidden; }
+.diet-bar i { display: block; height: 100%; border-radius: 6px; transition: width 500ms var(--ease); }
+.add-btn {
+  width: 36px; height: 36px; border-radius: 11px; border: 1px solid var(--border); padding: 0;
+  background: var(--surface-2); color: var(--accent); display: grid; place-items: center;
+  transition: transform 140ms var(--ease);
+}
+.add-btn:active { transform: scale(.9); }

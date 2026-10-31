@@ -3,16 +3,32 @@
 
 import { CONFIG } from '../../../config.js';
 import { repo } from '../repo.js';
-import { html, raw, toast, confirmDialog, openSheet, closeSheet, fieldError, clearErrors, DISCLAIMERS } from '../ui.js';
+import { html, raw, esc, toast, confirmDialog, openSheet, closeSheet, fieldError, clearErrors, DISCLAIMERS } from '../ui.js';
 import { parseIntBR, parseNum, fmtBRL } from '../utils.js';
 import { getInstallPrompt } from '../main.js';
+import { icon } from '../icons.js';
+import { currentUser, signOut, changePassword, deleteAccount } from '../auth.js';
 
 export async function main(ctx) {
   const profile = repo.profile.get();
   const settings = repo.settings.get();
   
+  const user = currentUser();
+
   ctx.el.innerHTML = html`
     <h1 tabindex="-1">Perfil</h1>
+
+    ${user ? raw(`
+      <div class="account-card">
+        <div class="account-row" style="margin:0;border:0;background:none;padding:0">
+          <span class="avatar">${esc((user.name || '?').trim().charAt(0).toUpperCase())}</span>
+          <div class="grow"><strong>${esc(user.name)}</strong><span>${esc(user.email)}</span></div>
+        </div>
+        <div class="account-actions">
+          <button type="button" class="btn btn--ghost btn--small" data-change-pw>${icon('eye', 16)} Trocar senha</button>
+          <button type="button" class="btn btn--ghost btn--small" data-logout>${icon('logout', 16)} Sair</button>
+        </div>
+      </div>`) : ''}
     
     <div class="card mb-1">
       <h2 style="font-size:1.125rem;margin-bottom:1rem">Dados pessoais</h2>
@@ -114,6 +130,7 @@ export async function main(ctx) {
       <button type="button" class="btn btn--ghost" style="width:100%;margin-bottom:0.75rem" data-export>Exportar backup</button>
       <button type="button" class="btn btn--ghost" style="width:100%;margin-bottom:0.75rem" data-import>Importar backup</button>
       <button type="button" class="btn btn--danger" style="width:100%" data-reset>Apagar todos os dados</button>
+      ${user ? raw(`<button type="button" class="link-danger" data-delete-account>Excluir minha conta deste aparelho</button>`) : ''}
       
       <input type="file" accept=".json" style="display:none" data-file-input>
     </div>
@@ -317,6 +334,77 @@ export async function main(ctx) {
     }
   });
   
+  // Conta: trocar senha, sair, excluir
+  function passwordSheet({ title, fields, submitLabel, danger, onSubmit }) {
+    openSheet(`
+      <form class="pw-form" novalidate>
+        ${fields.map((f) => `
+          <div class="field">
+            <label for="pw-${f.name}">${f.label}</label>
+            <input type="password" id="pw-${f.name}" name="${f.name}" autocomplete="${f.auto}">
+          </div>`).join('')}
+        <p class="field-error" data-pw-error hidden></p>
+        <button type="submit" class="btn ${danger ? 'btn--danger' : 'btn--primary'}" style="width:100%">${submitLabel}</button>
+      </form>`, { title });
+    const form = document.querySelector('.pw-form');
+    const err = form.querySelector('[data-pw-error]');
+    form.querySelector('input')?.focus();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('[type="submit"]');
+      btn.disabled = true;
+      const res = await onSubmit(Object.fromEntries(new FormData(form)));
+      btn.disabled = false;
+      if (!res.ok) {
+        err.textContent = res.error;
+        err.hidden = false;
+        if (res.field) form.querySelector(`[name="${res.field}"]`)?.focus();
+      }
+    });
+  }
+
+  ctx.el.querySelector('[data-change-pw]')?.addEventListener('click', () => {
+    passwordSheet({
+      title: 'Trocar senha',
+      submitLabel: 'Salvar nova senha',
+      fields: [
+        { name: 'current', label: 'Senha atual', auto: 'current-password' },
+        { name: 'next', label: 'Nova senha (mín. 6 caracteres)', auto: 'new-password' },
+      ],
+      onSubmit: async (d) => {
+        const res = await changePassword(d.current, d.next);
+        if (res.ok) { closeSheet(); toast('Senha alterada', { type: 'success' }); }
+        return res;
+      },
+    });
+  });
+
+  ctx.el.querySelector('[data-logout]')?.addEventListener('click', async () => {
+    const ok = await confirmDialog('Sair da sua conta neste aparelho? Seu progresso continua salvo.', { confirmLabel: 'Sair' });
+    if (!ok) return;
+    signOut();
+    location.replace(location.pathname + '#/');
+    location.reload();
+  });
+
+  ctx.el.querySelector('[data-delete-account]')?.addEventListener('click', () => {
+    passwordSheet({
+      title: 'Excluir conta',
+      submitLabel: 'Excluir conta e dados',
+      danger: true,
+      fields: [{ name: 'password', label: 'Confirme sua senha', auto: 'current-password' }],
+      onSubmit: async (d) => {
+        const res = await deleteAccount(d.password);
+        if (res.ok) {
+          closeSheet();
+          location.replace(location.pathname + '#/');
+          location.reload();
+        }
+        return res;
+      },
+    });
+  });
+
   // Reset
   ctx.el.querySelector('[data-reset]')?.addEventListener('click', async () => {
     const confirmed = await confirmDialog(

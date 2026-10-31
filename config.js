@@ -122,7 +122,7 @@ export const CONFIG = Object.freeze({
   legal: { termsUrl: '', privacyUrl: '', showMetaDisclaimer: true },
 
   site: {
-    url: 'https://SEU-SITE.netlify.app', // endereço final do site (sem barra no fim)
+    url: 'https://edfisicapro.vercel.app', // endereço final do site (sem barra no fim)
     appPath: './app/',                   // caminho do app a partir da página de vendas
     showDemoLink: false,       // true = mostra "Ver demonstração" apontando para o app.
                                // ATENÇÃO: sem access.requireCode, isso libera o app completo para qualquer visitante.

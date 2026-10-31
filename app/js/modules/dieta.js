@@ -3,6 +3,7 @@
 // Sem efeitos colaterais na importação
 
 import { repo, MEALS } from '../repo.js';
+import { icon } from '../icons.js';
 import { html, raw, toast, openSheet, closeSheet } from '../ui.js';
 import { ring, donut } from '../charts.js';
 import { dateKey, addDays, labelShort, normalize, parseNum, parseIntBR, fmtInt, fmt1 } from '../utils.js';
@@ -98,30 +99,28 @@ export async function main(ctx) {
         </button>
       </div>
 
-      <div class="card mb-1">
-        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-          <div>
-            ${raw(ring(kcalConsumed, kcalTarget || 2000, { size: 100, label: String(kcalConsumed), sublabel: kcalTarget ? 'de ' + fmtInt(kcalTarget) : '' }))}
-            <p class="text-small text-muted" style="text-align:center;margin-top:0.25rem">kcal</p>
-          </div>
-          <div style="flex:1;min-width:180px">
-            ${!targets ? raw(`<p class="text-muted text-small"><a href="#/dieta/metas">Defina suas metas →</a></p>`) : ''}
-            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center">
-              ${raw(macroRing(totals.prot, protTarget, MACRO_COLORS.prot, 'Prot g'))}
-              ${raw(macroRing(totals.carb, carbTarget, MACRO_COLORS.carb, 'Carb g'))}
-              ${raw(macroRing(totals.gord, gordTarget, MACRO_COLORS.gord, 'Gord g'))}
-            </div>
-          </div>
+      <div class="diet-sum">
+        <div class="diet-ring">
+          ${raw(ring(kcalConsumed, kcalTarget || 2000, { size: 104, strokeWidth: 10, label: String(kcalConsumed), sublabel: kcalTarget ? 'de ' + fmtInt(kcalTarget) : 'kcal' }))}
         </div>
-
-        <div style="margin-top:1rem">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.35rem">
-            <span class="text-small">💧 Água</span>
-            <span class="text-small text-muted">${habitDay.waterMl} / ${waterGoal.ml} ml</span>
-          </div>
-          <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-            <div style="height:100%;background:#60a5fa;width:${Math.min(100, (habitDay.waterMl / waterGoal.ml) * 100)}%;transition:width 300ms"></div>
-          </div>
+        <div class="diet-macros">
+          ${raw([
+            ['Proteínas', totals.prot, protTarget, MACRO_COLORS.prot],
+            ['Carboidratos', totals.carb, carbTarget, MACRO_COLORS.carb],
+            ['Gorduras', totals.gord, gordTarget, MACRO_COLORS.gord],
+          ].map(([label, val, tgt, color]) => `
+            <div class="diet-macro">
+              <p><span>${label}</span><span>${Math.round(val)}${tgt ? ' / ' + Math.round(tgt) : ''} g</span></p>
+              <div class="diet-bar"><i style="width:${tgt ? Math.min(100, (val / tgt) * 100) : 0}%;background:${color}"></i></div>
+            </div>`).join(''))}
+          ${!targets ? raw(`<a class="today-link" href="#/dieta/metas">Definir metas →</a>`) : ''}
+        </div>
+      </div>
+      <div class="water" style="margin-bottom:1rem">
+        <div class="water-ico">${raw(icon('droplet', 20))}</div>
+        <div class="water-main">
+          <div class="water-top"><strong>Água</strong><span>${habitDay.waterMl} / ${waterGoal.ml} ml</span></div>
+          <div class="water-bar"><b style="width:${Math.min(100, (habitDay.waterMl / waterGoal.ml) * 100)}%"></b></div>
         </div>
       </div>
 
@@ -131,10 +130,10 @@ export async function main(ctx) {
           <div class="card mb-1">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem">
               <h2 style="font-size:1rem;margin:0">${meal.label}</h2>
-              <button type="button" class="btn btn--small btn--primary" data-add-meal="${meal.key}" aria-label="Adicionar alimento em ${meal.label}">+ Adicionar</button>
+              <button type="button" class="add-btn" data-add-meal="${meal.key}" aria-label="Adicionar alimento em ${meal.label}">${icon('plus', 18)}</button>
             </div>
             ${entries.length === 0
-              ? '<p class="text-muted text-small">Nenhum alimento registrado</p>'
+              ? '<p class="text-muted text-small">Toque em + para registrar</p>'
               : entries.map(e => {
                   const f = foodsById[e.foodId];
                   if (!f) return '';

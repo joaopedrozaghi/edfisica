@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>EdFísica PRO · Estudos, Treino em Casa e Dieta em um só app</title>
   <meta name="description" content="App de Educação Física com estudos para provas, treinos em casa guiados, dieta com calculadora de alimentos, teste de IMC e avaliação física.">
-  <link rel="canonical" href="https://SEU-SITE.netlify.app/">
+  <link rel="canonical" href="https://edfisicapro.vercel.app/">
   <meta name="theme-color" content="#0B0C0E">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="EdFísica PRO · Estudos, Treino em Casa e Dieta em um só app">
   <meta property="og:description" content="Estude para provas, treine em casa com o app guiando cada exercício e monte sua dieta com calculadora de alimentos. Tudo em um só app.">
-  <meta property="og:url" content="https://SEU-SITE.netlify.app/">
-  <meta property="og:image" content="https://SEU-SITE.netlify.app/assets/img/og-image.png">
+  <meta property="og:url" content="https://edfisicapro.vercel.app/">
+  <meta property="og:image" content="https://edfisicapro.vercel.app/assets/img/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="EdFísica PRO: estudos, treino em casa e dieta em um só app">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="EdFísica PRO · Estudos, Treino em Casa e Dieta em um só app">
   <meta name="twitter:description" content="Estudos para provas, treinos em casa, dieta com calculadora de alimentos e teste de IMC em um só app.">
-  <meta name="twitter:image" content="https://SEU-SITE.netlify.app/assets/img/og-image.png">
+  <meta name="twitter:image" content="https://edfisicapro.vercel.app/assets/img/og-image.png">
   <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="./assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./assets/css/style.css">
@@ -38,86 +38,95 @@
 
   <main id="main" tabindex="-1">
 
-    <!-- 1. Hero + vitrine interativa do app -->
+    <!-- 1. Hero + iPhone interativo -->
     <section class="hero" aria-labelledby="hero-title">
       <p class="kicker">App de Educação Física</p>
       <h1 id="hero-title">Estude, treine e coma melhor. <span class="mark">Num app só.</span></h1>
       <p class="hero-sub">Matérias para provas, treino em casa guiado e dieta com alimentos brasileiros. Abre no celular, sem baixar nada.</p>
 
       <div class="show" data-show>
-        <div class="show-tabs" role="tablist" aria-label="Partes do app">
-          <button type="button" role="tab" aria-selected="true" data-tab="0">Estudar</button>
-          <button type="button" role="tab" aria-selected="false" data-tab="1">Treinar</button>
-          <button type="button" role="tab" aria-selected="false" data-tab="2">Comer</button>
-          <button type="button" role="tab" aria-selected="false" data-tab="3">Medir</button>
+        <div class="show-tabs" role="tablist" aria-label="Telas do app">
+          <button type="button" role="tab" aria-selected="true" data-tab="0">Início</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="1">Estudos</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="2">Treino</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="3">Dieta</button>
           <span class="show-ind" aria-hidden="true"></span>
         </div>
 
-        <div class="phone" data-phone>
-          <div class="phone-notch" aria-hidden="true"></div>
-          <div class="screens" data-screens>
+        <div class="iphone iphone--hero" data-phone>
+          <div class="iphone-screen">
+            <div class="screens" data-screens>
 
-            <!-- Estudar: flashcard que vira de verdade -->
-            <div class="scr" role="tabpanel" aria-label="Flashcards de Fisiologia">
-              <div class="scr-head"><span>‹ Fisiologia</span><span class="dim">4 de 15</span></div>
-              <div class="bar"><i style="width:27%"></i></div>
-              <button type="button" class="flash" data-flip aria-label="Virar o cartão">
-                <span class="flash-in">
-                  <span class="flash-face">
-                    <span class="lbl">Pergunta</span>
-                    <span class="q">Qual sistema energético predomina em esforços de até 10 segundos?</span>
-                    <span class="hint">Toque para ver a resposta</span>
-                  </span>
-                  <span class="flash-face flash-back">
-                    <span class="lbl lbl--y">Resposta</span>
-                    <span class="q">ATP-CP (fosfagênio)</span>
-                    <span class="dim">Esforços máximos e curtos, como um sprint de 100 m.</span>
-                  </span>
-                </span>
-              </button>
-              <div class="pair"><span class="pill pill--no">Errei</span><span class="pill pill--yes">Acertei</span></div>
-            </div>
-
-            <!-- Treinar: player -->
-            <div class="scr" role="tabpanel" aria-label="Player de treino">
-              <div class="segs"><i class="on"></i><i class="on"></i><i class="now"></i><i></i><i></i><i></i></div>
-              <p class="dim center">Full Body · 3 de 6</p>
-              <div class="ring">
-                <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="trk"/><circle cx="60" cy="60" r="52" class="val" data-ring/></svg>
-                <div class="ring-c"><b data-clock>0:30</b><span>trabalho</span></div>
+              <!-- Início -->
+              <div class="scr" role="tabpanel" aria-label="Tela inicial do app">
+                <div class="a-top"><div><b class="a-h">Olá, Ana</b><span class="a-sub">Sábado, 31 de outubro</span></div><span class="a-av">A</span></div>
+                <div class="a-today">
+                  <div class="a-ring"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="33" class="trk"/><circle cx="40" cy="40" r="33" class="val" style="stroke-dashoffset:93"/></svg><div><b>1.420</b><span>de 2.000</span></div></div>
+                  <div class="a-side"><span class="a-k">Sequência</span><b><i data-i="flame"></i> 5 dias</b><span class="a-k">Restam</span><b>580 kcal</b></div>
+                </div>
+                <div class="a-water"><i class="a-drop" data-i="droplet"></i><div><p><b>Água</b><span>1.250 / 2.800 ml</span></p><div class="a-bar"><i style="width:45%"></i></div></div><span class="a-plus">+</span></div>
+                <span class="a-label">Atalhos</span>
+                <div class="a-quick"><span><i data-i="dumbbell"></i>Treino</span><span><i data-i="apple"></i>Dieta</span><span><i data-i="scale"></i>IMC</span><span><i data-i="book"></i>Estudos</span></div>
+                <div class="a-next"><div><small>Treino sugerido</small><b>Full Body Iniciante</b><span>25 min · sem equipamento</span></div><span class="a-play" data-i="play"></span></div>
+                <div class="a-nav"><span class="on"><i data-i="home"></i>Início</span><span><i data-i="book"></i>Estudos</span><span><i data-i="dumbbell"></i>Treino</span><span><i data-i="apple"></i>Dieta</span><span><i data-i="grid"></i>Mais</span></div>
               </div>
-              <p class="ex">Agachamento livre</p>
-              <p class="dim center">Joelhos na direção da ponta dos pés</p>
-              <div class="row-card"><span class="dim">A seguir</span><strong>Flexão inclinada</strong></div>
-            </div>
 
-            <!-- Comer: dieta -->
-            <div class="scr" role="tabpanel" aria-label="Diário de dieta">
-              <div class="scr-head"><strong>Hoje</strong><span class="dim">1.420 de 2.000 kcal</span></div>
-              <div class="macro"><p><span>Proteínas</span><span>92 / 130 g</span></p><div class="bar"><i style="width:71%"></i></div></div>
-              <div class="macro"><p><span>Carboidratos</span><span>168 / 245 g</span></p><div class="bar"><i style="width:69%"></i></div></div>
-              <div class="macro"><p><span>Gorduras</span><span>38 / 62 g</span></p><div class="bar"><i style="width:61%"></i></div></div>
-              <ul class="meals">
-                <li><span>Café da manhã</span><span>410</span></li>
-                <li><span>Almoço · arroz, feijão, frango</span><span>690</span></li>
-                <li><span>Lanche · banana com aveia</span><span>320</span></li>
-                <li class="dim"><span>Jantar</span><span>+ adicionar</span></li>
-              </ul>
-            </div>
+              <!-- Estudos: flashcard que vira -->
+              <div class="scr" role="tabpanel" aria-label="Flashcards de Fisiologia">
+                <div class="a-row"><span class="a-back">‹ Fisiologia</span><span class="dim">4 de 15</span></div>
+                <div class="a-bar"><i style="width:27%"></i></div>
+                <button type="button" class="flash" data-flip aria-label="Virar o cartão">
+                  <span class="flash-in">
+                    <span class="flash-face">
+                      <span class="lbl">Pergunta</span>
+                      <span class="q">Qual sistema energético predomina em esforços de até 10 segundos?</span>
+                      <span class="hint">Toque para ver a resposta</span>
+                    </span>
+                    <span class="flash-face flash-back">
+                      <span class="lbl lbl--y">Resposta</span>
+                      <span class="q">ATP-CP (fosfagênio)</span>
+                      <span class="dim">Esforços máximos e curtos, como um sprint de 100 m.</span>
+                    </span>
+                  </span>
+                </button>
+                <div class="pair"><span class="pill pill--no">Errei</span><span class="pill pill--yes">Acertei</span></div>
+              </div>
 
-            <!-- Medir: IMC -->
-            <div class="scr" role="tabpanel" aria-label="Teste de IMC">
-              <div class="scr-head"><strong>Teste de IMC</strong><span class="dim">70 kg · 1,75 m</span></div>
-              <p class="imc">22,9</p>
-              <p class="center"><span class="pill pill--yes">Peso normal</span></p>
-              <div class="scale"><i></i><i class="on"></i><i></i><i></i></div>
-              <div class="scale-l"><span>18,5</span><span>25</span><span>30</span></div>
-              <div class="row-card"><span class="dim">Faixa saudável para 1,75 m</span><strong>56,7 a 76,3 kg</strong></div>
+              <!-- Treino: player -->
+              <div class="scr" role="tabpanel" aria-label="Player de treino">
+                <div class="segs"><i class="on"></i><i class="on"></i><i class="now"></i><i></i><i></i><i></i></div>
+                <p class="dim center">Full Body · exercício 3 de 6</p>
+                <div class="ring">
+                  <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="trk"/><circle cx="60" cy="60" r="52" class="val" data-ring/></svg>
+                  <div class="ring-c"><b data-clock>0:30</b><span>trabalho</span></div>
+                </div>
+                <p class="ex">Agachamento livre</p>
+                <p class="dim center">Joelhos na direção da ponta dos pés</p>
+                <div class="row-card"><span class="dim">A seguir</span><strong>Flexão inclinada</strong></div>
+                <div class="ctrl"><span>⏮</span><span class="main">❚❚</span><span>⏭</span></div>
+              </div>
+
+              <!-- Dieta -->
+              <div class="scr" role="tabpanel" aria-label="Diário de dieta">
+                <div class="a-row"><span class="a-nb">‹</span><b class="a-h a-h--sm">Hoje</b><span class="a-nb">›</span></div>
+                <div class="a-today a-today--diet">
+                  <div class="a-ring"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="33" class="trk"/><circle cx="40" cy="40" r="33" class="val" style="stroke-dashoffset:93"/></svg><div><b>1.420</b><span>de 2.000</span></div></div>
+                  <div class="a-macros">
+                    <p><span>Proteínas</span><span>92 / 130 g</span></p><div class="a-bar"><i style="width:71%"></i></div>
+                    <p><span>Carboidratos</span><span>168 / 245 g</span></p><div class="a-bar a-bar--o"><i style="width:69%"></i></div>
+                    <p><span>Gorduras</span><span>38 / 62 g</span></p><div class="a-bar a-bar--r"><i style="width:61%"></i></div>
+                  </div>
+                </div>
+                <div class="a-meal"><div><b>Café da manhã</b><span>Pão francês, ovo, café · 410 kcal</span></div><span class="a-add">+</span></div>
+                <div class="a-meal"><div><b>Almoço</b><span>Arroz, feijão, frango · 690 kcal</span></div><span class="a-add">+</span></div>
+                <div class="a-meal"><div><b>Lanche da tarde</b><span>Banana com aveia · 320 kcal</span></div><span class="a-add">+</span></div>
+                <div class="a-meal"><div><b>Jantar</b><span class="dim">Toque em + para registrar</span></div><span class="a-add">+</span></div>
+              </div>
             </div>
           </div>
         </div>
 
-        <p class="show-cap" data-cap aria-live="polite">6 matérias com resumos, flashcards e questões comentadas.</p>
+        <p class="show-cap" data-cap aria-live="polite">Seu dia em uma tela: calorias, água, sequência e o treino de hoje.</p>
       </div>
 
       <div class="cta-block">
@@ -128,7 +137,61 @@
       </div>
     </section>
 
-    <!-- 2. Números -->
+    <!-- 2. Como funciona: 3 iPhones -->
+    <section class="how" aria-labelledby="how-title">
+      <h2 id="how-title">Pronto em 1 minuto</h2>
+      <div class="fan" aria-hidden="true">
+        <!-- Login -->
+        <div class="iphone iphone--sm fan-l">
+          <div class="iphone-screen">
+            <div class="scr scr--static">
+              <div class="m-brand"><span class="m-logo" data-i="bolt"></span><b>EdFísica</b><em>PRO</em></div>
+              <b class="m-title">Crie sua conta</b>
+              <span class="dim m-s">Leva menos de um minuto.</span>
+              <div class="m-tabs"><span>Entrar</span><span class="on">Criar conta</span></div>
+              <div class="m-in"><small>Seu nome</small>Ana Souza</div>
+              <div class="m-in"><small>E-mail</small>ana@email.com</div>
+              <div class="m-in"><small>Senha</small>••••••••</div>
+              <span class="m-btn">Criar conta</span>
+            </div>
+          </div>
+        </div>
+        <!-- Estudos -->
+        <div class="iphone iphone--sm fan-c">
+          <div class="iphone-screen">
+            <div class="scr scr--static">
+              <b class="a-h">Estudos</b>
+              <div class="m-two"><span class="m-btn">Simulado</span><span class="m-ghost">Erros</span></div>
+              <div class="m-sub"><i></i><div><b>Anatomia</b><span>12 de 15 certas</span><em style="--w:80%"></em></div></div>
+              <div class="m-sub"><i></i><div><b>Fisiologia</b><span>9 de 15 certas</span><em style="--w:60%"></em></div></div>
+              <div class="m-sub"><i></i><div><b>Treinamento</b><span>5 de 15 certas</span><em style="--w:33%"></em></div></div>
+              <div class="m-sub"><i></i><div><b>Primeiros Socorros</b><span>Ainda não começou</span><em style="--w:0%"></em></div></div>
+              <div class="m-sub"><i></i><div><b>Avaliação Física</b><span>Ainda não começou</span><em style="--w:0%"></em></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Progresso -->
+        <div class="iphone iphone--sm fan-r">
+          <div class="iphone-screen">
+            <div class="scr scr--static">
+              <b class="a-h">Progresso</b>
+              <span class="dim m-s">Últimos 7 dias</span>
+              <div class="m-chart"><i style="--h:40%"></i><i style="--h:70%"></i><i style="--h:30%"></i><i style="--h:85%"></i><i style="--h:60%"></i><i style="--h:95%"></i><i style="--h:50%"></i></div>
+              <div class="m-days"><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span><span>D</span></div>
+              <div class="m-stats"><div><b>4</b><span>treinos</span></div><div><b>132</b><span>min</span></div><div><b>78%</b><span>acertos</span></div></div>
+              <div class="m-in"><small>Peso</small>80,0 → 78,4 kg</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ol class="steps">
+        <li><b>1</b><span><strong>Compre e receba o link</strong> no e-mail na hora.</span></li>
+        <li><b>2</b><span><strong>Crie sua conta</strong> com e-mail e senha.</span></li>
+        <li><b>3</b><span><strong>Estude, treine e acompanhe</strong> sua evolução.</span></li>
+      </ol>
+    </section>
+
+    <!-- 3. Números -->
     <section class="nums" aria-label="Conteúdo do app em números">
       <ul>
         <li><b data-countup data-cfg="contentStats.questions" data-fmt="int">90</b><span>questões comentadas</span></li>
@@ -138,13 +201,13 @@
       </ul>
     </section>
 
-    <!-- 3. Depoimentos (só aparecem os reais) -->
+    <!-- 4. Depoimentos (só aparecem os reais) -->
     <section id="depoimentos" class="block" aria-labelledby="dep-title" hidden>
       <h2 id="dep-title">Quem usa</h2>
       <div class="quotes" data-render="testimonials"></div>
     </section>
 
-    <!-- 4. Oferta -->
+    <!-- 5. Oferta -->
     <section id="oferta" class="block offer" aria-labelledby="offer-title">
       <div class="offer-card">
         <div class="offer-top">
@@ -172,7 +235,7 @@
       </div>
     </section>
 
-    <!-- 5. Dúvidas -->
+    <!-- 6. Dúvidas -->
     <section id="faq" class="block" aria-labelledby="faq-title">
       <h2 id="faq-title">Dúvidas</h2>
       <div class="faq">
@@ -197,8 +260,8 @@
           <p>Consegue. Cada exercício tem passo a passo e erros comuns, os programas começam no iniciante e o player controla o tempo de treino e descanso por você.</p>
         </details>
         <details>
-          <summary>A dieta substitui o nutricionista?</summary>
-          <p>Não. A calculadora usa fórmulas reconhecidas e a Tabela TACO para estimar metas e organizar o dia, mas não substitui um acompanhamento individual.</p>
+          <summary>Onde ficam meus dados?</summary>
+          <p>No seu próprio celular, protegidos pela sua senha. Nada é enviado para servidores. Para trocar de aparelho, use “Exportar backup” no Perfil.</p>
         </details>
         <details>
           <summary>Como falo com o suporte?</summary>

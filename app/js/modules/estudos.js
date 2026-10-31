@@ -4,6 +4,7 @@
 import { repo } from '../repo.js';
 import { html, raw, toast } from '../ui.js';
 import { SUBJECTS, LOADERS } from '../../data/subjects/index.js';
+import { icon } from '../icons.js';
 
 // ─────────────────────────────────────────────────────────────────────
 // Entrada principal: roteada por ctx.params.subjectId e ctx.query.tab
@@ -37,47 +38,43 @@ export async function main(ctx) {
 // Lista de matérias
 // ─────────────────────────────────────────────────────────────────────
 
+const SUBJECT_ICON = {
+  anatomia: 'user',
+  fisiologia: 'heart',
+  treinamento: 'dumbbell',
+  'primeiros-socorros': 'plus',
+  avaliacao: 'ruler',
+  'regras-esportes': 'clipboard',
+};
+
 function renderList(ctx) {
   const studyData = repo.study.get();
+  const wrongCount = studyData.wrong ? Object.keys(studyData.wrong).length : 0;
 
   ctx.el.innerHTML = html`
-    <h1 tabindex="-1">📚 Estudos para Prova</h1>
-    <p class="text-muted mb-2">Escolha uma matéria para estudar.</p>
+    <h1 tabindex="-1">Estudos</h1>
+    <p class="page-sub">Escolha uma matéria. Resumo, flashcards e quiz em cada uma.</p>
 
-    ${studyData.wrong && Object.keys(studyData.wrong).length > 0 ? raw(`
-      <a href="#/estudos/caderno" class="banner" style="display:flex;align-items:center;gap:1rem;text-decoration:none;margin-bottom:1.5rem">
-        <div style="font-size:1.75rem">📓</div>
-        <div>
-          <div class="banner-title">Caderno de Erros</div>
-          <p class="banner-text">${Object.keys(studyData.wrong).length} questão(ões) para revisar</p>
-        </div>
-      </a>
-    `) : ''}
-
-    <div style="display:grid;gap:1rem">
-      ${raw(SUBJECTS.map(s => {
-        const quiz = studyData.quiz[s.id] || { answered: 0, correct: 0 };
-        const pct = quiz.answered > 0 ? Math.round((quiz.correct / quiz.answered) * 100) : null;
-        return `
-          <a href="#/estudos/${s.id}" class="card" style="display:flex;align-items:center;gap:1rem;text-decoration:none;padding:1rem">
-            <div style="font-size:2rem;flex-shrink:0">${s.icon}</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-weight:600;font-size:1.05rem">${s.title}</div>
-              ${pct !== null
-                ? `<div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.25rem">${quiz.correct}/${quiz.answered} corretas (${pct}%)</div>`
-                : `<div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.25rem">Não estudado ainda</div>`
-              }
-            </div>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M7 4l6 6-6 6"/>
-            </svg>
-          </a>
-        `;
-      }).join(''))}
+    <div class="study-cta">
+      <a href="#/simulado" class="btn btn--primary">${raw(icon('timer', 18))} Fazer simulado</a>
+      <a href="#/estudos/caderno" class="btn btn--ghost">${raw(icon('notebook', 18))} Erros${wrongCount ? raw(` <span class="badge">${wrongCount}</span>`) : ''}</a>
     </div>
 
-    <div style="margin-top:2rem">
-      <a href="#/simulado" class="btn btn--primary" style="width:100%">⏱️ Iniciar Simulado</a>
+    <div class="subject-list">
+      ${raw(SUBJECTS.map((s) => {
+        const quiz = studyData.quiz[s.id] || { answered: 0, correct: 0 };
+        const pct = quiz.answered > 0 ? Math.round((quiz.correct / quiz.answered) * 100) : 0;
+        return `
+          <a href="#/estudos/${s.id}" class="list-item subject">
+            <span class="list-item-icon">${icon(SUBJECT_ICON[s.id] || 'book', 20)}</span>
+            <span class="list-item-content">
+              <span class="list-item-title">${s.title}</span>
+              <span class="list-item-subtitle">${quiz.answered ? `${quiz.correct} de ${quiz.answered} certas` : 'Ainda não começou'}</span>
+              <span class="subject-bar"><i style="width:${pct}%"></i></span>
+            </span>
+            <span class="list-item-action">${icon('chevron', 18)}</span>
+          </a>`;
+      }).join(''))}
     </div>
   `;
 
