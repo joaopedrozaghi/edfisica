@@ -2,7 +2,9 @@
 // Exported: matchRoute (pura, testável), parseQuery, start(), destroy-before-render
 
 import { CONFIG } from '../../config.js';
-import { importErrorState } from './ui.js';
+import { importErrorState, esc } from './ui.js';
+import { currentUser, redeemUpgrade } from './auth.js';
+import { icon } from './icons.js';
 
 // ---------------------------------------------------------------------
 // Route table (literal import() specifiers, B4.5, B11.1)
@@ -124,6 +126,49 @@ let currentView = null;
 let viewEl = null;
 
 // ---------------------------------------------------------------------
+// Bônus do plano Completo: quem tem o Básico vê a tela de upgrade
+// ---------------------------------------------------------------------
+
+const BONUS_PROGRAMS = ['mobilidade', 'terceira-idade'];
+
+export function isBonusRoute(pattern, params = {}) {
+  if (pattern === '/simulado' || pattern === '/estudos/caderno' || pattern === '/dieta/planos') return true;
+  if ((pattern === '/treino/programas/:id' || pattern === '/treino/player/:id') && BONUS_PROGRAMS.includes(params.id)) return true;
+  return false;
+}
+
+function renderLocked(el, onUnlock) {
+  const url = String(CONFIG.checkout.url || '');
+  const canBuy = url.indexOf('SEU-CHECKOUT') === -1 && /^https?:\/\//.test(url);
+  const full = (CONFIG.plans && CONFIG.plans.full) || { name: 'Completo' };
+  el.innerHTML = `
+    <div class="locked">
+      <span class="locked-ico">${icon('timer', 26)}</span>
+      <h1 tabindex="-1">Disponível no plano ${esc(full.name)}</h1>
+      <p class="page-sub" style="margin:0">Seu plano atual é o Básico. Com o ${esc(full.name)} você libera:</p>
+      <ul class="locked-list">${CONFIG.bonuses.map((b) => `<li>${esc(b.title)}</li>`).join('')}</ul>
+      ${canBuy ? `<a class="btn btn--primary btn--block" href="${esc(url)}" target="_blank" rel="noopener">Fazer upgrade</a>` : ''}
+      <form class="locked-form" novalidate>
+        <label for="up-code" class="text-small text-muted">Já fez o upgrade? Digite o código do e-mail:</label>
+        <div class="locked-row">
+          <input id="up-code" name="code" type="text" autocomplete="off" autocapitalize="characters" placeholder="Código">
+          <button type="submit" class="btn btn--ghost">Liberar</button>
+        </div>
+        <p class="field-error" data-up-error hidden></p>
+      </form>
+    </div>`;
+  const form = el.querySelector('.locked-form');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const res = await redeemUpgrade(form.code.value, CONFIG.access);
+    if (res.ok) { onUnlock(); return; }
+    const err = form.querySelector('[data-up-error]');
+    err.textContent = res.error;
+    err.hidden = false;
+  });
+}
+
+// ---------------------------------------------------------------------
 // Router start (chamado por main.js após boot)
 // ---------------------------------------------------------------------
 
@@ -160,6 +205,17 @@ async function handleRoute() {
   
   const { route, params } = matched;
   const query = parseQuery(search || '');
+
+  const user = currentUser();
+  if (user && user.plan === 'basico' && isBonusRoute(route.pattern, params)) {
+    if (currentView?.destroy) { try { currentView.destroy(); } catch (e) { console.error(e); } }
+    currentView = null;
+    renderLocked(viewEl, () => handleRoute());
+    document.title = `Plano ${CONFIG.plans?.full?.name || 'Completo'} · ${CONFIG.product.name}`;
+    updateNavigation(route.nav);
+    viewEl.querySelector('h1')?.focus();
+    return;
+  }
   
   // Destroy current view
   if (currentView?.destroy) {

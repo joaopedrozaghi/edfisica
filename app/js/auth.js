@@ -69,7 +69,31 @@ export function currentUser() {
   try { session = JSON.parse(s.getItem(SESSION_KEY) || 'null'); } catch (e) { session = null; }
   if (!session || !session.id) return null;
   const u = readUsers().find((x) => x.id === session.id);
-  return u ? { id: u.id, name: u.name, email: u.email } : null;
+  return u ? { id: u.id, name: u.name, email: u.email, plan: u.plan === 'basico' ? 'basico' : 'completo' } : null;
+}
+
+/** Plano a partir do código da compra: 'completo', 'basico' ou null (código inválido). */
+async function planFromCode(code, accessCfg) {
+  const norm = normalizeCode(code || '');
+  if (!norm) return null;
+  const hash = await hashCode(norm);
+  if ((accessCfg.codeHashes || []).includes(hash)) return 'completo';
+  if ((accessCfg.basicCodeHashes || []).includes(hash)) return 'basico';
+  return null;
+}
+
+/** Libera o plano Completo na conta logada com um código do Completo (upgrade). */
+export async function redeemUpgrade(code, accessCfg = {}) {
+  const me = currentUser();
+  if (!me) return { ok: false, error: 'Entre novamente.' };
+  if ((await planFromCode(code, accessCfg)) !== 'completo') {
+    return { ok: false, field: 'code', error: 'Código inválido. Use o código do e-mail do plano Completo.' };
+  }
+  const users = readUsers();
+  const u = users.find((x) => x.id === me.id);
+  u.plan = 'completo';
+  writeUsers(users);
+  return { ok: true };
 }
 
 export function hasAccounts() {
@@ -120,11 +144,11 @@ export async function signUp({ name, email, password, code }, accessCfg = {}) {
   if (!isValidEmail(cleanEmail)) return { ok: false, field: 'email', error: 'Confira o e-mail.' };
   if (String(password || '').length < 6) return { ok: false, field: 'password', error: 'Use pelo menos 6 caracteres.' };
 
+  // Sem código obrigatório, toda conta é Completa (não há como saber o plano).
+  let plan = 'completo';
   if (accessCfg.requireCode) {
-    const hash = await hashCode(normalizeCode(code || ''));
-    if (!normalizeCode(code || '') || !(accessCfg.codeHashes || []).includes(hash)) {
-      return { ok: false, field: 'code', error: 'Código inválido. Ele está no e-mail da sua compra.' };
-    }
+    plan = await planFromCode(code, accessCfg);
+    if (!plan) return { ok: false, field: 'code', error: 'Código inválido. Ele está no e-mail da sua compra.' };
   }
 
   const users = readUsers();
@@ -136,11 +160,11 @@ export async function signUp({ name, email, password, code }, accessCfg = {}) {
   const hash = await derive(password, salt);
   const id = toHex(crypto.getRandomValues(new Uint8Array(6)));
   const first = users.length === 0;
-  users.push({ id, name: cleanName, email: cleanEmail, salt, hash, createdAt: Date.now() });
+  users.push({ id, name: cleanName, email: cleanEmail, salt, hash, plan, createdAt: Date.now() });
   writeUsers(users);
   if (first) adoptLegacyData(id);
   startSession(id);
-  return { ok: true, user: { id, name: cleanName, email: cleanEmail } };
+  return { ok: true, user: { id, name: cleanName, email: cleanEmail, plan } };
 }
 
 /** @returns {Promise<{ok:true,user}|{ok:false,field,error}>} */

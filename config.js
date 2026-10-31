@@ -15,21 +15,38 @@ export const CONFIG = Object.freeze({
     tagline: 'Estude, treine e coma melhor em um só app',
   },
 
-  // Preço da oferta.
+  // Preço do plano COMPLETO (o plano principal, destacado na página).
   price: {
-    current: 27.90,            // número com ponto decimal
+    current: 21.90,            // número com ponto decimal
     anchor: null,              // preço "De". Use null se você NÃO praticou esse preço antes (CDC art. 37):
                                // com null, somem "De", "Você economiza", "% OFF", "Valor total"
                                // e os valores riscados dos bônus (que passam a mostrar "Incluso").
-    installmentsText: 'ou 4x de R$ 7,57', // ATUALIZE junto com o preço (copie o valor do seu checkout)
+    installmentsText: 'ou 3x de R$ 7,30', // ATUALIZE junto com o preço (copie o valor do seu checkout)
     paymentNote: 'Pagamento único · Sem mensalidades',
   },
 
-  // Link do checkout (Hotmart, Kiwify, Eduzz etc.).
+  // Link do checkout do plano COMPLETO (Hotmart, Kiwify, Eduzz etc.).
   checkout: {
     url: 'https://SEU-CHECKOUT-AQUI',
     // Parâmetros da URL da página que são repassados ao checkout (rastreamento de campanhas).
     passThroughParams: ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'src', 'sck', 'xcod'],
+  },
+
+  // Os dois planos da página. O Completo usa price.current e checkout.url acima.
+  plans: {
+    full: {
+      name: 'Completo',
+      badge: 'Mais escolhido',
+      tagline: 'App + todos os bônus',
+    },
+    basic: {
+      enabled: true,           // false = some o plano Básico e a página volta a ter um plano só
+      name: 'Básico',
+      tagline: 'Só o app, sem os bônus',
+      price: 14.90,
+      installmentsText: 'ou 2x de R$ 7,45', // ATUALIZE junto com o preço
+      checkoutUrl: 'https://SEU-CHECKOUT-BASICO',
+    },
   },
 
   guarantee: { days: 7 },      // mínimo 7 (direito de arrependimento, CDC art. 49)
@@ -37,7 +54,10 @@ export const CONFIG = Object.freeze({
   // Acesso ao app.
   access: {
     lifetime: true,            // true = mostra "Acesso vitalício"
-    requireCode: false,        // true = pede código ao abrir o app (barreira leve, NÃO é segurança)
+    requireCode: false,        // true = pede o código da compra ao criar a conta (barreira leve, NÃO é segurança)
+                               // codeHashes = códigos do plano COMPLETO; basicCodeHashes = códigos do plano BÁSICO.
+                               // Quem cria a conta com código do Básico não acessa os bônus (aparece "Fazer upgrade").
+    basicCodeHashes: [],
     codeHashes: [],            // SHA-256 (hex, minúsculas) dos códigos válidos, gerado com o comando do README
                                // (que já converte o código para MAIÚSCULAS). Maiúsculas/minúsculas não importam.
   },

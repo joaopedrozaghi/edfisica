@@ -23,6 +23,7 @@ export async function main(ctx) {
         <div class="account-row" style="margin:0;border:0;background:none;padding:0">
           <span class="avatar">${esc((user.name || '?').trim().charAt(0).toUpperCase())}</span>
           <div class="grow"><strong>${esc(user.name)}</strong><span>${esc(user.email)}</span></div>
+          <span class="plan-chip${user.plan === 'basico' ? '' : ' plan-chip--full'}">${user.plan === 'basico' ? 'Básico' : 'Completo'}</span>
         </div>
         <div class="account-actions">
           <button type="button" class="btn btn--ghost btn--small" data-change-pw>${icon('eye', 16)} Trocar senha</button>
