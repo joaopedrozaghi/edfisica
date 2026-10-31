@@ -102,7 +102,7 @@ async function biblioteca(ctx) {
       <h1 tabindex="-1">Treino em Casa</h1>
 
       <div class="module-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem">
-        <a href="#/treino/programas" class="btn btn--primary">${raw(icon('play', 18))} Programas</a>
+        <a href="#/treino/programas" class="btn btn--primary">${raw(icon('play', 18))} Treinos prontos</a>
         <a href="#/treino/construtor" class="btn btn--ghost">${raw(icon('wrench', 18))} Montar treino</a>
       </div>
 
@@ -238,7 +238,7 @@ async function listaProgramas(ctx) {
 
   ctx.el.innerHTML = html`
     <a href="#/treino" class="back-link">${raw(icon('back', 18))} Treino</a>
-    <h1 tabindex="-1">Programas</h1>
+    <h1 tabindex="-1">Treinos prontos</h1>
     <p class="page-sub">Escolha um e aperte play: o app guia cada série e descanso.</p>
 
     <div class="prog-list">${raw(PROGRAMS.map(programCard).join(''))}</div>
@@ -275,8 +275,8 @@ async function programaDetalhe(ctx, id) {
 
   if (!program) {
     ctx.el.innerHTML = html`
-      <a href="#/treino/programas" class="back-link">${raw(icon('back', 18))} Programas</a>
-      <div class="done"><h1 tabindex="-1">Programa não encontrado</h1><a href="#/treino/programas" class="btn btn--primary">Voltar</a></div>`;
+      <a href="#/treino/programas" class="back-link">${raw(icon('back', 18))} Treinos prontos</a>
+      <div class="done"><h1 tabindex="-1">Treino não encontrado</h1><a href="#/treino/programas" class="btn btn--primary">Voltar</a></div>`;
     return {};
   }
 
@@ -286,7 +286,7 @@ async function programaDetalhe(ctx, id) {
   const minutes = program.durationMin || Math.max(1, Math.round(totalSec / 60));
 
   ctx.el.innerHTML = html`
-    <a href="#/treino/programas" class="back-link">${raw(icon('back', 18))} Programas</a>
+    <a href="#/treino/programas" class="back-link">${raw(icon('back', 18))} Treinos prontos</a>
     <div class="prog-hero" style="--c:${t.c}">
       <span class="prog-hero-ico">${raw(icon(t.i, 28))}</span>
       <h1 tabindex="-1">${program.name}</h1>
