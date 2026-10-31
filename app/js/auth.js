@@ -153,3 +153,37 @@ export async function signIn({ email, password }) {
   startSession(u.id);
   return { ok: true, user: { id: u.id, name: u.name, email: u.email } };
 }
+
+/** Troca a senha da conta logada (pede a senha atual). */
+export async function changePassword(current, next) {
+  const me = currentUser();
+  if (!me) return { ok: false, field: 'current', error: 'Entre novamente.' };
+  if (String(next || '').length < 6) return { ok: false, field: 'next', error: 'Use pelo menos 6 caracteres.' };
+  const users = readUsers();
+  const u = users.find((x) => x.id === me.id);
+  if ((await derive(String(current || ''), u.salt)) !== u.hash) return { ok: false, field: 'current', error: 'Senha atual incorreta.' };
+  u.salt = toHex(crypto.getRandomValues(new Uint8Array(16)));
+  u.hash = await derive(String(next), u.salt);
+  writeUsers(users);
+  return { ok: true };
+}
+
+/** Exclui a conta logada e todos os dados dela neste aparelho. Pede a senha. */
+export async function deleteAccount(password) {
+  const me = currentUser();
+  if (!me) return { ok: false, error: 'Entre novamente.' };
+  const users = readUsers();
+  const u = users.find((x) => x.id === me.id);
+  if ((await derive(String(password || ''), u.salt)) !== u.hash) return { ok: false, field: 'password', error: 'Senha incorreta.' };
+  const s = ls();
+  const prefix = userPrefix(me.id);
+  const keys = [];
+  for (let i = 0; i < s.length; i++) {
+    const k = s.key(i);
+    if (k && k.indexOf(prefix) === 0) keys.push(k);
+  }
+  keys.forEach((k) => s.removeItem(k));
+  writeUsers(users.filter((x) => x.id !== me.id));
+  signOut();
+  return { ok: true };
+}

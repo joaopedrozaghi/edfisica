@@ -224,8 +224,8 @@ function initCountdown() {
 
 // ---------- Entrada suave ao rolar ----------
 function initReveal() {
-  const els = document.querySelectorAll('.nums, .block, .foot');
-  if (reduceMotion || !('IntersectionObserver' in window)) return;
+  const els = document.querySelectorAll('.how, .nums, .block, .foot');
+  if (reduceMotion || !('IntersectionObserver' in window)) { els.forEach((el) => el.classList.add('is-in')); return; }
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
@@ -302,10 +302,10 @@ function initCountUp() {
 
 // ---------- Vitrine: abas, arrastar no celular, flashcard e timer ----------
 const CAPTIONS = [
+  () => 'Seu dia em uma tela: calorias, água, sequência e o treino de hoje.',
   () => `${fmtInt(CONFIG.contentStats.subjects)} matérias com resumos, flashcards e questões comentadas. Toque no cartão.`,
   () => 'O app conta o tempo, avisa a troca e mostra o próximo exercício.',
   () => `Monte o dia com ${fmtInt(CONFIG.contentStats.foods)}+ alimentos brasileiros e veja calorias e macros.`,
-  () => 'IMC, % de gordura, frequência cardíaca e seu histórico de peso.',
 ];
 
 function initShowcase() {
@@ -391,6 +391,36 @@ phone.addEventListener('pointerdown', stopAuto);
   go(0);
 }
 
+// ---------- iPhones: Dynamic Island, barra de status, ícones ----------
+const MOCK_ICONS = {
+  home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/>',
+  book: '<path d="M4 19.5V5a2 2 0 0 1 2-2h13v15H6.5A2.5 2.5 0 0 0 4 20.5 2.5 2.5 0 0 0 6.5 23H19v-5"/>',
+  dumbbell: '<path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/>',
+  apple: '<path d="M12 7c-1.5-1.2-3.5-1.4-5-.6C5 7.5 4 10 4.5 13c.6 3.8 3 8 5.5 8 .9 0 1.3-.5 2-.5s1.1.5 2 .5c2.5 0 4.9-4.2 5.5-8 .5-3-.5-5.5-2.5-6.6-1.5-.8-3.5-.6-5 .6Z"/><path d="M12 7c0-2 1-3.5 3-4"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
+  scale: '<path d="M5 21h14a1 1 0 0 0 1-1l-1.5-12A2 2 0 0 0 16.5 6h-9a2 2 0 0 0-2 2L4 20a1 1 0 0 0 1 1Z"/><path d="M12 10v3M9 6a3 3 0 0 1 6 0"/>',
+  flame: '<path d="M12 22c4 0 7-2.7 7-6.8 0-3.4-2.3-6-4.2-8.2-.4 1.8-1.3 3-2.8 3.5.4-3.2-1-6.2-3.5-8.5C8.3 5.7 5 9 5 15.2 5 19.3 8 22 12 22Z"/>',
+  droplet: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
+  play: '<path d="M7 4.5v15a1 1 0 0 0 1.5.9l12-7.5a1 1 0 0 0 0-1.8l-12-7.5A1 1 0 0 0 7 4.5Z" fill="currentColor"/>',
+  bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="none"/>',
+};
+
+function initPhones() {
+  document.querySelectorAll('[data-i]').forEach((el) => {
+    const d = MOCK_ICONS[el.getAttribute('data-i')];
+    if (d) el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  });
+  const status = '<div class="ip-status" aria-hidden="true"><span>9:41</span><span class="ip-icons">'
+    + '<svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#fff"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg>'
+    + '<svg viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0zM3.5 6.9a6.4 6.4 0 0 1 9 0l-1.4 1.4a4.4 4.4 0 0 0-6.2 0zM1 4.4a10 10 0 0 1 14 0l-1.4 1.4a8 8 0 0 0-11.2 0z" fill="#fff"/></svg>'
+    + '<svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="23" height="11" rx="3.5" fill="none" stroke="#fff" stroke-opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="#fff"/><path d="M25 4v4a2 2 0 0 0 0-4z" fill="#fff" fill-opacity=".4"/></svg>'
+    + '</span></div>';
+  document.querySelectorAll('.iphone-screen').forEach((scr) => {
+    scr.insertAdjacentHTML('afterbegin', '<div class="ip-island" aria-hidden="true"></div>' + status);
+    scr.insertAdjacentHTML('beforeend', '<div class="ip-home" aria-hidden="true"></div>');
+  });
+}
+
 // ---------- Inicialização ----------
 function init() {
   document.documentElement.classList.add('js');
@@ -400,6 +430,7 @@ function init() {
   renderSupport();
   bindCTAs();
   initCountdown();
+  initPhones();
   initShowcase();
   initReveal();
   initTopBar();
