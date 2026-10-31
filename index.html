@@ -369,6 +369,20 @@
       </div>
 
       <div class="plans">
+        <!-- Básico -->
+        <article class="plan plan--basic" aria-labelledby="plan-basic-name" data-plan-basic>
+          <div class="plan-head">
+            <h3 id="plan-basic-name" data-cfg="plans.basic.name">Básico</h3>
+            <p data-cfg="plans.basic.tagline">Só o app, sem os bônus</p>
+          </div>
+          <div class="plan-price plan-price--sm">
+            <b data-cfg="derived.basicBRL">R$&nbsp;14,90</b>
+            <span data-cfg="plans.basic.installmentsText">ou 2x de R$ 7,45</span>
+          </div>
+          <ul class="incl incl--basic" data-render="included-basic"></ul>
+          <a class="btn btn-ghost btn-full" href="#oferta" data-cta="basic">Quero o Básico</a>
+        </article>
+
         <!-- Completo (destacado) -->
         <article class="plan plan--full" aria-labelledby="plan-full-name">
           <span class="plan-badge" data-cfg="plans.full.badge">Mais escolhido</span>
@@ -384,20 +398,6 @@
           <ul class="incl" data-render="included-full"></ul>
           <a class="btn btn-main btn-full" href="#oferta" data-cta="full">Quero o Completo</a>
           <p class="plan-delta" data-plan-delta>Só <b data-cfg="derived.deltaBRL">R$&nbsp;7,00</b> a mais que o Básico e você leva os <span data-cfg="derived.bonusCount">3</span> bônus.</p>
-        </article>
-
-        <!-- Básico -->
-        <article class="plan plan--basic" aria-labelledby="plan-basic-name" data-plan-basic>
-          <div class="plan-head">
-            <h3 id="plan-basic-name" data-cfg="plans.basic.name">Básico</h3>
-            <p data-cfg="plans.basic.tagline">Só o app, sem os bônus</p>
-          </div>
-          <div class="plan-price plan-price--sm">
-            <b data-cfg="derived.basicBRL">R$&nbsp;14,90</b>
-            <span data-cfg="plans.basic.installmentsText">ou 2x de R$ 7,45</span>
-          </div>
-          <ul class="incl incl--basic" data-render="included-basic"></ul>
-          <a class="btn btn-ghost btn-full" href="#oferta" data-cta="basic">Quero o Básico</a>
         </article>
       </div>
 
