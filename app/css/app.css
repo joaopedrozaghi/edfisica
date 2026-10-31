@@ -1526,3 +1526,9 @@ a.card, a.list-item, a.tile, a.banner { color: var(--text); }
 .splash-mark { animation: beat 1.4s var(--ease, ease) infinite; filter: none; }
 @keyframes beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.08); } 30% { transform: scale(1); } 45% { transform: scale(1.05); } }
 @media (prefers-reduced-motion: reduce) { .splash-mark { animation: none; } }
+
+/* Wordmark EducaFit */
+.auth-mark b { border: 0 !important; padding: 0 !important; margin: 0 !important; font-size: inherit !important; letter-spacing: inherit !important; vertical-align: baseline !important; }
+.auth-mark span { letter-spacing: -.035em; }
+.sidebar-logo { letter-spacing: -.035em; gap: .6rem; }
+.wm-fit { color: var(--accent); }

@@ -435,18 +435,63 @@ function initPhones() {
   });
 }
 
-// ---------- Para quem é: abas ----------
-function initWho() {
-  const root = document.querySelector('[data-who]');
-  if (!root) return;
-  const tabs = Array.from(root.querySelectorAll('[data-who-tab]'));
-  const panels = Array.from(root.querySelectorAll('[data-who-panel]'));
-  const go = (i) => {
-    tabs.forEach((t, n) => { t.setAttribute('aria-selected', String(n === i)); t.tabIndex = n === i ? 0 : -1; });
-    panels.forEach((p, n) => { p.hidden = n !== i; });
-  };
-  tabs.forEach((t, n) => t.addEventListener('click', () => go(n)));
-  go(0);
+// ---------- Título: palavra que troca ----------
+function initRotator() {
+  const root = document.querySelector('[data-rot]');
+  if (!root || reduceMotion) return;
+  const words = Array.from(root.children);
+  let i = 0;
+  setInterval(() => {
+    if (document.hidden) return;
+    const cur = words[i];
+    i = (i + 1) % words.length;
+    const next = words[i];
+    cur.classList.remove('is-on');
+    cur.classList.add('is-out');
+    next.classList.remove('is-out');
+    next.classList.add('is-on');
+    setTimeout(() => cur.classList.remove('is-out'), 600);
+  }, 2600);
+}
+
+// ---------- Carrosséis: pontinhos + iPhones que viram para o centro ----------
+function initCarousels() {
+  document.querySelectorAll('[data-car]').forEach((track) => {
+    const items = Array.from(track.children);
+    const dotsEl = track.parentElement.querySelector('[data-car-dots]');
+    const cover = track.hasAttribute('data-cover');
+    if (dotsEl) {
+      dotsEl.innerHTML = items.map(() => '<button type="button" tabindex="-1"></button>').join('');
+      Array.from(dotsEl.children).forEach((d, n) => d.addEventListener('click', () => {
+        const it = items[n];
+        track.scrollTo({ left: it.offsetLeft - (track.clientWidth - it.offsetWidth) / 2, behavior: reduceMotion ? 'auto' : 'smooth' });
+      }));
+    }
+    let raf = 0;
+    const paint = () => {
+      raf = 0;
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0;
+      let bestD = Infinity;
+      items.forEach((it, n) => {
+        const c = it.offsetLeft + it.offsetWidth / 2;
+        const d = (c - mid) / it.offsetWidth;
+        if (Math.abs(d) < bestD) { bestD = Math.abs(d); best = n; }
+        if (cover && !reduceMotion) {
+          const k = Math.max(-1.4, Math.min(1.4, d));
+          const tilt = it.firstElementChild;
+          tilt.style.transform = `rotateY(${(-k * 30).toFixed(1)}deg) scale(${(1 - Math.abs(k) * 0.1).toFixed(3)})`;
+          tilt.style.setProperty('--dir', k < 0 ? '1' : '-1');
+          it.style.opacity = String(1 - Math.min(0.45, Math.abs(k) * 0.35));
+        }
+      });
+      items.forEach((it, n) => it.classList.toggle('is-active', n === best));
+      if (dotsEl) Array.from(dotsEl.children).forEach((d, n) => d.classList.toggle('on', n === best));
+    };
+    track.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(paint); }, { passive: true });
+    window.addEventListener('resize', () => { if (!raf) raf = requestAnimationFrame(paint); });
+    paint();
+  });
 }
 
 // ---------- Inicialização ----------
@@ -460,7 +505,8 @@ function init() {
   initCountdown();
   initPhones();
   initShowcase();
-  initWho();
+  initRotator();
+  initCarousels();
   initReveal();
   initTopBar();
   initStickyCTA();

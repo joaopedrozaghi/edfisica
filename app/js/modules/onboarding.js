@@ -69,7 +69,7 @@ function renderScreen1(ctx) {
         <div class="onboarding-progress-dot"></div>
       </div>
       
-      <h1 tabindex="-1">Como você vai usar o EdFísica PRO?</h1>
+      <h1 tabindex="-1">Como você vai usar o EducaFit?</h1>
       <p class="text-muted mb-2">Escolha a opção que mais combina com você</p>
       
       <div class="onboarding-personas" role="radiogroup" aria-label="Selecione seu perfil">
