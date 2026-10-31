@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 48" width="196" height="48" role="img" aria-label="EducaFit">
-  <rect width="48" height="48" rx="13" fill="#FFD60A"/>
-  <g fill="none" stroke="#0B0C0E" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 38V17h7l11-6.5"/><path d="M15 38h16M15 27.5h11"/><path d="M27.5 9.5l6 .7-1.7 5.8"/></g>
-  <text x="60" y="33" font-family="Sora, 'Segoe UI', Arial, sans-serif" font-size="26" font-weight="800" letter-spacing="-1" fill="#F3F5F7">Educa<tspan fill="#FFD60A">Fit</tspan></text>
+  <rect width="48" height="48" rx="13" fill="#3B82F6"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 38V17h7l11-6.5"/><path d="M15 38h16M15 27.5h11"/><path d="M27.5 9.5l6 .7-1.7 5.8"/></g>
+  <text x="60" y="33" font-family="Sora, 'Segoe UI', Arial, sans-serif" font-size="26" font-weight="800" letter-spacing="-1" fill="#F3F5F7">Educa<tspan fill="#60A5FA">Fit</tspan></text>
 </svg>

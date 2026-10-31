@@ -206,7 +206,7 @@ async function exercicioDetalhe(ctx, id) {
 
 // Capa de cada programa: cor e ícone
 const PROGRAM_THEME = {
-  'full-body-iniciante': { c: '#FFD60A', i: 'dumbbell' },
+  'full-body-iniciante': { c: '#38BDF8', i: 'dumbbell' },
   'hiit-15min': { c: '#FF7A45', i: 'flame' },
   mobilidade: { c: '#4ADE80', i: 'heart' },
   core: { c: '#6BB4FF', i: 'timer' },
@@ -215,7 +215,7 @@ const PROGRAM_THEME = {
 const BONUS_PROGRAMS = ['mobilidade', 'terceira-idade'];
 
 function programCard(p) {
-  const t = PROGRAM_THEME[p.id] || { c: '#FFD60A', i: 'dumbbell' };
+  const t = PROGRAM_THEME[p.id] || { c: '#38BDF8', i: 'dumbbell' };
   return `
     <a href="#/treino/programas/${p.id}" class="prog" style="--c:${t.c}">
       <span class="prog-cover">${icon(t.i, 26)}${BONUS_PROGRAMS.includes(p.id) ? '<em>Bônus</em>' : ''}</span>
@@ -280,7 +280,7 @@ async function programaDetalhe(ctx, id) {
     return {};
   }
 
-  const t = PROGRAM_THEME[program.id] || { c: '#FFD60A', i: isCustom ? 'wrench' : 'dumbbell' };
+  const t = PROGRAM_THEME[program.id] || { c: '#38BDF8', i: isCustom ? 'wrench' : 'dumbbell' };
   const exItems = program.items.map((item) => ({ item, ex: EXERCISES_BY_ID[item.exerciseId] }));
   const totalSec = program.items.reduce((s, it) => s + it.sets * (it.workSec + it.restSec), 0);
   const minutes = program.durationMin || Math.max(1, Math.round(totalSec / 60));

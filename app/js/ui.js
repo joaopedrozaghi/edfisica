@@ -375,3 +375,28 @@ export const DISCLAIMERS = Object.freeze({
   
   elderly: `Se você tem mais de 60 anos ou condições de saúde, consulte um médico antes de iniciar exercícios.`,
 });
+
+// ---------------------------------------------------------------------
+// Confete: comemora conquistas (não roda com "reduzir movimento")
+// ---------------------------------------------------------------------
+export function confetti({ count = 70 } = {}) {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const colors = ['#3B82F6', '#38BDF8', '#60A5FA', '#FFFFFF', '#FBBF24', '#4ADE80'];
+  const box = document.createElement('div');
+  box.className = 'confetti';
+  box.setAttribute('aria-hidden', 'true');
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('i');
+    const dx = (Math.random() - 0.5) * 2;
+    p.style.setProperty('--x', `${50 + dx * 10}vw`);
+    p.style.setProperty('--dx', `${dx * 45}vw`);
+    p.style.setProperty('--r', `${Math.random() * 720 - 360}deg`);
+    p.style.setProperty('--d', `${900 + Math.random() * 900}ms`);
+    p.style.setProperty('--delay', `${Math.random() * 120}ms`);
+    p.style.background = colors[i % colors.length];
+    if (i % 3 === 0) p.style.borderRadius = '50%';
+    box.appendChild(p);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 2200);
+}

@@ -7,6 +7,8 @@ import { html, raw } from '../ui.js';
 import { line } from '../charts.js';
 import { dateKey, labelShort, fmtInt, fmt1 } from '../utils.js';
 import * as calc from '../calc.js';
+import { icon } from '../icons.js';
+import { level, achievements, stats } from '../missions.js';
 
 const calcStreak = calc.streak;
 
@@ -28,7 +30,7 @@ export async function main(ctx) {
   const thisWeekStart = addDays7(today);
   const logsThisWeek = workoutLogs.filter(l => l.date >= thisWeekStart);
   const totalWorkouts = workoutLogs.length;
-  const minThisWeek = logsThisWeek.reduce((s, l) => s + (l.durationMin || 0), 0);
+  const minThisWeek = logsThisWeek.reduce((s, l) => s + (l.durationMin || Math.round((l.durationSec || 0) / 60)), 0);
 
   // Estatísticas de estudo
   const subjects = Object.keys(studyData.quiz);
@@ -54,6 +56,11 @@ export async function main(ctx) {
   const imcPoints = bodyPoints.filter(e => e.bmi !== null).map(e => ({ y: e.bmi }));
   const xLabels = bodyPoints.map(e => labelShort(e.date));
 
+  const st = stats();
+  const lv = level(st);
+  const badges = achievements(st);
+  const unlocked = badges.filter((b) => b.done).length;
+
   ctx.el.innerHTML = html`
     <h1 tabindex="-1">Progresso</h1>
     <p class="page-sub">Sua constância nos últimos dias.</p>
@@ -69,6 +76,26 @@ export async function main(ctx) {
       <div class="kpi"><b>${totalAnswered}</b><span>questões respondidas</span></div>
       <div class="kpi"><b>${accuracy}%</b><span>de acerto</span></div>
       <a class="kpi kpi--link" href="#/estudos/caderno"><b>${wrongCount}</b><span>para revisar →</span></a>
+    </div>
+
+    <section class="lv-card" aria-label="Seu nível">
+      <span class="lv-card-n">${lv.n}</span>
+      <div class="lv-card-t">
+        <small>Nível ${lv.n}</small>
+        <b>${lv.title}</b>
+        <i><b style="width:${lv.pct}%"></b></i>
+        <span>${lv.xp} XP · faltam ${lv.need - lv.into} para o nível ${lv.n + 1}</span>
+      </div>
+    </section>
+
+    <h2 class="section-title">Conquistas <span class="text-muted" style="font-weight:600">${unlocked}/${badges.length}</span></h2>
+    <div class="badges">
+      ${raw(badges.map((b) => `
+        <div class="badge-card${b.done ? ' is-done' : ''}">
+          <span class="badge-ico">${icon(b.icon, 20)}</span>
+          <b>${b.title}</b>
+          <span>${b.done ? 'Conquistada' : `${b.desc} · ${b.progress}`}</span>
+        </div>`).join(''))}
     </div>
 
     ${bodyPoints.length > 1 ? raw(`
