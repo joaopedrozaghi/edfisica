@@ -121,7 +121,7 @@ export async function main(ctx) {
   if (!program) {
     ctx.el.innerHTML = html`
       <div class="empty">
-        <h1 tabindex="-1">Programa não encontrado</h1>
+        <h1 tabindex="-1">Treino não encontrado</h1>
         <p>O programa "${programId}" não existe.</p>
         <a href="#/treino/programas" class="btn btn--primary">Ver programas</a>
       </div>`;

@@ -27,8 +27,8 @@ const ROUTES = [
 
   // Treino em Casa
   { pattern: '/treino', load: () => import('./modules/treino.js'), view: 'main', title: 'Treino em Casa', nav: 'treino' },
-  { pattern: '/treino/programas', load: () => import('./modules/treino.js'), view: 'programas', title: 'Programas', nav: 'treino' },
-  { pattern: '/treino/programas/:id', load: () => import('./modules/treino.js'), view: 'programas', title: 'Programa', nav: 'treino' },
+  { pattern: '/treino/programas', load: () => import('./modules/treino.js'), view: 'programas', title: 'Treinos prontos', nav: 'treino' },
+  { pattern: '/treino/programas/:id', load: () => import('./modules/treino.js'), view: 'programas', title: 'Treino', nav: 'treino' },
   { pattern: '/treino/exercicio/:id', load: () => import('./modules/treino.js'), view: 'main', title: 'Exercício', nav: 'treino' },
   { pattern: '/treino/construtor', load: () => import('./modules/treino.js'), view: 'construtor', title: 'Montar Treino', nav: 'treino' },
 

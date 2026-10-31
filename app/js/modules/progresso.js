@@ -138,7 +138,7 @@ export async function main(ctx) {
       <div class="card mb-1">
         <h2 style="font-size:1rem;margin-bottom:0.75rem">Favoritos</h2>
         ${favExercises.length > 0 ? `<p class="text-small" style="margin-bottom:0.25rem"><strong>Exercícios:</strong> ${favExercises.length} favoritos · <a href="#/treino">Ver →</a></p>` : ''}
-        ${favPrograms.length > 0 ? `<p class="text-small" style="margin-bottom:0.25rem"><strong>Programas:</strong> ${favPrograms.length} favoritos · <a href="#/treino/programas">Ver →</a></p>` : ''}
+        ${favPrograms.length > 0 ? `<p class="text-small" style="margin-bottom:0.25rem"><strong>Treinos prontos:</strong> ${favPrograms.length} favoritos · <a href="#/treino/programas">Ver →</a></p>` : ''}
         ${favFoods.length > 0 ? `<p class="text-small"><strong>Alimentos:</strong> ${favFoods.length} favoritos · <a href="#/dieta">Ver →</a></p>` : ''}
       </div>
     `) : ''}

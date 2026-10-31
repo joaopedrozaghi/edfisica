@@ -33,7 +33,7 @@ export function todayMissions() {
   const water = !!repo.habits.getDay(k).waterGoalHit;
   const items = [
     { id: 'study', label: 'Estudar uma matéria', hint: 'Termine um quiz ou uma rodada de flashcards', done: studied, href: '#/estudos' },
-    { id: 'workout', label: 'Fazer um treino', hint: 'Qualquer programa conta', done: trained, href: '#/treino/programas' },
+    { id: 'workout', label: 'Fazer um treino', hint: 'Qualquer treino pronto ou montado conta', done: trained, href: '#/treino/programas' },
     { id: 'water', label: 'Bater a meta de água', hint: 'Use o + no card de água', done: water, href: '#/' },
   ];
   return { items, done: items.filter((i) => i.done).length, total: items.length };

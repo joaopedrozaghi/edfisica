@@ -109,7 +109,7 @@ export const CONFIG = Object.freeze({
       emoji: '🥗',
     },
     {
-      title: 'Programas Terceira Idade & Mobilidade',
+      title: 'Treinos Terceira Idade & Mobilidade',
       desc: 'Treinos guiados de baixo impacto, com apoio de cadeira e parede, para ganhar mobilidade, equilíbrio e autonomia no dia a dia.',
       value: 25.00,
       emoji: '🧘',

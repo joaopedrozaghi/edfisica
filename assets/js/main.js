@@ -489,6 +489,29 @@ function initCarousels() {
       if (dotsEl) Array.from(dotsEl.children).forEach((d, n) => d.classList.toggle('on', n === best));
     };
     track.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(paint); }, { passive: true });
+    // Setas (só aparecem no computador, pelo CSS): avançam um item por clique
+    if (cover) {
+      const go = (dir) => {
+        const mid = track.scrollLeft + track.clientWidth / 2;
+        let cur = 0;
+        items.forEach((it, n) => { if (Math.abs(it.offsetLeft + it.offsetWidth / 2 - mid) < Math.abs(items[cur].offsetLeft + items[cur].offsetWidth / 2 - mid)) cur = n; });
+        const it = items[Math.max(0, Math.min(items.length - 1, cur + dir))];
+        const left = it.offsetLeft - (track.clientWidth - it.offsetWidth) / 2;
+        const start = track.scrollLeft;
+        track.scrollTo({ left, behavior: reduceMotion ? 'auto' : 'smooth' });
+        // Se o navegador não animar, pula direto
+        setTimeout(() => { if (Math.abs(track.scrollLeft - start) < 2 && Math.abs(left - start) > 2) track.scrollLeft = left; }, 450);
+      };
+      ['prev', 'next'].forEach((d) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = `car-arrow car-arrow--${d}`;
+        b.setAttribute('aria-label', d === 'prev' ? 'Tela anterior' : 'Próxima tela');
+        b.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d === 'prev' ? 'm15 6-6 6 6 6' : 'm9 6 6 6-6 6'}"/></svg>`;
+        b.addEventListener('click', () => go(d === 'prev' ? -1 : 1));
+        track.parentElement.appendChild(b);
+      });
+    }
     window.addEventListener('resize', () => { if (!raf) raf = requestAnimationFrame(paint); });
     paint();
   });
